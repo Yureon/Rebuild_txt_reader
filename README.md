@@ -1,141 +1,549 @@
 # TxT Reader Multi
 
-셀프호스팅 TXT 웹소설 리더입니다. Node.js + Express 서버와 Vanilla JavaScript ESM 클라이언트로 구성되어 있으며, owner 계정이 일반 독서 계정과 라이브러리 접근 권한을 관리합니다.
+Self-hosted TXT web novel reader for large Korean novel libraries.  
+The project is a Node.js/Express server with a vanilla JavaScript ESM client. It supports chunk-based TXT reading, folder-style multi-episode works, multi-user access control, owner-managed invite codes, and adaptive search performance tuning.
 
-기준 버전: `rebuild-v564`
+Current baseline: `rebuild-v564`
 
-## 핵심 기능
+\---
 
-- 대용량 TXT chunk 기반 reader
-- 단일 파일 / 폴더형 다중 에피소드 지원
-- 읽기 위치, 북마크, 최근 열람, 설정 동기화
-- owner 콘솔 기반 일반 사용자 생성, 가입코드, 권한 관리
-- 폴더 prefix 기반 library ACL
-- cache-first 검색 기본값
-  - 전체검색 OFF: 표시 중 / 메모리 / IndexedDB 캐시만 검색
-  - 전체검색 ON: 서버 content API로 전체 범위 검색
-- owner-only 운영 진단
-  - `ok / warn / error` 등급
-  - finding별 조치 방법
-  - 배포 전 점검 버튼
-- PWA, 오프라인 캐시, 복구 센터
+## Features
 
-## 빠른 시작
+* **Large TXT reader**
+
+  * Chunk-based loading for large text files
+  * Single-file and folder-based multi-episode reading
+  * Reader anchoring, slider navigation, bookmarks, recent items, and reading-state sync
+* **Multi-user mode**
+
+  * Owner-only admin console
+  * User creation, editing, activation/deactivation, password reset, and session invalidation
+  * Folder-prefix library ACL
+  * Invite/signup code management
+  * Per-user and per-invite-code full-search permission
+* **Search**
+
+  * Cache-first search by default
+  * Optional full search through server content APIs
+  * Full-search toggle hidden for users without permission
+  * Server-side permission guard for full-search requests
+  * Adaptive search profile based on available CPU, cgroup/cpuset limits, memory, and storage profile
+* **Performance and stability**
+
+  * Bounded content worker pool for heavy TXT preprocessing
+  * Abort propagation for cancelled search/content requests
+  * Windowed multi-file block manifest generation
+  * Client-side chunk and coordinate cache pruning
+  * IndexedDB cache limits
+* **Deployment**
+
+  * Docker Compose support
+  * Proxmox LXC-friendly non-root container mode
+  * Cloudflare Tunnel and Nginx Proxy Manager deployment examples
+  * Production cookie/origin/CSP hardening
+  * Healthcheck endpoint: `/healthz`
+
+\---
+
+## Repository layout
+
+```text
+.
+├── server.js
+├── server/                         # Express server, auth, APIs, cache/services
+├── public/                         # Reader/admin/login frontend
+├── tools/                          # Smoke tests, packaging, permission helper scripts
+├── docs/                           # Deployment, security, smoke tests, ACL and operations docs
+├── Dockerfile
+├── docker-compose.yml
+├── docker-compose.example.yml
+├── docker-compose.cloudflare-tunnel.example.yml
+├── docker-entrypoint.sh
+├── .env.example
+└── package.json
+```
+
+\---
+
+## Requirements
+
+### Native Node.js
+
+* Node.js 20 or newer recommended
+* npm
+
+### Docker
+
+* Docker Engine
+* Docker Compose plugin
+* A writable local app-data directory mounted to `/app/data`
+* A TXT library directory mounted read-only to `/library`
+
+For Proxmox LXC, enable Docker-compatible nesting/keyctl settings on the LXC container before installing Docker.
+
+\---
+
+## Quick start: Node.js
 
 ```bash
 cp .env.example .env
-npm install --no-audit --no-fund --package-lock=false
+npm install --no-audit --no-fund
 node server.js
 ```
 
-브라우저에서 `http://localhost:3000`으로 접속한다. `.env`의 `LOGINID` / `LOGINPW`는 owner 콘솔 전용 계정이다.
+Open:
 
-## Docker Compose
+```text
+http://localhost:3000
+```
+
+The owner account is configured with `LOGINID` and `LOGINPW` in `.env`. The owner account is for administration, not normal reading.
+
+\---
+
+## Quick start: Docker Compose
+
+### 1\. Prepare `.env`
 
 ```bash
+cp .env.example .env
+```
+
+Edit at least these values:
+
+```env
+LOGINID=owner\_admin
+LOGINPW=change\_this\_to\_14\_chars\_or\_more
+URL=http://localhost:3000
+APP\_ORIGIN=http://localhost:3000
+LIBRARY\_PATH=/absolute/path/to/novels
+SESSION\_STORE\_SECRET=change\_this\_to\_a\_long\_random\_secret\_32\_chars\_or\_more
+```
+
+### 2\. Prepare app data directory
+
+`/app/data` stores accounts, sessions, user state, audit logs, and runtime caches. It must be writable by the container process.
+
+The v556 image runs as:
+
+```text
+UID 1000
+primary GID 0
+```
+
+This is still non-root execution because the UID is not `0`. The primary GID is `0` to support both common bind-mount layouts in Proxmox LXC and similar environments.
+
+Supported app-data permission layouts:
+
+```bash
+# Layout A: 1000:1000 owner-write
 mkdir -p ./data/user-data
-# 권장: UID 1000 owner-write
 chown -R 1000:1000 ./data
 chmod -R u+rwX,g+rwX ./data
-# 대안: root group-write bind mount를 유지해야 하는 환경
-# chgrp -R 0 ./data && chmod -R g+rwX ./data
+```
+
+or:
+
+```bash
+# Layout B: 0:0 group-write
+mkdir -p ./data/user-data
+chgrp -R 0 ./data
+chmod -R g+rwX ./data
+```
+
+The helper script applies the recommended local permission layout:
+
+```bash
+sh tools/fix\_docker\_data\_permissions.sh
+```
+
+### 3\. Start
+
+```bash
 docker compose up -d --build
 ```
 
-Cloudflare Tunnel sidecar 예시는 다음 파일을 사용한다.
+Check logs and health:
 
 ```bash
-docker compose -f docker-compose.cloudflare-tunnel.example.yml up -d
+docker logs --tail=100 txt\_reader
+docker stats --no-stream txt\_reader
+curl http://127.0.0.1:3000/healthz
 ```
 
+\---
 
-### v548 Docker data and search profile note
+## Docker volume model
 
-`rebuild-v564` keeps `/app/data` as a host-side bind mount and runs the app as non-root UID `1000` with primary GID `0`. This supports both `1000:1000` owner-write directories and `0:0` group-write directories such as `drwxrwxr-x`. The compose files use `create_host_path:false` for `/app/data` so Docker Compose does not silently create a wrong directory. Run `sh tools/fix_docker_data_permissions.sh` from the project directory before the first `docker compose up`, or keep an existing `root:root` data directory group-writable.
+The default compose file uses:
 
-Search concurrency is modestly relaxed from the v539 server-protection profile: full/live search may scale up to 3 concurrent content requests, multi-episode target scanning up to 2, cache-only scanning to 4, and client worker batches up to 5. The limits remain bounded and adaptive so user input pressure or slow batches still reduce throughput automatically.
+```yaml
+volumes:
+  - type: bind
+    source: ./data
+    target: /app/data
+    bind:
+      create\_host\_path: false
+  - ${LIBRARY\_PATH}:/library:ro
+```
 
-### v563 Docker npm registry note
+Important points:
 
-`package-lock.json` must not contain `packages.applied-caas`, `internal.api.openai`, or other sandbox-only npm registry URLs. Docker builds copy `.npmrc` before `npm ci` and install with `--no-audit --no-fund`, so production builds use `https://registry.npmjs.org/` and avoid the previous internal-registry timeout.
+* `./data` must exist before `docker compose up`.
+* `create\_host\_path: false` prevents Docker Compose from silently creating `./data` as a wrong `root:root` directory.
+* `/app/data` must be writable.
+* `/library` can be read-only and may point to a large TXT library.
+* If the TXT library is on SMB/CIFS/NFS, keep only the novel library there. Prefer local LXC storage for `./data`.
 
-## Cloudflare Tunnel / NPM 보안 전제
+If the container logs show:
 
-Cloudflare Tunnel 모드에서 앱은 `DEPLOYMENT_MODE=cloudflare-tunnel`일 때 `CF-Visitor: {"scheme":"https"}`를 production HTTPS 판정의 보조 신호로 사용할 수 있다. 이 신뢰 모델은 **외부 인터넷에서 NPM 80/443/81 또는 Node 앱 포트로 직접 접근할 수 없는 구성**이 전제다. 관리자 포트 81만 막는 것으로는 부족하며, 일반 서비스 포트 80/443도 WAN에서 Cloudflare를 우회해 접근되면 안 된다.
+```text
+/app/data is not writable by the container user
+```
 
-## 주요 환경변수
-
-| 변수 | 설명 |
-|---|---|
-| `LOGINID` | owner 계정 ID |
-| `LOGINPW` | owner 계정 비밀번호. production에서는 OWNER_PASSWORD_MIN_LENGTH 이상 필요(기본 14, 하한 10) |
-| `USER_PASSWORD_MIN_LENGTH` | 일반 user 비밀번호 최소 길이. 기본 8, 설정 하한 8 |
-| `PORT` | 앱 포트. 기본 3000 |
-| `HOST` | bind 주소. Cloudflare Tunnel 단독 구성은 `127.0.0.1` 권장 |
-| `LIBRARY_PATH` | TXT 라이브러리 경로 |
-| `APP_ORIGIN`, `URL` | 브라우저 주소창의 origin. 여러 개면 쉼표 구분 |
-| `DEPLOYMENT_MODE` | `direct`, `trusted-proxy`, `cloudflare-tunnel` |
-| `REQUIRE_STRICT_ORIGIN` | unsafe method Origin/Fetch Metadata 검증 |
-| `ALLOW_CLOUDFLARE_INSIGHTS`, `ALLOW_BLOB_WORKER` | CSP 예외 opt-in. 기본값은 둘 다 0 |
-| `CLIENT_IP_HEADER` | 필요 시 실제 client IP header |
-
-## 운영 문서
-
-- `docs/deployment-guide.md`: 배포 모드와 환경변수
-- `docs/proxy-tunnel-setup.md`: Nginx Proxy Manager / Cloudflare Tunnel
-- `docs/operations-checklist.md`: 배포 전 점검 목록
-- `docs/security.md`: 인증, CSP, cookie, owner diagnostics 경계
-- `docs/smoke-tests.md`: smoke test 그룹 설명
-- `docs/multi-user-access-control.md`: multi-user / ACL 설계
-
-## 검증
+check:
 
 ```bash
-npm run smoke:docs
+docker inspect txt\_reader --format '{{range .Mounts}}{{println .Type .Source "->" .Destination "RW=" .RW}}{{end}}'
+ls -ldn ./data ./data/user-data
+```
+
+Fix with one of the supported layouts above.
+
+\---
+
+## Environment variables
+
+Core settings:
+
+|Variable|Purpose|
+|-|-|
+|`LOGINID`|Owner/admin login ID|
+|`LOGINPW`|Owner/admin password|
+|`OWNER\_PASSWORD\_MIN\_LENGTH`|Owner password minimum length; default `14`, lower bound `10`|
+|`USER\_PASSWORD\_MIN\_LENGTH`|Normal user password minimum length; default `8`|
+|`PORT`|App port; default `3000`|
+|`HOST`|Bind address. Use `0.0.0.0` for Docker/NPM, `127.0.0.1` for local-only tunnel setups|
+|`URL`|Public or local app origin|
+|`APP\_ORIGIN`|Allowed browser origin list; comma-separated values supported|
+|`LIBRARY\_PATH`|Host TXT library path used by Docker Compose|
+|`SESSION\_STORE\_SECRET`|Long random secret for session store HMAC; set in production|
+
+Security and proxy settings:
+
+|Variable|Purpose|
+|-|-|
+|`NODE\_ENV`|Set `production` for HTTPS/cookie hardening|
+|`DEPLOYMENT\_MODE`|`direct`, `trusted-proxy`, or `cloudflare-tunnel`|
+|`REQUIRE\_STRICT\_ORIGIN`|Require Origin/Fetch Metadata checks for unsafe methods|
+|`CLIENT\_IP\_HEADER`|Trusted client IP header, for example `CF-Connecting-IP`|
+|`ALLOW\_CLOUDFLARE\_INSIGHTS`|Optional CSP allowance; default `0`|
+|`ALLOW\_BLOB\_WORKER`|Optional CSP allowance; default `0`|
+
+Search and content performance:
+
+|Variable|Purpose|
+|-|-|
+|`CONTENT\_WORKER\_THREADS\_ENABLED`|Enable worker-thread pool for heavy TXT preprocessing|
+|`CONTENT\_WORKER\_POOL\_SIZE`|`0` means automatic pool size|
+|`SEARCH\_PERFORMANCE\_PROFILE`|`auto`, `safe`, `balanced`, `n100\_2core`, `fast`, `aggressive`|
+|`SEARCH\_STORAGE\_PROFILE`|`auto`, `local`, `network`, `slow`|
+|`SEARCH\_SERVER\_CORES`|Manual core override; `0` means automatic|
+|`SEARCH\_FULL\_CONCURRENCY\_MAX`|Manual full-search concurrency override|
+|`SEARCH\_LIVE\_CONCURRENCY\_MAX`|Manual live-search concurrency override|
+|`SEARCH\_MULTI\_EPISODE\_CONCURRENCY\_MAX`|Manual multi-episode search concurrency override|
+|`SEARCH\_CACHE\_ONLY\_CONCURRENCY`|Manual cache-only search concurrency override|
+|`SEARCH\_WORKER\_BATCH\_MAX`|Manual frontend worker batch limit override|
+
+Large-file/cache settings:
+
+|Variable|Purpose|
+|-|-|
+|`MAX\_TEXT\_FILE\_BYTES`|Maximum TXT file size; default 100 MiB|
+|`CONTENT\_FILE\_CACHE\_MAX\_BYTES`|In-memory content file cache size|
+|`CONTENT\_FILE\_CACHE\_MAX\_ENTRIES`|In-memory content file cache entry count|
+|`FOLDER\_BLOCK\_MANIFEST\_RADIUS`|Multi-file folder manifest window radius|
+|`DISK\_CACHE\_AUTO\_PRUNE\_ENABLED`|Enable runtime cache pruning|
+|`DISK\_CACHE\_PRUNE\_USAGE\_PCT`|Disk usage threshold for pruning|
+|`DISK\_CACHE\_PRUNE\_TARGET\_USAGE\_PCT`|Target disk usage after pruning|
+
+See `.env.example` for the full list and deployment examples.
+
+\---
+
+## User and permission model
+
+There are two account types:
+
+* **Owner account**
+
+  * Configured through `.env`
+  * Intended for administration only
+  * Redirects to the user management console after login
+* **Normal users**
+
+  * Created by the owner, or registered through owner-issued signup codes
+  * Can be granted folder-prefix access to the TXT library
+  * Can be allowed or denied full-search permission
+
+Full-search permission is enforced in two places:
+
+1. The search modal hides the full-search toggle for users without permission.
+2. The server rejects forced full-search requests from unauthorized users.
+
+Signup codes can predefine permissions, including full-search availability, so newly registered users inherit the intended policy.
+
+\---
+
+## Search behavior
+
+The reader uses cache-first search by default.
+
+* **Full search OFF**
+
+  * Searches visible chunks, memory cache, and IndexedDB cache.
+  * Lower server load.
+* **Full search ON**
+
+  * Uses server content APIs to scan a broader/full range.
+  * Requires user permission.
+  * Uses adaptive concurrency limits.
+
+For constrained servers such as an Intel N100 LXC with 2 CPU cores, keep:
+
+```env
+SEARCH\_PERFORMANCE\_PROFILE=auto
+SEARCH\_STORAGE\_PROFILE=auto
+```
+
+The server will normally select a conservative profile. For network storage, set:
+
+```env
+SEARCH\_STORAGE\_PROFILE=network
+```
+
+or:
+
+```env
+SEARCH\_STORAGE\_PROFILE=slow
+```
+
+\---
+
+## Reverse proxy and Cloudflare Tunnel
+
+### Direct internal HTTP
+
+```env
+NODE\_ENV=
+DEPLOYMENT\_MODE=direct
+URL=http://192.168.1.100:3000
+APP\_ORIGIN=http://192.168.1.100:3000
+HOST=0.0.0.0
+```
+
+### HTTPS reverse proxy
+
+```env
+NODE\_ENV=production
+DEPLOYMENT\_MODE=trusted-proxy
+URL=https://reader.example.com
+APP\_ORIGIN=https://reader.example.com
+HOST=0.0.0.0
+```
+
+The proxy should forward HTTPS information, normally with:
+
+```text
+X-Forwarded-Proto: https
+```
+
+### Cloudflare Tunnel
+
+```env
+NODE\_ENV=production
+DEPLOYMENT\_MODE=cloudflare-tunnel
+URL=https://reader.example.com
+APP\_ORIGIN=https://reader.example.com
+CLIENT\_IP\_HEADER=CF-Connecting-IP
+```
+
+Security requirement: when trusting Cloudflare headers, do not expose the origin directly to the WAN. Block direct external access to Node port `3000`, NPM service ports `80/443`, and NPM admin port `81` unless they are only reachable through trusted internal/tunnel paths.
+
+\---
+
+## Common operations
+
+### Start / stop
+
+```bash
+docker compose up -d --build
+docker compose down
+```
+
+### Logs
+
+```bash
+docker logs -f --tail=100 txt\_reader
+```
+
+### Healthcheck
+
+```bash
+curl http://127.0.0.1:3000/healthz
+```
+
+### Check CPU usage
+
+```bash
+docker stats --no-stream txt\_reader
+```
+
+### Verify `/app/data` mount
+
+```bash
+docker inspect txt\_reader --format '{{range .Mounts}}{{println .Type .Source "->" .Destination "RW=" .RW}}{{end}}'
+```
+
+### Fix Docker data permissions
+
+```bash
+cd /opt/txt\_reader
+mkdir -p ./data/user-data
+sh tools/fix\_docker\_data\_permissions.sh
+```
+
+\---
+
+## Development and validation
+
+Install dependencies:
+
+```bash
+npm install --no-audit --no-fund
+```
+
+Run checks:
+
+```bash
+npm run check
+npm run smoke:quick
+```
+
+Available smoke groups include:
+
+```bash
+npm run smoke:server
+npm run smoke:frontend
 npm run smoke:search
 npm run smoke:cache
 npm run smoke:security
 npm run smoke:reader
 npm run smoke:settings
-npm run smoke:server
-node tools/check_rebuild_frontend.js --quiet-ok
-node tools/check_frontend_supervisor.js --quiet-ok
-npm audit --omit=dev --json --package-lock=false
+npm run smoke:docs
+npm run smoke:full
 ```
 
-배포 ZIP에는 `node_modules`, `data`, `sync_data.json`, `test_novels`, `.npm-cache`를 포함하지 않는다. `package-lock.json`은 일반 파일로 포함한다.
+Release/archive validation:
 
+```bash
+npm run release:verify -- <zip-file>
+```
 
-## v417 skeleton UI
+\---
 
-초기 앱 셸, 라이브러리 목록, reader 본문 로딩, 검색 실행 중 결과 영역, owner 콘솔 초기 로딩 영역에 스켈레톤 UI를 추가했다. reader anchoring 계열 로직은 변경하지 않았다.
+## Packaging notes
 
+Deployment archives should not include runtime or local-only data:
 
-## v417 owner actions / release verify
+* `node\_modules/`
+* `data/`
+* `sync\_data.json`
+* `test\_novels/`
+* `.npm-cache/`
 
-- owner 콘솔의 사용자 생성, 수정, 활성 전환, 세션 강제 만료, 계정 삭제, 비밀번호 초기화 wiring은 `public/scripts/admin/actions.js`로 분리한다.
-- 운영 진단과 배포 전 점검은 카드형 요약과 `details` 기반 원본 JSON을 함께 제공한다.
-- `npm run release:verify -- <zip>`는 ZIP integrity, 금지 항목, precompressed hash, current-version lint, owner split smoke, frontend check를 clean extract에서 확인한다.
-- 검색 모달에서 제거된 대소문자 구분/캐시 전용 옵션은 `search-option-dead-code-smoke`로 재도입을 방지한다.
+`package-lock.json` should remain a normal file, not a symlink.
 
+\---
 
+## Troubleshooting
 
-### v541 content worker pool / search abort note
+### `/app/data is not writable by the container user`
 
-`rebuild-v564` moves cold TXT content preprocessing for search-triggered `/content` loads into a bounded worker-thread pool and propagates HTTP abort signals into those builds. Stopped full searches can now cancel queued/running cold content work instead of leaving the main server process saturated. Configure with `CONTENT_WORKER_THREADS_ENABLED` and `CONTENT_WORKER_POOL_SIZE`.
+Check current permissions:
 
-### v540 block manifest server-load mitigation note
+```bash
+ls -ldn ./data ./data/user-data
+```
 
-`rebuild-v540` reduces server CPU/IO spikes around multi-file block manifests. Concurrent cold folder manifest requests are coalesced, repeated hot requests avoid immediate full episode stat sweeps, and the server no longer writes every per-episode manifest JSON while building one aggregate folder manifest. Direct episode manifest cache files are still written on demand.
+Check container mount:
 
-### v537 search server-load mitigation note
+```bash
+docker inspect txt\_reader --format '{{range .Mounts}}{{println .Type .Source "->" .Destination "RW=" .RW}}{{end}}'
+```
 
-`rebuild-v539`부터 전체검색은 검색 시작 전에 block manifest 전체 cold build를 강제하지 않습니다. 전체검색 content 요청은 `X-Search-Scan: 1`을 붙이고, 서버는 해당 요청의 cold chunk payload에 대해 동기 디스크 쓰기를 생략해 검색 후 서버 CPU/IO 잔류 부하를 줄입니다. Reader anchoring / slider / virtual-layout 안정화 로직은 이 변경의 대상이 아닙니다.
+Use one of these fixes:
 
-### v536 UI polish note
+```bash
+# Owner-write layout
+chown -R 1000:1000 ./data
+chmod -R u+rwX,g+rwX ./data
+```
 
-`rebuild-v536`부터 상단바의 테마 버튼은 다크모드 직접 전환이 아니라 테마 색상 모달을 여는 바로가기입니다. 네트워크 인디케이터 배경은 선택한 테마 색상에 맞춰 조정되며, safe-area 상단 matte는 완전 검정 배경을 유지합니다.
+or:
 
-### 사용자 정의 사이트 언어
+```bash
+# Group-root layout
+chgrp -R 0 ./data
+chmod -R g+rwX ./data
+```
 
-설정 > 일반 > 사이트 언어에서 기본 한국어/영어 외에 사용자 정의 언어를 추가할 수 있습니다. 언어 이름과 코드를 입력한 뒤, 한 줄에 `원문=표시문구` 형식으로 UI 문구를 직접 등록합니다. 예: `설정=Settings`. JSON 객체 형식도 허용합니다. 등록하지 않은 문구는 기본 한국어/영어 fallback을 사용합니다.
+If `chown` or `chmod` is not permitted, the app-data directory is likely on SMB/CIFS/NFS or a restricted LXC mount. Move `./data` to local LXC storage and mount only the novel library from network storage.
+
+### `su-exec: setgroups(...) Operation not permitted`
+
+Older images that used `su-exec` can fail inside unprivileged Proxmox LXC. v556 does not use `su-exec`; rebuild the image and recreate the container:
+
+```bash
+docker compose down
+docker compose up -d --build --force-recreate
+```
+
+### CPU remains high after stopping search
+
+Check whether the server is doing content preprocessing or state writes:
+
+```bash
+docker stats --no-stream txt\_reader
+pidstat -u -t -p $(pgrep -f "node server.js" | head -1) 1 5
+```
+
+Also check logs for repeated write permission errors:
+
+```bash
+docker logs --tail=200 txt\_reader
+```
+
+\---
+
+## Documentation
+
+Additional documentation is available under `docs/`:
+
+* `docs/deployment-guide.md`
+* `docs/proxy-tunnel-setup.md`
+* `docs/operations-checklist.md`
+* `docs/security.md`
+* `docs/smoke-tests.md`
+* `docs/multi-user-access-control.md`
+* `docs/performance-cache.md`
+* `docs/production-diagnostics.md`
+* `docs/reader-anchoring-stability-contract.md`
+* `docs/reader-search-baseline.md`
+
+\---
+
+## License
+
+No license file is included in this archive. Add a `LICENSE` file before publishing publicly if redistribution terms should be explicit.
+
