@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TxT Reader</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="/icon/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/icon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/icon/favicon-16x16.png">
+  <link rel="manifest" href="/manifest.json?v=rebuild-v564">
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="/styles/login.css?v=rebuild-v564" rel="stylesheet">
+</head>
+<body>
+  <div class="card">
+    <div class="logo-wrap">
+      <div class="logo-img-wrap"><img src="/icon/icon-192.png" alt="TxT Reader" class="logo-img"></div>
+      <div class="logo-title">TxT <span>Reader</span></div>
+      <div class="logo-sub">PRIVATE NOVEL VIEWER</div>
+    </div>
+    <div class="tabs" role="tablist" aria-label="로그인 또는 회원가입">
+      <button class="tab-btn active" id="tab-login" type="button">로그인</button>
+      <button class="tab-btn" id="tab-register" type="button">회원가입</button>
+    </div>
+    <p class="intro-copy" id="mode-copy">Owner 계정 또는 발급된 일반 계정으로 로그인하세요.</p>
+    <div id="message" class="message error"><span id="message-text"></span></div>
+    <section class="panel" id="login-panel">
+      <form id="login-form" class="form" autocomplete="on">
+        <div class="input-wrap"><span class="icon">👤</span><input id="login-id" name="username" autocomplete="username" placeholder="아이디" required></div>
+        <div class="input-wrap"><span class="icon">🔒</span><input id="login-pw" name="password" type="password" autocomplete="current-password" placeholder="비밀번호" required></div>
+        <div id="caps-msg" class="caps-msg">Caps Lock이 켜져 있습니다.</div>
+        <button type="submit" class="btn-login" id="login-btn">입장하기</button>
+      </form>
+    </section>
+    <section class="panel" id="register-panel" hidden>
+      <form id="register-form" class="form" autocomplete="on">
+        <div class="input-wrap"><span class="icon">🆔</span><input id="register-id" name="username" autocomplete="username" placeholder="새 아이디 · 영문/숫자 3~32자" required></div>
+        <div class="input-wrap"><span class="icon">🔒</span><input id="register-pw" name="new-password" type="password" autocomplete="new-password" placeholder="비밀번호 · 최소 8자" required></div>
+        <div class="input-wrap"><span class="icon">✅</span><input id="register-pw2" name="new-password-confirm" type="password" autocomplete="new-password" placeholder="비밀번호 확인" required></div>
+        <div class="input-wrap"><span class="icon">🎟️</span><input id="register-code" name="signup-code" autocomplete="one-time-code" placeholder="가입코드" required></div>
+        <p class="hint">가입코드는 owner가 미리 권한을 설정해 발급한 코드만 사용할 수 있습니다. 성공 후 로그인 화면에서 다시 로그인하세요.</p>
+        <button type="submit" class="btn-login" id="register-btn">회원가입</button>
+      </form>
+    </section>
+    <div class="offline-banner" id="offline-banner-text">네트워크 연결 후 로그인할 수 있습니다.</div>
+    <div class="footer">TxT Reader · 개인용 웹소설 뷰어</div>
+  </div>
+  <script src="/scripts/login.js?v=rebuild-v564" defer></script>
+</body>
+</html>

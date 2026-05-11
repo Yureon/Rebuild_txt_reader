@@ -1,0 +1,63 @@
+services:
+  txt_reader:
+    build: .
+    container_name: txt_reader
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - PORT=3000
+      - LIBRARY_PATH=/library
+      - URL=${URL}
+      - APP_ORIGIN=${APP_ORIGIN}
+      - NODE_ENV=${NODE_ENV:-production}
+      - DEPLOYMENT_MODE=${DEPLOYMENT_MODE:-direct}
+      - REQUIRE_STRICT_ORIGIN=${REQUIRE_STRICT_ORIGIN:-1}
+      - CLIENT_IP_HEADER=${CLIENT_IP_HEADER:-}
+      - SESSION_STORE_SECRET=${SESSION_STORE_SECRET:-}
+      - MAX_TEXT_FILE_BYTES=${MAX_TEXT_FILE_BYTES:-104857600}
+      - OWNER_PASSWORD_MIN_LENGTH=${OWNER_PASSWORD_MIN_LENGTH:-14}
+      - USER_PASSWORD_MIN_LENGTH=${USER_PASSWORD_MIN_LENGTH:-8}
+      - ALLOW_CLOUDFLARE_INSIGHTS=${ALLOW_CLOUDFLARE_INSIGHTS:-0}
+      - ALLOW_BLOB_WORKER=${ALLOW_BLOB_WORKER:-0}
+      - HOST=${HOST:-}
+      - LIBRARY_DEEP_SIGNATURE_CHECK_TTL_MS=${LIBRARY_DEEP_SIGNATURE_CHECK_TTL_MS:-2000}
+      - APP_UID=${APP_UID:-1000}
+      - APP_GID=${APP_GID:-1000}
+      - APP_RUNTIME_GID=${APP_RUNTIME_GID:-0}
+      - SEARCH_PERFORMANCE_PROFILE=${SEARCH_PERFORMANCE_PROFILE:-auto}
+      - SEARCH_STORAGE_PROFILE=${SEARCH_STORAGE_PROFILE:-auto}
+      - SEARCH_SERVER_CORES=${SEARCH_SERVER_CORES:-0}
+      - SEARCH_FULL_CONCURRENCY_MAX=${SEARCH_FULL_CONCURRENCY_MAX:-0}
+      - SEARCH_LIVE_CONCURRENCY_MAX=${SEARCH_LIVE_CONCURRENCY_MAX:-0}
+      - SEARCH_MULTI_EPISODE_CONCURRENCY_MAX=${SEARCH_MULTI_EPISODE_CONCURRENCY_MAX:-0}
+      - SEARCH_CACHE_ONLY_CONCURRENCY=${SEARCH_CACHE_ONLY_CONCURRENCY:-0}
+      - SEARCH_WORKER_BATCH_MAX=${SEARCH_WORKER_BATCH_MAX:-0}
+    ports:
+      - "${PORT:-3000}:3000"
+    volumes:
+      # /app/data stores accounts, sessions, user state, audit log, and runtime caches.
+      # Create ./data on the LXC/host first and make it writable by either:
+      #   - UID:GID 1000:1000 owner-write, or
+      #   - root:root group-write, e.g. drwxrwxr-x.
+      # The image runs as non-root UID 1000 with primary GID 0.
+      # create_host_path:false prevents Docker Compose from silently creating ./data as root:root.
+      - type: bind
+        source: ./data
+        target: /app/data
+        bind:
+          create_host_path: false
+      - ${LIBRARY_PATH}:/library:ro
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/healthz').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      start_period: 20s
+      retries: 3

@@ -1,0 +1,17 @@
+const fs = require('fs');
+const path = require('path');
+const assert = require('assert');
+const root = path.join(__dirname, '../..');
+const read = rel => fs.readFileSync(path.join(root, rel), 'utf8');
+const appearance = read('public/scripts/rebuild/features/settings/appearance.mjs');
+const shell = read('public/fragments/app-shell.html');
+const css = read('public/styles/app.css');
+assert.ok(appearance.includes('app.els.openThemeEditorBtn?.click?.()'), 'topbar theme button must open theme editor');
+assert.ok(!appearance.includes("set({ themeMode: prefs().themeMode === 'dark' ? 'light' : 'dark' })"), 'topbar theme button must not toggle html/body dark mode');
+assert.ok(shell.includes('v536-topbar-theme-editor-shortcut-pass'), 'theme shortcut shell marker missing');
+assert.ok(shell.includes('title="테마 색상 변경"'), 'theme shortcut title must describe theme editor');
+assert.ok(css.includes('v536: topbar theme shortcut, theme-aware network badge, and black safe-area matte'), 'v536 css marker missing');
+assert.ok(css.includes('.toolbar-safe::after{') && css.includes('background:transparent !important'), 'safe-area center matte overlay must be disabled');
+assert.ok(css.includes('#toolbar-network-mode.search-mode-badge') && css.includes('var(--surface) 82%,var(--accent) 18%'), 'toolbar network badge background must use theme colors');
+assert.ok(css.includes('#nsearch-network-mode.search-mode-badge') && css.includes('var(--surface) 82%,var(--accent) 18%'), 'search network badge background must use theme colors');
+console.log('v536-theme-shortcut-safe-area-polish-smoke-pass');

@@ -1,0 +1,21 @@
+#!/usr/bin/env node
+const fs = require('fs');
+const path = require('path');
+const assert = require('assert');
+const root = path.resolve(__dirname, '..', '..');
+const ui = fs.readFileSync(path.join(root, 'public/scripts/rebuild/features/ui.mjs'), 'utf8');
+const css = fs.readFileSync(path.join(root, 'public/styles/app.css'), 'utf8');
+const runner = fs.readFileSync(path.join(root, 'tools/run_smoke_tests.js'), 'utf8');
+const release = fs.readFileSync(path.join(root, 'docs/release-history.md'), 'utf8');
+const PASS = 'v382-site-responsive-sidebar-close-smoke-pass';
+assert.ok(ui.includes('document.body?.classList.contains("mobile-library-overlay")'), 'sidebar runtime must detect responsive overlay mode');
+assert.ok(ui.includes('if (sidebar) sidebar.classList.remove("open");'), 'close path must remove sidebar.open');
+assert.ok(css.includes('v382: site.html narrow viewport sidebar close guard'), 'css must document v382 responsive site sidebar guard');
+assert.ok(css.includes('body[data-client-profile="site"].mobile-library-overlay .sidebar'), 'css must target site.html responsive overlay sidebar');
+assert.ok(css.includes('body.reader-site.mobile-library-overlay .sidebar'), 'css must target reader-site responsive overlay sidebar');
+assert.ok(css.includes('transform:translateX(calc(-100% - 18px)) !important;'), 'closed responsive site sidebar must override docked transform:none!important');
+assert.ok(css.includes('body[data-client-profile="site"].mobile-library-overlay .sidebar.open'), 'open responsive site sidebar override must exist');
+assert.ok(css.includes('transform:translateX(0) !important;'), 'open responsive site sidebar must be visible');
+assert.ok(runner.includes('tools/checks/site-responsive-sidebar-close-smoke.js'), 'smoke runner must include responsive site sidebar smoke');
+assert.ok(release.includes(PASS), 'release history must mention v382 responsive site sidebar smoke pass');
+console.log(JSON.stringify({ pass: PASS }));

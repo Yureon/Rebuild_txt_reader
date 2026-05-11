@@ -1,0 +1,16 @@
+const fs = require('fs');
+const assert = require('assert');
+const css = fs.readFileSync('public/styles/app.css', 'utf8');
+const ui = fs.readFileSync('public/scripts/rebuild/features/ui.mjs', 'utf8');
+const marker = 'v462-status-pill-fullscreen-height-lock-pass';
+assert.ok(ui.includes(marker), 'status pill fullscreen height lock marker missing in ui');
+assert.ok(ui.includes('dataset.statusPillCompactPass'), 'status pill compact dataset must be set');
+assert.ok(css.includes(marker), 'status pill compact css marker missing');
+assert.ok(css.includes('body.browser-fullscreen-fit #ui-status-dock'), 'browser fullscreen status pill selector missing');
+assert.ok(css.includes('body.fullscreen-fallback #ui-status-dock'), 'pseudo fullscreen status pill selector missing');
+assert.ok(/height:30px\s*!important/.test(css), 'status pill height must be locked');
+assert.ok(/min-height:30px\s*!important/.test(css), 'status pill min-height must be locked');
+assert.ok(/max-height:30px\s*!important/.test(css), 'status pill max-height must be locked');
+assert.ok(/line-height:18px\s*!important/.test(css), 'status pill text line-height must be locked');
+assert.ok(css.includes('body[class~="reader-mobile"][class~="reader-bars-hidden"]'), 'mobile fullscreen hidden-bars guard missing');
+console.log('v462-status-pill-fullscreen-height-lock-smoke-pass');

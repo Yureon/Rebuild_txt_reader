@@ -1,0 +1,17 @@
+#!/usr/bin/env node
+const fs = require('fs');
+const path = require('path');
+const assert = require('assert');
+const root = path.resolve(__dirname, '../..');
+const PASS = 'v457-periodic-device-sync-dirty-check-smoke-pass';
+const src = fs.readFileSync(path.join(root, 'public/scripts/rebuild/features/sync/periodic-device-sync.mjs'), 'utf8');
+assert.ok(src.includes(`PERIODIC_DEVICE_SYNC_DIRTY_CHECK_PASS = '${PASS}'`), 'dirty-check marker missing');
+assert.ok(src.includes('function buildDeviceSyncPayload(app)'), 'stable payload builder missing');
+assert.ok(src.includes('function stableStringify(value)'), 'stable stringify helper missing');
+assert.ok(src.includes('function hashStablePayload(value)'), 'payload hash helper missing');
+assert.ok(src.includes('state.lastSuccessfulPayloadHash = payloadHash;'), 'payload hash must update after successful PUT');
+assert.ok(src.includes("return { ok: true, skipped: true, pass: PERIODIC_DEVICE_SYNC_DIRTY_CHECK_PASS };"), 'unchanged payload must skip PUT');
+assert.ok(src.includes("window.setTimeout(() => push({ force: true }), 1200)"), 'initial push must remain forced');
+const catchBlock = src.slice(src.indexOf('} catch {'), src.indexOf('} finally {'));
+assert.ok(!catchBlock.includes('lastSuccessfulPayloadHash'), 'hash update must not be in a failure path');
+console.log(JSON.stringify({ pass: PASS }));

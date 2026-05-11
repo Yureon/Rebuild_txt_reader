@@ -1,0 +1,349 @@
+:root{color-scheme:dark;--bg:#0d0d0d;--panel:#171717;--panel2:#111;--border:#2d2d2d;--text:#ece7df;--muted:#a39b93;--accent:#4ade80;--danger:#f87171;--warn:#fbbf24}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at top left,rgba(74,222,128,.08),transparent 34%),var(--bg);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text);padding:26px}main{max-width:1280px;margin:0 auto;display:grid;gap:18px}.card{background:rgba(23,23,23,.96);border:1px solid var(--border);border-radius:18px;padding:20px;box-shadow:0 18px 48px rgba(0,0,0,.32)}h1{font-size:1.55rem;margin:0 0 8px}h2{font-size:1.05rem;margin:0 0 12px}.muted{color:var(--muted);line-height:1.65}.small{font-size:.82rem}.badge{display:inline-flex;border:1px solid rgba(74,222,128,.35);color:var(--accent);border-radius:999px;padding:6px 10px;font-size:.82rem;font-weight:800}.grid{display:grid;grid-template-columns:minmax(320px,420px) 1fr;gap:18px}.subgrid{display:grid;grid-template-columns:minmax(280px,1fr) minmax(300px,420px);gap:14px}.field{display:grid;gap:7px;margin:0 0 12px}label{font-size:.82rem;color:var(--muted);font-weight:800}button,input,select,textarea{font:inherit}input,select,textarea{width:100%;border:1px solid var(--border);background:var(--panel2);color:var(--text);border-radius:12px;padding:10px 12px}textarea{min-height:92px;resize:vertical}.actions{display:flex;gap:8px;flex-wrap:wrap}button,a.button{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--border);background:#222;color:var(--text);border-radius:12px;padding:9px 13px;text-decoration:none;font-weight:800;cursor:pointer}button.primary{background:linear-gradient(135deg,#22c55e,#4ade80);color:#06130a;border:0}button.danger{border-color:rgba(248,113,113,.34);color:#fecaca;background:rgba(248,113,113,.09)}.status{white-space:pre-wrap;overflow:auto;max-height:210px;background:#0a0a0a;border:1px solid var(--border);border-radius:12px;padding:12px;color:var(--muted)}.user-list{display:grid;gap:10px}.user-row{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start;background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:14px;padding:12px}.user-title{font-weight:900}.user-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}.pill{display:inline-flex;border-radius:999px;padding:4px 8px;border:1px solid var(--border);color:var(--muted);font-size:.75rem;font-weight:800}.pill.ok{color:var(--accent);border-color:rgba(74,222,128,.35)}.pill.off{color:var(--danger);border-color:rgba(248,113,113,.35)}.pill.warn{color:var(--warn);border-color:rgba(251,191,36,.35)}code{color:var(--accent)}.folder-picker{border:1px solid var(--border);background:#0b0b0b;border-radius:12px;max-height:240px;overflow:auto;padding:8px;display:grid;gap:2px}.folder-line{display:flex;align-items:center;gap:7px;min-height:30px;border-radius:8px;padding:4px 6px}.folder-line:hover{background:rgba(255,255,255,.045)}.folder-line input{width:auto}.chip{border:1px solid var(--border);background:#202020;border-radius:999px;padding:4px 8px;font-size:.75rem;color:var(--muted)}.selection-summary{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.edit-empty{display:grid;place-items:center;min-height:260px;border:1px dashed var(--border);border-radius:14px;color:var(--muted);text-align:center;padding:18px}.split-line{height:1px;background:var(--border);margin:14px 0}.checkline{display:flex;align-items:center;gap:9px;margin-bottom:12px}.checkline input{width:auto}.owner-warning{border-color:rgba(251,191,36,.35);background:rgba(251,191,36,.06)}.danger-zone{margin-top:14px;border:1px solid rgba(248,113,113,.34);background:rgba(248,113,113,.055);border-radius:14px;padding:12px}.danger-zone h3{margin-top:0}@media(max-width:940px){body{padding:14px}.grid,.subgrid{grid-template-columns:1fr}.card{padding:16px}.user-row{grid-template-columns:1fr}.status{max-height:160px}}
+.admin-nav{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;padding-top:14px;border-top:1px solid var(--border)}
+.admin-nav button{background:#161616;color:var(--muted)}
+.admin-nav button.active{border-color:rgba(74,222,128,.48);background:rgba(74,222,128,.10);color:var(--accent)}
+.admin-section[hidden]{display:none!important}.admin-section{display:grid;gap:18px}.admin-section-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}.admin-section-title{margin:0}.admin-section-desc{margin:6px 0 0}.audit-filter-event{max-width:260px}.audit-filter-user{max-width:180px}.audit-filter-query{max-width:220px}.audit-filter-limit{max-width:120px}.mt-10{margin-top:10px}.folder-depth-0{padding-left:6px}.folder-depth-1{padding-left:20px}.folder-depth-2{padding-left:34px}.folder-depth-3{padding-left:48px}.folder-depth-4{padding-left:62px}.folder-depth-5{padding-left:76px}.folder-depth-6{padding-left:90px}.folder-depth-7{padding-left:104px}.folder-depth-8{padding-left:118px}.folder-depth-9{padding-left:132px}.folder-depth-10{padding-left:146px}.operation-grid{display:grid;grid-template-columns:minmax(320px,1fr) minmax(320px,1fr);gap:18px}@media(max-width:940px){.operation-grid{grid-template-columns:1fr}.admin-nav button{flex:1 1 46%}}
+
+
+/* v411 operational diagnostics */
+.diagnostics-summary{margin-top:12px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:rgba(255,255,255,.04)}
+.diagnostics-summary.grade-ok,.diagnostics-grade.grade-ok{border-color:rgba(16,122,74,.35);background:rgba(16,122,74,.10);color:#b8f4d2}
+.diagnostics-summary.grade-warn,.diagnostics-grade.grade-warn{border-color:rgba(181,124,24,.45);background:rgba(181,124,24,.12);color:#ffe0a3}
+.diagnostics-summary.grade-error,.diagnostics-grade.grade-error{border-color:rgba(190,64,64,.48);background:rgba(190,64,64,.14);color:#ffc0c0}
+.diagnostics-output{display:flex;flex-direction:column;gap:12px}
+.diagnostics-grade{display:inline-flex;align-self:flex-start;min-width:64px;justify-content:center;padding:6px 12px;border:1px solid var(--border);border-radius:999px;font-weight:800;font-size:12px}
+.diagnostics-checklist{border:1px solid var(--border);border-radius:12px;padding:12px;background:rgba(255,255,255,.03)}
+.diagnostics-checklist h3,.diagnostics-preflight h3{margin:0 0 8px;font-size:14px}
+.diagnostics-checklist ol{margin:0;padding-left:20px;display:grid;gap:6px}
+.diagnostics-checklist li span{display:block;margin-top:2px;color:var(--muted);font-size:12px}
+.diagnostics-findings{display:grid;gap:10px}
+.diagnostics-finding{border:1px solid var(--border);border-radius:12px;padding:12px;background:rgba(255,255,255,.03)}
+.diagnostics-finding.grade-ok{border-color:rgba(16,122,74,.35)}
+.diagnostics-finding.grade-warn{border-color:rgba(181,124,24,.45)}
+.diagnostics-finding.grade-error{border-color:rgba(190,64,64,.48)}
+.diagnostics-finding-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
+.diagnostics-finding-head code{font-size:11px;color:var(--muted)}
+.diagnostics-finding p{margin:0 0 8px;color:var(--muted);font-size:13px;line-height:1.5}
+.diagnostics-fix{padding:8px 10px;border-radius:9px;background:rgba(255,255,255,.05);font-size:13px;line-height:1.5}
+.diagnostics-doc{margin-top:6px;font-size:11px;color:var(--muted)}
+.diagnostics-preflight pre{max-height:220px;overflow:auto;white-space:pre-wrap}
+@media (max-width:760px){.diagnostics-finding-head{align-items:flex-start;flex-direction:column}.diagnostics-checklist ol{padding-left:18px}}
+
+
+/* v417 owner skeleton UI */
+.admin-skeleton-list{display:grid;gap:10px;padding:4px 0}.admin-skeleton-list>div{height:42px;border-radius:12px;background:linear-gradient(90deg,rgba(255,255,255,.08),rgba(255,255,255,.22),rgba(255,255,255,.08));background-size:220% 100%;animation:adminSkeletonShimmer 1.15s ease-in-out infinite;border:1px solid rgba(255,255,255,.08)}@keyframes adminSkeletonShimmer{0%{background-position:120% 0}100%{background-position:-120% 0}}@media (prefers-reduced-motion:reduce){.admin-skeleton-list>div{animation:none}}
+
+/* v417 diagnostics history, detail tables, filter and owner operations cards. */
+.diagnostics-history{display:grid;gap:8px}.diagnostics-history-item{display:grid;grid-template-columns:auto auto auto 1fr;gap:8px;align-items:center;border:1px solid var(--border);border-radius:12px;padding:8px 10px;background:rgba(255,255,255,.03)}.diagnostics-history-item.grade-warn{border-color:rgba(251,191,36,.35);background:rgba(251,191,36,.06)}.diagnostics-history-item.grade-error{border-color:rgba(248,113,113,.35);background:rgba(248,113,113,.06)}.diagnostics-history-item code{font-size:12px}.ops-mini-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}.ops-mini-card{display:grid;gap:4px;border:1px solid var(--border);border-radius:12px;padding:10px 12px;background:rgba(255,255,255,.035)}.ops-mini-card span{color:var(--muted);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.03em}.ops-mini-card strong{font-size:15px;word-break:break-word}.ops-mini-card small{color:var(--muted);font-size:11px}.diagnostics-card{border:1px solid var(--border);border-radius:14px;padding:12px;background:rgba(255,255,255,.03)}.diagnostics-card h3{margin:0 0 10px;font-size:14px}.diagnostics-detail{border:1px solid var(--border);border-radius:12px;background:rgba(0,0,0,.18);overflow:hidden}.diagnostics-detail summary{cursor:pointer;padding:10px 12px;font-weight:800;color:var(--text)}.diagnostics-detail pre{margin:0;padding:12px;border-top:1px solid var(--border);max-height:260px;overflow:auto;white-space:pre-wrap;color:var(--muted)}
+
+
+/* v416/v417 diagnostics detail tables and filter */
+.diagnostics-filter{margin:0;padding:8px 10px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.035);color:var(--muted)}
+.diagnostics-filter input{width:auto}.diagnostics-table-wrap{width:100%;overflow:auto}.diagnostics-card table{width:100%;border-collapse:collapse;font-size:12px}.diagnostics-card th,.diagnostics-card td{border-bottom:1px solid var(--border);padding:8px 9px;text-align:left;vertical-align:top}.diagnostics-card thead th{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.03em}.diagnostics-card tbody tr:last-child th,.diagnostics-card tbody tr:last-child td{border-bottom:0}.diagnostics-summary-table th{width:160px}.diagnostics-checklist tr.grade-warn td,.diagnostics-checklist tr.grade-warn th{background:rgba(251,191,36,.045)}.diagnostics-checklist tr.grade-error td,.diagnostics-checklist tr.grade-error th{background:rgba(248,113,113,.055)}.diagnostics-finding-table table{background:rgba(0,0,0,.14);border-radius:10px;overflow:hidden}.diagnostics-finding-table th{width:96px;color:var(--muted)}
+
+.diagnostics-io-table code{font-size:11px}.diagnostics-io-table td:nth-child(3){word-break:break-word}.diagnostics-io-table tbody th{white-space:nowrap}
+
+/* v490 folder mutation permissions and compact operations view. */
+.permission-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.permission-grid textarea{min-height:72px}.operation-grid{grid-template-columns:minmax(280px,.78fr) minmax(420px,1.22fr);align-items:start}.diagnostics-output{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.diagnostics-output>p,.diagnostics-output>.diagnostics-grade,.diagnostics-output>.ops-mini-grid,.diagnostics-output>.diagnostics-summary-table,.diagnostics-output>.diagnostics-detail{grid-column:1/-1}.diagnostics-output .diagnostics-findings{grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}.diagnostics-card{min-width:0}.diagnostics-card h3{font-size:13px}.diagnostics-card table{font-size:11px}.diagnostics-table-wrap{max-height:240px;overflow:auto;border-radius:10px}.diagnostics-finding{padding:10px}.diagnostics-finding p,.diagnostics-fix{font-size:12px}.diagnostics-detail pre{max-height:180px}.diagnostics-history{max-height:280px;overflow:auto;padding-right:2px}@media(max-width:940px){.permission-grid,.diagnostics-output{grid-template-columns:1fr}.operation-grid{grid-template-columns:1fr}.diagnostics-history{max-height:none}}
+
+/* v494 owner console layout compaction. */
+.user-management-layout{display:grid;grid-template-columns:minmax(280px,.82fr) minmax(260px,.78fr) minmax(380px,1.18fr);gap:14px;align-items:start}
+.user-create-card,.user-list-card,.user-edit-card{min-width:0}
+.user-list-card,.user-edit-card{max-height:calc(100vh - 156px);overflow:auto}
+.user-list-card .user-list{gap:8px}
+.user-list-card .user-row{grid-template-columns:minmax(0,1fr);gap:8px;padding:10px}
+.user-list-card .user-row .actions{gap:6px}
+.user-list-card .user-row .actions button{padding:7px 9px;font-size:.78rem}
+.user-list-card .user-meta{gap:4px}.user-list-card .pill{padding:3px 7px;font-size:.7rem}
+.admin-section[data-admin-section="users"] .card{padding:16px}
+.admin-section[data-admin-section="users"] .field{margin-bottom:9px;gap:5px}
+.admin-section[data-admin-section="users"] textarea{min-height:58px}
+.admin-section[data-admin-section="users"] .folder-picker{max-height:126px;padding:6px}
+.admin-section[data-admin-section="users"] .permission-grid{gap:8px}
+.admin-section[data-admin-section="users"] .split-line{margin:10px 0}
+.admin-section[data-admin-section="users"] h3{margin:10px 0 8px;font-size:.95rem}
+.admin-section[data-admin-section="users"] .status{max-height:120px}
+.operation-grid{grid-template-columns:minmax(260px,.68fr) minmax(560px,1.32fr);grid-template-areas:"control result" "history result" "status result";gap:14px;align-items:start}
+.ops-control-card{grid-area:control}.ops-result-card{grid-area:result}.ops-history-card{grid-area:history}.ops-status-card{grid-area:status}
+.ops-control-card,.ops-history-card,.ops-status-card,.ops-result-card{min-width:0}.ops-result-card{max-height:calc(100vh - 156px);overflow:auto}.ops-status-card .status{max-height:130px}
+.diagnostics-output{grid-template-columns:repeat(12,minmax(0,1fr));align-items:start}.diagnostics-output>.diagnostics-grade{grid-column:span 2}.diagnostics-output>.ops-mini-grid{grid-column:span 10}.diagnostics-output>.diagnostics-summary-table{grid-column:span 6}.diagnostics-output>.diagnostics-checklist{grid-column:span 6}.diagnostics-output>.diagnostics-findings,.diagnostics-output>.diagnostics-io-table,.diagnostics-output>.diagnostics-detail{grid-column:1/-1}
+.diagnostics-output>.diagnostics-detail pre{max-height:150px}.diagnostics-table-wrap{max-height:190px}.diagnostics-card{padding:10px}.ops-mini-grid{grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:8px}.ops-mini-card{padding:9px 10px}.diagnostics-history{max-height:220px}
+@media(max-width:1180px){.user-management-layout{grid-template-columns:minmax(280px,.9fr) minmax(360px,1.1fr);grid-template-areas:"create edit" "list edit"}.user-create-card{grid-area:create}.user-list-card{grid-area:list}.user-edit-card{grid-area:edit}.user-list-card,.user-edit-card{max-height:none}.operation-grid{grid-template-columns:1fr;grid-template-areas:"control" "result" "history" "status"}.ops-result-card{max-height:none}.diagnostics-output{grid-template-columns:1fr}.diagnostics-output>.diagnostics-grade,.diagnostics-output>.ops-mini-grid,.diagnostics-output>.diagnostics-summary-table,.diagnostics-output>.diagnostics-checklist{grid-column:1/-1}}
+@media(max-width:940px){.user-management-layout{grid-template-columns:1fr;grid-template-areas:none}.user-create-card,.user-list-card,.user-edit-card{grid-area:auto}.admin-section[data-admin-section="users"] .folder-picker{max-height:180px}}
+
+/* v495 cache threshold diagnostics card layout fix. */
+.diagnostics-output>.diagnostics-cache-thresholds{grid-column:1/-1}
+.diagnostics-cache-thresholds .diagnostics-table-wrap table{min-width:720px}
+.diagnostics-cache-thresholds td:nth-child(3),.diagnostics-cache-thresholds td:nth-child(4){white-space:nowrap}
+
+/* v499 user management item-row layout correction.
+   The user-management cards stay in one horizontal row, and each card's form
+   fields use label-left/control-right rows instead of vertical stacked items. */
+.admin-section[data-admin-section="users"]{overflow-x:auto;max-width:100%;padding-bottom:10px}
+.admin-section[data-admin-section="users"] .user-management-layout{display:grid;grid-template-columns:minmax(760px,1.15fr) minmax(320px,.5fr) minmax(820px,1.25fr);grid-template-areas:"create list edit";gap:14px;align-items:start;min-width:1940px}
+.admin-section[data-admin-section="users"] .user-create-card{grid-area:create;min-width:0}
+.admin-section[data-admin-section="users"] .user-list-card{grid-area:list;min-width:0}
+.admin-section[data-admin-section="users"] .user-edit-card{grid-area:edit;min-width:0}
+.admin-section[data-admin-section="users"] .user-list-card,.admin-section[data-admin-section="users"] .user-edit-card{max-height:calc(100vh - 156px);overflow:auto}
+.admin-section[data-admin-section="users"] #create-form,.admin-section[data-admin-section="users"] #edit-form{display:grid;grid-template-columns:1fr;gap:10px;align-items:start}
+.admin-section[data-admin-section="users"] #create-form>.field,.admin-section[data-admin-section="users"] #edit-form>.field,.admin-section[data-admin-section="users"] #create-form .permission-grid>.field,.admin-section[data-admin-section="users"] #edit-form .permission-grid>.field{display:grid;grid-template-columns:148px minmax(0,1fr);gap:8px 12px;align-items:start;margin:0}
+.admin-section[data-admin-section="users"] #create-form>.field>label,.admin-section[data-admin-section="users"] #edit-form>.field>label,.admin-section[data-admin-section="users"] #create-form .permission-grid>.field>label,.admin-section[data-admin-section="users"] #edit-form .permission-grid>.field>label{grid-column:1;align-self:center;padding-top:8px;line-height:1.35}
+.admin-section[data-admin-section="users"] #create-form>.field>input,.admin-section[data-admin-section="users"] #create-form>.field>select,.admin-section[data-admin-section="users"] #create-form>.field>textarea,.admin-section[data-admin-section="users"] #create-form>.field>.folder-picker,.admin-section[data-admin-section="users"] #create-form>.field>.selection-summary,.admin-section[data-admin-section="users"] #edit-form>.field>input,.admin-section[data-admin-section="users"] #edit-form>.field>select,.admin-section[data-admin-section="users"] #edit-form>.field>textarea,.admin-section[data-admin-section="users"] #edit-form>.field>.folder-picker,.admin-section[data-admin-section="users"] #edit-form>.field>.selection-summary,.admin-section[data-admin-section="users"] #create-form .permission-grid>.field>input,.admin-section[data-admin-section="users"] #create-form .permission-grid>.field>textarea,.admin-section[data-admin-section="users"] #create-form .permission-grid>.field>.folder-picker,.admin-section[data-admin-section="users"] #create-form .permission-grid>.field>.selection-summary,.admin-section[data-admin-section="users"] #edit-form .permission-grid>.field>input,.admin-section[data-admin-section="users"] #edit-form .permission-grid>.field>textarea,.admin-section[data-admin-section="users"] #edit-form .permission-grid>.field>.folder-picker,.admin-section[data-admin-section="users"] #edit-form .permission-grid>.field>.selection-summary{grid-column:2;min-width:0;margin:0}
+.admin-section[data-admin-section="users"] #create-form>.field>p,.admin-section[data-admin-section="users"] #edit-form>.field>p,.admin-section[data-admin-section="users"] #create-form .permission-grid>.field>p,.admin-section[data-admin-section="users"] #edit-form .permission-grid>.field>p{grid-column:2;margin:0}
+.admin-section[data-admin-section="users"] #create-form>.field>textarea,.admin-section[data-admin-section="users"] #edit-form>.field>textarea,.admin-section[data-admin-section="users"] #create-form .permission-grid>.field>textarea,.admin-section[data-admin-section="users"] #edit-form .permission-grid>.field>textarea{min-height:58px}
+.admin-section[data-admin-section="users"] #create-form>.permission-grid,.admin-section[data-admin-section="users"] #edit-form>.permission-grid{display:grid;grid-template-columns:1fr;gap:10px;margin:0}
+.admin-section[data-admin-section="users"] #create-form>button{justify-self:start;margin-top:2px}
+.admin-section[data-admin-section="users"] #edit-form>input[type="hidden"]{display:none}
+.admin-section[data-admin-section="users"] #edit-form>h3{margin:0 0 2px}
+.admin-section[data-admin-section="users"] #edit-form>.checkline{margin:0;min-height:40px;align-items:center}
+.admin-section[data-admin-section="users"] #edit-form>.actions{margin:0}
+.admin-section[data-admin-section="users"] #edit-form>.split-line{margin:4px 0}
+.admin-section[data-admin-section="users"] .folder-picker{max-height:300px;min-height:190px;padding:8px;overflow:auto}
+.admin-section[data-admin-section="users"] .folder-line{display:grid;grid-template-columns:auto minmax(0,1fr);grid-auto-rows:auto;column-gap:8px;row-gap:2px;align-items:start;min-width:0;max-width:100%}
+.admin-section[data-admin-section="users"] .folder-line input{grid-column:1;grid-row:1 / span 2;margin-top:3px}
+.admin-section[data-admin-section="users"] .folder-line span{grid-column:2;min-width:0;max-width:100%;white-space:normal;overflow-wrap:anywhere;word-break:break-word;line-height:1.35}
+.admin-section[data-admin-section="users"] .folder-line .muted{grid-column:2;white-space:normal}
+.admin-section[data-admin-section="users"] .folder-line.folder-depth-0{padding-left:6px}.admin-section[data-admin-section="users"] .folder-line.folder-depth-1{padding-left:12px}.admin-section[data-admin-section="users"] .folder-line.folder-depth-2{padding-left:18px}.admin-section[data-admin-section="users"] .folder-line.folder-depth-3{padding-left:24px}.admin-section[data-admin-section="users"] .folder-line.folder-depth-4{padding-left:30px}.admin-section[data-admin-section="users"] .folder-line.folder-depth-5{padding-left:36px}.admin-section[data-admin-section="users"] .folder-line.folder-depth-6{padding-left:42px}.admin-section[data-admin-section="users"] .folder-line.folder-depth-7{padding-left:48px}.admin-section[data-admin-section="users"] .folder-line.folder-depth-8{padding-left:54px}.admin-section[data-admin-section="users"] .folder-line.folder-depth-9{padding-left:60px}.admin-section[data-admin-section="users"] .folder-line.folder-depth-10{padding-left:66px}
+@media(max-width:719px){.admin-section[data-admin-section="users"]{overflow-x:visible;padding-bottom:0}.admin-section[data-admin-section="users"] .user-management-layout{display:block;min-width:0}.admin-section[data-admin-section="users"] .user-create-card,.admin-section[data-admin-section="users"] .user-list-card,.admin-section[data-admin-section="users"] .user-edit-card{margin-bottom:14px}.admin-section[data-admin-section="users"] #create-form,.admin-section[data-admin-section="users"] #edit-form{display:block}.admin-section[data-admin-section="users"] #create-form>.field,.admin-section[data-admin-section="users"] #edit-form>.field,.admin-section[data-admin-section="users"] #create-form .permission-grid>.field,.admin-section[data-admin-section="users"] #edit-form .permission-grid>.field{display:grid;grid-template-columns:1fr;margin:0 0 12px}.admin-section[data-admin-section="users"] #create-form>.field>label,.admin-section[data-admin-section="users"] #edit-form>.field>label,.admin-section[data-admin-section="users"] #create-form .permission-grid>.field>label,.admin-section[data-admin-section="users"] #edit-form .permission-grid>.field>label,.admin-section[data-admin-section="users"] #create-form>.field>input,.admin-section[data-admin-section="users"] #create-form>.field>select,.admin-section[data-admin-section="users"] #create-form>.field>textarea,.admin-section[data-admin-section="users"] #create-form>.field>.folder-picker,.admin-section[data-admin-section="users"] #create-form>.field>.selection-summary,.admin-section[data-admin-section="users"] #edit-form>.field>input,.admin-section[data-admin-section="users"] #edit-form>.field>select,.admin-section[data-admin-section="users"] #edit-form>.field>textarea,.admin-section[data-admin-section="users"] #edit-form>.field>.folder-picker,.admin-section[data-admin-section="users"] #edit-form>.field>.selection-summary,.admin-section[data-admin-section="users"] #create-form .permission-grid>.field>input,.admin-section[data-admin-section="users"] #create-form .permission-grid>.field>textarea,.admin-section[data-admin-section="users"] #create-form .permission-grid>.field>.folder-picker,.admin-section[data-admin-section="users"] #create-form .permission-grid>.field>.selection-summary,.admin-section[data-admin-section="users"] #edit-form .permission-grid>.field>input,.admin-section[data-admin-section="users"] #edit-form .permission-grid>.field>textarea,.admin-section[data-admin-section="users"] #edit-form .permission-grid>.field>.folder-picker,.admin-section[data-admin-section="users"] #edit-form .permission-grid>.field>.selection-summary,.admin-section[data-admin-section="users"] #create-form>.field>p,.admin-section[data-admin-section="users"] #edit-form>.field>p,.admin-section[data-admin-section="users"] #create-form .permission-grid>.field>p,.admin-section[data-admin-section="users"] #edit-form .permission-grid>.field>p{grid-column:1}.admin-section[data-admin-section="users"] .folder-picker{max-height:240px;min-height:150px}}
+
+
+/* v500 user management three-panel redesign.
+   The users tab is intentionally organized as three horizontal panels:
+   사용자 생성 | 사용자 목록 | 사용자 편집.  Inner controls are grouped into
+   compact horizontal rows instead of stacked label/control columns. */
+@media(min-width:720px){
+  .admin-section[data-admin-section="users"]{overflow-x:auto;max-width:100%;padding-bottom:12px}
+  .admin-section[data-admin-section="users"] .user-management-layout{display:grid;grid-template-columns:minmax(360px,.92fr) minmax(300px,.72fr) minmax(500px,1.2fr);grid-template-areas:"create list edit";gap:12px;align-items:start;min-width:1184px;width:100%}
+  .admin-section[data-admin-section="users"] .user-create-card{grid-area:create}
+  .admin-section[data-admin-section="users"] .user-list-card{grid-area:list}
+  .admin-section[data-admin-section="users"] .user-edit-card{grid-area:edit}
+  .admin-section[data-admin-section="users"] .user-panel{min-width:0;padding:16px;max-height:calc(100vh - 148px);overflow:auto}
+  .admin-section[data-admin-section="users"] .user-panel-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:12px}
+  .admin-section[data-admin-section="users"] .user-panel-heading h2{margin-bottom:4px}
+  .admin-section[data-admin-section="users"] .user-panel-heading p{margin:0;line-height:1.45}
+  .admin-section[data-admin-section="users"] #create-form,.admin-section[data-admin-section="users"] #edit-form{display:grid;grid-template-columns:1fr;gap:10px;align-items:start}
+  .admin-section[data-admin-section="users"] .user-form-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-items:start}
+  .admin-section[data-admin-section="users"] .user-form-row-compact{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .admin-section[data-admin-section="users"] #create-form .field,.admin-section[data-admin-section="users"] #edit-form .field{display:grid;grid-template-columns:1fr;gap:6px;margin:0;min-width:0}
+  .admin-section[data-admin-section="users"] #create-form .field>label,.admin-section[data-admin-section="users"] #edit-form .field>label{grid-column:1;padding:0;align-self:auto;line-height:1.35}
+  .admin-section[data-admin-section="users"] #create-form .field>input,.admin-section[data-admin-section="users"] #create-form .field>select,.admin-section[data-admin-section="users"] #create-form .field>textarea,.admin-section[data-admin-section="users"] #edit-form .field>input,.admin-section[data-admin-section="users"] #edit-form .field>select,.admin-section[data-admin-section="users"] #edit-form .field>textarea{grid-column:1;min-width:0;margin:0}
+  .admin-section[data-admin-section="users"] #create-form textarea,.admin-section[data-admin-section="users"] #edit-form textarea{min-height:64px}
+  .admin-section[data-admin-section="users"] .field-panel{display:grid;gap:8px;margin:0;padding:10px;border:1px solid var(--border);border-radius:14px;background:rgba(255,255,255,.018);min-width:0}
+  .admin-section[data-admin-section="users"] .field-panel-header{display:grid;grid-template-columns:minmax(96px,.32fr) minmax(0,1fr);gap:8px;align-items:start;min-width:0}
+  .admin-section[data-admin-section="users"] .field-panel-header>label{padding-top:9px;line-height:1.3}
+  .admin-section[data-admin-section="users"] .field-panel-header>input,.admin-section[data-admin-section="users"] .field-panel-header>textarea{min-width:0;margin:0}
+  .admin-section[data-admin-section="users"] .picker-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(130px,.65fr);gap:8px;min-width:0;align-items:start}
+  .admin-section[data-admin-section="users"] .picker-column{display:grid;gap:6px;min-width:0}
+  .admin-section[data-admin-section="users"] .picker-column-summary{align-self:stretch}
+  .admin-section[data-admin-section="users"] .selection-summary{min-height:42px;margin-top:0;align-content:start;max-height:120px;overflow:auto;border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:6px;background:rgba(0,0,0,.12)}
+  .admin-section[data-admin-section="users"] .user-mutation-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:0}
+  .admin-section[data-admin-section="users"] .mutation-panel{padding:10px}
+  .admin-section[data-admin-section="users"] .mutation-panel .field-panel-header{grid-template-columns:1fr;gap:6px}
+  .admin-section[data-admin-section="users"] .mutation-panel .field-panel-header>label{padding-top:0}
+  .admin-section[data-admin-section="users"] .picker-grid-compact{grid-template-columns:minmax(0,1fr)}
+  .admin-section[data-admin-section="users"] .picker-grid-compact .picker-column-summary{min-height:0}
+  .admin-section[data-admin-section="users"] .picker-grid-compact .selection-summary{max-height:86px}
+  .admin-section[data-admin-section="users"] .folder-picker{min-height:176px;max-height:260px;padding:8px;overflow:auto}
+  .admin-section[data-admin-section="users"] .mutation-panel .folder-picker{min-height:132px;max-height:180px}
+  .admin-section[data-admin-section="users"] .folder-line{display:grid;grid-template-columns:auto minmax(0,1fr);grid-auto-rows:auto;column-gap:8px;row-gap:2px;align-items:start;min-width:0;max-width:100%}
+  .admin-section[data-admin-section="users"] .folder-line input{grid-column:1;grid-row:1 / span 2;margin-top:3px}
+  .admin-section[data-admin-section="users"] .folder-line span{grid-column:2;min-width:0;max-width:100%;white-space:normal;overflow-wrap:anywhere;word-break:break-word;line-height:1.35}
+  .admin-section[data-admin-section="users"] .folder-line .muted{grid-column:2;white-space:normal}
+  .admin-section[data-admin-section="users"] .folder-line.folder-depth-0{padding-left:6px}.admin-section[data-admin-section="users"] .folder-line.folder-depth-1{padding-left:10px}.admin-section[data-admin-section="users"] .folder-line.folder-depth-2{padding-left:14px}.admin-section[data-admin-section="users"] .folder-line.folder-depth-3{padding-left:18px}.admin-section[data-admin-section="users"] .folder-line.folder-depth-4{padding-left:22px}.admin-section[data-admin-section="users"] .folder-line.folder-depth-5{padding-left:26px}.admin-section[data-admin-section="users"] .folder-line.folder-depth-6{padding-left:30px}.admin-section[data-admin-section="users"] .folder-line.folder-depth-7{padding-left:34px}.admin-section[data-admin-section="users"] .folder-line.folder-depth-8{padding-left:38px}.admin-section[data-admin-section="users"] .folder-line.folder-depth-9{padding-left:42px}.admin-section[data-admin-section="users"] .folder-line.folder-depth-10{padding-left:46px}
+  .admin-section[data-admin-section="users"] .user-panel-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:0}
+  .admin-section[data-admin-section="users"] .compact-user-list{display:grid;gap:8px;max-height:calc(100vh - 240px);overflow:auto;padding-right:2px}
+  .admin-section[data-admin-section="users"] .compact-user-list .user-row{display:grid;grid-template-columns:minmax(96px,.52fr) minmax(0,1fr);grid-template-areas:"identity actions" "meta meta";gap:8px;align-items:start;padding:10px}
+  .admin-section[data-admin-section="users"] .user-identity{grid-area:identity;min-width:0}
+  .admin-section[data-admin-section="users"] .user-access-pills{grid-area:meta;display:flex;gap:5px;flex-wrap:wrap;min-width:0}
+  .admin-section[data-admin-section="users"] .user-row-actions{grid-area:actions;justify-content:flex-end;gap:5px}
+  .admin-section[data-admin-section="users"] .user-row-actions button{padding:6px 8px;border-radius:9px;font-size:.76rem}
+  .admin-section[data-admin-section="users"] .edit-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid var(--border);border-radius:12px;padding:9px 10px;background:rgba(255,255,255,.02)}
+  .admin-section[data-admin-section="users"] .edit-toolbar h3{margin:0}
+  .admin-section[data-admin-section="users"] .edit-toolbar .checkline{margin:0;white-space:nowrap}
+  .admin-section[data-admin-section="users"] .edit-subsections{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-items:start}
+  .admin-section[data-admin-section="users"] .edit-subcard{min-width:0;border:1px solid var(--border);border-radius:14px;padding:10px;background:rgba(255,255,255,.018);margin:0}
+  .admin-section[data-admin-section="users"] .edit-subcard h3{margin:0 0 6px;font-size:.95rem}
+  .admin-section[data-admin-section="users"] .edit-subcard p{margin:0 0 8px;line-height:1.45}
+  .admin-section[data-admin-section="users"] .edit-subcard .status{max-height:96px}
+  .admin-section[data-admin-section="users"] .edit-danger-card{grid-column:1/-1;border-color:rgba(248,113,113,.34);background:rgba(248,113,113,.055)}
+  .admin-section[data-admin-section="users"] #edit-empty{min-height:420px}
+}
+@media(min-width:720px) and (max-width:1180px){
+  .admin-section[data-admin-section="users"] .user-management-layout{min-width:1184px}
+}
+@media(max-width:719px){
+  .admin-section[data-admin-section="users"] .user-management-layout{display:block;min-width:0;width:100%}
+  .admin-section[data-admin-section="users"] .user-panel{max-height:none;overflow:visible;margin-bottom:14px}
+  .admin-section[data-admin-section="users"] .user-form-row,.admin-section[data-admin-section="users"] .picker-grid,.admin-section[data-admin-section="users"] .user-mutation-row,.admin-section[data-admin-section="users"] .edit-subsections{grid-template-columns:1fr}
+  .admin-section[data-admin-section="users"] .field-panel-header{grid-template-columns:1fr}
+  .admin-section[data-admin-section="users"] .compact-user-list .user-row{grid-template-columns:1fr;grid-template-areas:"identity" "meta" "actions"}
+  .admin-section[data-admin-section="users"] .user-row-actions{justify-content:flex-start}
+}
+
+
+/* v501 user management forced three-panel row redesign.
+   The user-management tab must remain 사용자 생성 | 사용자 목록 | 사용자 편집 horizontally.
+   Narrow viewports use horizontal scroll, not a vertical fallback. */
+.admin-users-page main{max-width:none;width:100%}
+.admin-section[data-admin-section="users"]{overflow-x:auto;max-width:100%;padding-bottom:14px}
+.admin-section[data-admin-section="users"] .user-management-layout{display:flex!important;flex-flow:row nowrap!important;grid-template-columns:none!important;grid-template-areas:none!important;align-items:flex-start!important;gap:14px;min-width:1510px;width:max-content;max-width:none}
+.admin-section[data-admin-section="users"] .user-create-card{order:1;grid-area:auto!important;flex:0 0 500px;min-width:500px;max-width:500px}
+.admin-section[data-admin-section="users"] .user-list-card{order:2;grid-area:auto!important;flex:0 0 340px;min-width:340px;max-width:340px}
+.admin-section[data-admin-section="users"] .user-edit-card{order:3;grid-area:auto!important;flex:0 0 640px;min-width:640px;max-width:640px}
+.admin-section[data-admin-section="users"] .user-panel{margin-bottom:0!important;max-height:calc(100vh - 148px);overflow:auto;padding:16px}
+.admin-section[data-admin-section="users"] .user-panel-heading{min-height:64px;margin-bottom:12px}
+.admin-section[data-admin-section="users"] .user-panel-heading p{margin:0;line-height:1.42}
+.admin-section[data-admin-section="users"] .user-create-card .user-form-row-compact{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.admin-section[data-admin-section="users"] .user-create-card .user-form-row-access{display:grid;grid-template-columns:minmax(150px,.42fr) minmax(0,.58fr);gap:10px}
+.admin-section[data-admin-section="users"] .user-edit-card .user-form-row-access{display:grid;grid-template-columns:minmax(170px,.38fr) minmax(0,.62fr);gap:10px}
+.admin-section[data-admin-section="users"] .user-create-card .field,.admin-section[data-admin-section="users"] .user-edit-card .field{display:grid!important;grid-template-columns:1fr!important;gap:6px;margin:0;min-width:0}
+.admin-section[data-admin-section="users"] .field-panel{padding:10px;border:1px solid var(--border);border-radius:14px;background:rgba(255,255,255,.018);min-width:0}
+.admin-section[data-admin-section="users"] .access-picker-panel .field-panel-header{display:grid;grid-template-columns:128px minmax(0,1fr);gap:10px;align-items:center}
+.admin-section[data-admin-section="users"] .mutation-panel .field-panel-header{display:grid;grid-template-columns:112px minmax(0,1fr);gap:8px;align-items:start}
+.admin-section[data-admin-section="users"] .mutation-panel .field-panel-header textarea{min-height:58px}
+.admin-section[data-admin-section="users"] .picker-grid{display:grid;grid-template-columns:minmax(0,1.32fr) minmax(170px,.68fr);gap:10px;align-items:start}
+.admin-section[data-admin-section="users"] .picker-grid-compact{display:grid;grid-template-columns:minmax(0,1fr) minmax(150px,.7fr);gap:8px}
+.admin-section[data-admin-section="users"] .user-mutation-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:0}
+.admin-section[data-admin-section="users"] .user-create-card .folder-picker{min-height:218px;max-height:320px}
+.admin-section[data-admin-section="users"] .user-create-card .mutation-panel .folder-picker{min-height:150px;max-height:210px}
+.admin-section[data-admin-section="users"] .user-edit-card .folder-picker{min-height:210px;max-height:300px}
+.admin-section[data-admin-section="users"] .user-edit-card .mutation-panel .folder-picker{min-height:142px;max-height:204px}
+.admin-section[data-admin-section="users"] .folder-line{display:grid!important;grid-template-columns:auto minmax(0,1fr);grid-auto-rows:auto;column-gap:8px;row-gap:2px;align-items:start;min-width:0;max-width:100%}
+.admin-section[data-admin-section="users"] .folder-line input{grid-column:1;grid-row:1 / span 2;margin-top:3px;width:auto}
+.admin-section[data-admin-section="users"] .folder-line span{grid-column:2;min-width:0;max-width:100%;white-space:normal;overflow-wrap:anywhere;word-break:break-word;line-height:1.35}
+.admin-section[data-admin-section="users"] .folder-line .muted{grid-column:2;white-space:normal}
+.admin-section[data-admin-section="users"] .folder-line.folder-depth-0{padding-left:6px}.admin-section[data-admin-section="users"] .folder-line.folder-depth-1{padding-left:10px}.admin-section[data-admin-section="users"] .folder-line.folder-depth-2{padding-left:14px}.admin-section[data-admin-section="users"] .folder-line.folder-depth-3{padding-left:18px}.admin-section[data-admin-section="users"] .folder-line.folder-depth-4{padding-left:22px}.admin-section[data-admin-section="users"] .folder-line.folder-depth-5{padding-left:26px}.admin-section[data-admin-section="users"] .folder-line.folder-depth-6{padding-left:30px}.admin-section[data-admin-section="users"] .folder-line.folder-depth-7{padding-left:34px}.admin-section[data-admin-section="users"] .folder-line.folder-depth-8{padding-left:38px}.admin-section[data-admin-section="users"] .folder-line.folder-depth-9{padding-left:42px}.admin-section[data-admin-section="users"] .folder-line.folder-depth-10{padding-left:46px}
+.admin-section[data-admin-section="users"] .compact-user-list{display:grid;gap:8px;max-height:calc(100vh - 240px);overflow:auto;padding-right:2px}
+.admin-section[data-admin-section="users"] .compact-user-list .user-row{display:grid!important;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"identity actions" "meta meta";gap:8px;align-items:start;padding:10px}
+.admin-section[data-admin-section="users"] .user-row-actions{grid-area:actions;display:flex;justify-content:flex-end;gap:5px;flex-wrap:wrap}
+.admin-section[data-admin-section="users"] .user-identity{grid-area:identity;min-width:0}
+.admin-section[data-admin-section="users"] .user-access-pills{grid-area:meta;display:flex;gap:5px;flex-wrap:wrap;min-width:0}
+.admin-section[data-admin-section="users"] .edit-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.admin-section[data-admin-section="users"] .edit-subsections{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-items:start}
+.admin-section[data-admin-section="users"] .edit-danger-card{grid-column:1/-1}
+@media(max-width:719px){
+  .admin-section[data-admin-section="users"]{overflow-x:auto!important;padding-bottom:14px!important}
+  .admin-section[data-admin-section="users"] .user-management-layout{display:flex!important;flex-flow:row nowrap!important;min-width:1510px!important;width:max-content!important}
+  .admin-section[data-admin-section="users"] .user-create-card{flex:0 0 500px!important;min-width:500px!important;max-width:500px!important;margin-bottom:0!important}
+  .admin-section[data-admin-section="users"] .user-list-card{flex:0 0 340px!important;min-width:340px!important;max-width:340px!important;margin-bottom:0!important}
+  .admin-section[data-admin-section="users"] .user-edit-card{flex:0 0 640px!important;min-width:640px!important;max-width:640px!important;margin-bottom:0!important}
+  .admin-section[data-admin-section="users"] .user-form-row{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .admin-section[data-admin-section="users"] .user-form-row-access{grid-template-columns:minmax(150px,.42fr) minmax(0,.58fr)}
+  .admin-section[data-admin-section="users"] .picker-grid{grid-template-columns:minmax(0,1.32fr) minmax(170px,.68fr)}
+  .admin-section[data-admin-section="users"] .picker-grid-compact{grid-template-columns:minmax(0,1fr) minmax(150px,.7fr)}
+  .admin-section[data-admin-section="users"] .user-mutation-row{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .admin-section[data-admin-section="users"] .edit-subsections{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+/* v502 user management workbench tabs redesign.
+   The previous implementation rendered three tall vertical lanes.  The owner
+   user-management tab now uses horizontal sub-tabs and shows one wide workbench
+   panel at a time, so it no longer appears as 세로 3열. */
+.admin-users-page main{max-width:none;width:100%}
+.admin-section[data-admin-section="users"]{overflow-x:visible!important;max-width:none!important;padding-bottom:14px!important}
+.admin-section[data-admin-section="users"] .user-workbench-tabs{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 12px;padding:10px;border:1px solid var(--border);border-radius:18px;background:rgba(255,255,255,.026)}
+.admin-section[data-admin-section="users"] .user-workbench-tabs button{min-width:160px;justify-content:center}
+.admin-section[data-admin-section="users"] .user-workbench-tabs button.active{border-color:rgba(52,211,153,.62);background:rgba(52,211,153,.14);color:#d1fae5}
+.admin-section[data-admin-section="users"] .user-management-layout{display:block!important;width:100%!important;min-width:0!important;max-width:none!important}
+.admin-section[data-admin-section="users"] .user-panel[hidden]{display:none!important}
+.admin-section[data-admin-section="users"] .user-panel.is-active{display:block!important}
+.admin-section[data-admin-section="users"] .user-create-card,.admin-section[data-admin-section="users"] .user-list-card,.admin-section[data-admin-section="users"] .user-edit-card{order:0!important;grid-area:auto!important;flex:none!important;min-width:0!important;max-width:none!important;width:100%!important;margin:0!important;max-height:none!important;overflow:visible!important;padding:18px!important}
+.admin-section[data-admin-section="users"] .user-panel-heading{min-height:0!important;display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:14px!important}
+.admin-section[data-admin-section="users"] .user-panel-form{display:grid!important;grid-template-columns:1fr!important;gap:12px!important;align-items:start!important}
+.admin-section[data-admin-section="users"] .user-form-row{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:12px!important;align-items:start!important}
+.admin-section[data-admin-section="users"] .user-form-row-compact{grid-template-columns:repeat(2,minmax(0,1fr))!important;max-width:820px}
+.admin-section[data-admin-section="users"] .user-form-row-access{grid-template-columns:minmax(220px,.34fr) minmax(360px,.66fr)!important}
+.admin-section[data-admin-section="users"] .user-create-card .field,.admin-section[data-admin-section="users"] .user-edit-card .field{display:grid!important;grid-template-columns:132px minmax(0,1fr)!important;gap:8px 12px!important;align-items:center!important;margin:0!important;min-width:0!important}
+.admin-section[data-admin-section="users"] .user-create-card .field>label,.admin-section[data-admin-section="users"] .user-edit-card .field>label{grid-column:1!important;padding:0!important;align-self:center!important;line-height:1.35!important}
+.admin-section[data-admin-section="users"] .user-create-card .field>input,.admin-section[data-admin-section="users"] .user-create-card .field>select,.admin-section[data-admin-section="users"] .user-create-card .field>textarea,.admin-section[data-admin-section="users"] .user-edit-card .field>input,.admin-section[data-admin-section="users"] .user-edit-card .field>select,.admin-section[data-admin-section="users"] .user-edit-card .field>textarea{grid-column:2!important;min-width:0!important;margin:0!important;width:100%!important}
+.admin-section[data-admin-section="users"] .field-panel{padding:12px!important;border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.018);min-width:0!important}
+.admin-section[data-admin-section="users"] .access-picker-panel .field-panel-header{display:grid!important;grid-template-columns:140px minmax(320px,1fr)!important;gap:12px!important;align-items:center!important}
+.admin-section[data-admin-section="users"] .picker-grid{display:grid!important;grid-template-columns:minmax(420px,1.12fr) minmax(260px,.88fr)!important;gap:12px!important;align-items:start!important}
+.admin-section[data-admin-section="users"] .picker-grid-compact{grid-template-columns:minmax(360px,1.05fr) minmax(220px,.95fr)!important}
+.admin-section[data-admin-section="users"] .user-mutation-row{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important;margin:0!important}
+.admin-section[data-admin-section="users"] .mutation-panel .field-panel-header{display:grid!important;grid-template-columns:132px minmax(0,1fr)!important;gap:10px!important;align-items:start!important}
+.admin-section[data-admin-section="users"] .mutation-panel .field-panel-header textarea{min-height:64px!important}
+.admin-section[data-admin-section="users"] .folder-picker{min-height:220px!important;max-height:340px!important}
+.admin-section[data-admin-section="users"] .mutation-panel .folder-picker{min-height:170px!important;max-height:260px!important}
+.admin-section[data-admin-section="users"] .folder-line{display:grid!important;grid-template-columns:auto minmax(0,1fr);grid-auto-rows:auto;column-gap:8px;row-gap:2px;align-items:start;min-width:0;max-width:100%}
+.admin-section[data-admin-section="users"] .folder-line input{grid-column:1;grid-row:1 / span 2;margin-top:3px;width:auto}
+.admin-section[data-admin-section="users"] .folder-line span{grid-column:2;min-width:0;max-width:100%;white-space:normal;overflow-wrap:anywhere;word-break:break-word;line-height:1.35}
+.admin-section[data-admin-section="users"] .folder-line .muted{grid-column:2;white-space:normal}
+.admin-section[data-admin-section="users"] .compact-user-list{display:grid!important;gap:8px;max-height:none!important;overflow:visible!important;padding-right:0!important}
+.admin-section[data-admin-section="users"] .compact-user-list .user-row{display:grid!important;grid-template-columns:minmax(220px,.9fr) minmax(280px,1.2fr) auto!important;grid-template-areas:"identity meta actions"!important;gap:10px!important;align-items:center!important;padding:10px 12px!important}
+.admin-section[data-admin-section="users"] .user-row-actions{grid-area:actions!important;display:flex!important;justify-content:flex-end!important;gap:6px!important;flex-wrap:wrap!important}
+.admin-section[data-admin-section="users"] .user-identity{grid-area:identity!important;min-width:0!important}
+.admin-section[data-admin-section="users"] .user-access-pills{grid-area:meta!important;display:flex!important;gap:5px!important;flex-wrap:wrap!important;min-width:0!important}
+.admin-section[data-admin-section="users"] .edit-toolbar{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:12px!important;border:1px solid var(--border);border-radius:14px;padding:10px 12px;background:rgba(255,255,255,.018)}
+.admin-section[data-admin-section="users"] .edit-subsections{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:12px!important;align-items:start!important}
+.admin-section[data-admin-section="users"] .edit-danger-card{grid-column:auto!important}
+.admin-section[data-admin-section="users"] #edit-empty{min-height:280px!important;display:grid;place-items:center}
+@media(max-width:980px){
+  .admin-section[data-admin-section="users"]{overflow-x:auto!important}
+  .admin-section[data-admin-section="users"] .user-panel.is-active{min-width:960px!important;width:960px!important}
+  .admin-section[data-admin-section="users"] .user-workbench-tabs{min-width:960px!important;width:960px!important;flex-wrap:nowrap}
+}
+
+/* v530 owner diagnostics readability cleanup. v530-owner-diagnostics-readability-css-pass
+   Keep operations diagnostics full-width where the payload is table-heavy, and
+   avoid narrow one-column auto-placement that splits Korean/English words into
+   vertical fragments. */
+.diagnostics-output>.diagnostics-cf-tunnel-exposure{grid-column:1/-1}
+.diagnostics-output>.diagnostics-findings{grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))}
+.ops-mini-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr))}
+.ops-mini-card{min-width:0;overflow:hidden}
+.ops-mini-card strong{font-size:14px;line-height:1.28;overflow-wrap:break-word;word-break:normal;hyphens:auto}
+.ops-mini-card span,.ops-mini-card small{line-height:1.35;overflow-wrap:break-word;word-break:normal}
+.diagnostics-card{min-width:0;overflow:hidden}
+.diagnostics-card h3{line-height:1.3;word-break:keep-all;overflow-wrap:break-word}
+.diagnostics-card table{table-layout:auto;min-width:100%}
+.diagnostics-card th,.diagnostics-card td{line-height:1.45;overflow-wrap:break-word;word-break:normal}
+.diagnostics-card code,.diagnostics-finding-head code{overflow-wrap:anywhere;word-break:normal;white-space:normal}
+.diagnostics-output>.diagnostics-cf-tunnel-exposure .diagnostics-table-wrap,.diagnostics-finding .diagnostics-table-wrap{max-height:none;overflow-x:auto;overflow-y:visible}
+.diagnostics-cf-tunnel-exposure table,.diagnostics-checklist table{min-width:760px}
+.diagnostics-finding-table table{min-width:0;width:100%}
+.diagnostics-finding-table th{width:88px;white-space:nowrap}
+.diagnostics-finding-table td{white-space:normal}.diagnostics-fix{display:block;max-height:none;overflow:visible}
+.diagnostics-finding-head strong{min-width:0;line-height:1.32;word-break:keep-all;overflow-wrap:break-word}.diagnostics-finding-head code{flex:0 1 auto;max-width:46%;text-align:right}
+@media(max-width:1180px){.diagnostics-output>.diagnostics-findings{grid-template-columns:1fr}.ops-mini-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr))}.diagnostics-cf-tunnel-exposure table,.diagnostics-checklist table{min-width:680px}}
+@media(max-width:760px){.diagnostics-finding-head code{max-width:100%;text-align:left}.diagnostics-cf-tunnel-exposure table,.diagnostics-checklist table{min-width:620px}}
+
+/* v557 mobile user management width containment.
+   Keep the desktop owner workbench layout, but remove the previous mobile
+   960px/1510px fixed-width overrides so user-management cards fit the
+   viewport without horizontal page scrolling. */
+@media(max-width:980px){
+  .admin-users-page{padding:12px!important;overflow-x:hidden!important}
+  .admin-users-page main{width:100%!important;max-width:100%!important;min-width:0!important;gap:12px!important}
+  .admin-users-page .card{max-width:100%!important;min-width:0!important;padding:14px!important}
+  .admin-section[data-admin-section="users"]{overflow-x:visible!important;max-width:100%!important;min-width:0!important;padding-bottom:0!important}
+  .admin-section[data-admin-section="users"] .user-workbench-tabs{min-width:0!important;width:100%!important;max-width:100%!important;flex-wrap:wrap!important;gap:8px!important;padding:8px!important}
+  .admin-section[data-admin-section="users"] .user-workbench-tabs button{min-width:0!important;flex:1 1 calc(50% - 8px)!important;padding:9px 10px!important;white-space:normal!important}
+  .admin-section[data-admin-section="users"] .user-management-layout{display:block!important;width:100%!important;min-width:0!important;max-width:100%!important;overflow:visible!important}
+  .admin-section[data-admin-section="users"] .user-panel.is-active{width:100%!important;min-width:0!important;max-width:100%!important;overflow:visible!important}
+  .admin-section[data-admin-section="users"] .user-create-card,.admin-section[data-admin-section="users"] .user-list-card,.admin-section[data-admin-section="users"] .user-edit-card{width:100%!important;min-width:0!important;max-width:100%!important;flex:none!important;padding:14px!important;overflow:visible!important}
+  .admin-section[data-admin-section="users"] .user-panel-heading{display:block!important;margin-bottom:12px!important}
+  .admin-section[data-admin-section="users"] .user-panel-form{display:grid!important;grid-template-columns:1fr!important;gap:10px!important;width:100%!important;min-width:0!important}
+  .admin-section[data-admin-section="users"] .user-form-row,.admin-section[data-admin-section="users"] .user-form-row-compact,.admin-section[data-admin-section="users"] .user-form-row-access,.admin-section[data-admin-section="users"] .picker-grid,.admin-section[data-admin-section="users"] .picker-grid-compact,.admin-section[data-admin-section="users"] .user-mutation-row,.admin-section[data-admin-section="users"] .edit-subsections{display:grid!important;grid-template-columns:1fr!important;width:100%!important;min-width:0!important;max-width:100%!important;gap:10px!important}
+  .admin-section[data-admin-section="users"] .access-picker-panel .field-panel-header,.admin-section[data-admin-section="users"] .mutation-panel .field-panel-header{display:grid!important;grid-template-columns:1fr!important;gap:8px!important;align-items:start!important}
+  .admin-section[data-admin-section="users"] .user-create-card .field,.admin-section[data-admin-section="users"] .user-edit-card .field{display:grid!important;grid-template-columns:1fr!important;gap:6px!important;width:100%!important;min-width:0!important}
+  .admin-section[data-admin-section="users"] .user-create-card .field>label,.admin-section[data-admin-section="users"] .user-edit-card .field>label,.admin-section[data-admin-section="users"] .user-create-card .field>input,.admin-section[data-admin-section="users"] .user-create-card .field>select,.admin-section[data-admin-section="users"] .user-create-card .field>textarea,.admin-section[data-admin-section="users"] .user-edit-card .field>input,.admin-section[data-admin-section="users"] .user-edit-card .field>select,.admin-section[data-admin-section="users"] .user-edit-card .field>textarea{grid-column:1!important;min-width:0!important;width:100%!important;max-width:100%!important}
+  .admin-section[data-admin-section="users"] .field-panel{width:100%!important;min-width:0!important;max-width:100%!important;padding:10px!important}
+  .admin-section[data-admin-section="users"] input,.admin-section[data-admin-section="users"] select,.admin-section[data-admin-section="users"] textarea{min-width:0!important;max-width:100%!important}
+  .admin-section[data-admin-section="users"] .folder-picker{min-height:150px!important;max-height:240px!important;width:100%!important;min-width:0!important;max-width:100%!important}
+  .admin-section[data-admin-section="users"] .selection-summary{width:100%!important;min-width:0!important;max-width:100%!important;overflow-wrap:anywhere!important}
+  .admin-section[data-admin-section="users"] .compact-user-list .user-row{grid-template-columns:1fr!important;grid-template-areas:"identity" "meta" "actions"!important;align-items:start!important;min-width:0!important;max-width:100%!important}
+  .admin-section[data-admin-section="users"] .user-row-actions{justify-content:flex-start!important}
+  .admin-section[data-admin-section="users"] .edit-toolbar{display:grid!important;grid-template-columns:1fr!important;align-items:start!important}
+}
+@media(max-width:520px){
+  .admin-section[data-admin-section="users"] .user-workbench-tabs button{flex-basis:100%!important}
+  .admin-section[data-admin-section="users"] .user-panel-actions button,.admin-section[data-admin-section="users"] .user-row-actions button{width:100%!important}
+}
+
+/* v560 shared site-language pack admin UI */
+.language-pack-admin-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(280px,.95fr);gap:16px;align-items:start}
+.language-pack-form{display:grid;gap:12px;min-width:0}
+.language-pack-map{min-height:320px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;line-height:1.45;white-space:pre;overflow:auto}
+.language-pack-row{align-items:start}.language-pack-row .actions{align-self:start}
+@media(max-width:980px){.language-pack-admin-grid{grid-template-columns:1fr}.language-pack-map{min-height:240px}.admin-section[data-admin-section="languages"] .user-row{display:grid;grid-template-columns:1fr;gap:10px}.admin-section[data-admin-section="languages"] .actions{justify-content:flex-start;flex-wrap:wrap}}

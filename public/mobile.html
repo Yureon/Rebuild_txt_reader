@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="TxT Reader">
+<link rel="apple-touch-icon" sizes="180x180" href="/icon/apple-icon-180x180.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/icon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/icon/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json?v=rebuild-v564">
+<meta name="theme-color" content="#000000">
+<title>TxT Reader Mobile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link id="builtin-font-defaults" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500&family=Pretendard:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="styles/app.css?v=rebuild-v564" rel="stylesheet">
+<link rel="modulepreload" href="/scripts/rebuild/core/app-shell.mjs">
+<link rel="modulepreload" href="/scripts/rebuild/main.mjs">
+<link rel="modulepreload" href="/scripts/rebuild/core/api.mjs">
+<link rel="modulepreload" href="/scripts/rebuild/core/utils.mjs">
+<link rel="modulepreload" href="/scripts/rebuild/state/app-state.mjs">
+<link rel="modulepreload" href="/scripts/rebuild/features/ui.mjs">
+<link rel="modulepreload" href="/scripts/rebuild/features/library.mjs">
+<link rel="modulepreload" href="/scripts/rebuild/features/reader.mjs">
+<link rel="modulepreload" href="/scripts/rebuild/features/search.mjs">
+<link rel="modulepreload" href="/scripts/rebuild/features/theme-settings.mjs">
+<meta content="light dark" name="color-scheme">
+</head>
+<body data-theme="light" data-client-profile="mobile" class="reader-mobile">
+<div id="boot-skeleton" class="app-skeleton-shell" data-skeleton-ui-pass="v417-skeleton-ui-pass" aria-hidden="true">
+  <aside class="app-skeleton-sidebar">
+    <div class="skeleton-line title"></div>
+    <div class="skeleton-input"></div>
+    <div class="skeleton-row"></div>
+    <div class="skeleton-row short"></div>
+    <div class="skeleton-row"></div>
+    <div class="skeleton-row mid"></div>
+  </aside>
+  <main class="app-skeleton-main">
+    <div class="skeleton-toolbar"><div class="skeleton-dot"></div><div class="skeleton-line title"></div><div class="skeleton-dot"></div></div>
+    <div class="reader-skeleton-block">
+      <div class="skeleton-line wide"></div>
+      <div class="skeleton-line"></div>
+      <div class="skeleton-line mid"></div>
+      <div class="skeleton-line wide"></div>
+      <div class="skeleton-line short"></div>
+    </div>
+  </main>
+</div>
+<script type="module" src="scripts/rebuild/mobile.mjs?v=rebuild-v564"></script>
+</body>
+</html>

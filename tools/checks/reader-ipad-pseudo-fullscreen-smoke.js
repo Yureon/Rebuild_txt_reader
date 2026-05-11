@@ -1,0 +1,16 @@
+const assert = require('assert');
+const fs = require('fs');
+const dom = fs.readFileSync('public/scripts/rebuild/features/reader/dom-actions.mjs', 'utf-8');
+const css = fs.readFileSync('public/styles/app.css', 'utf-8');
+assert(dom.includes("READER_IPAD_PSEUDO_FULLSCREEN_PASS = 'v456-reader-ipad-pseudo-fullscreen-pass'"), 'missing pseudo fullscreen marker');
+assert(dom.includes('document.webkitFullscreenElement'), 'webkit fullscreen state must be checked');
+assert(dom.includes('root.webkitRequestFullscreen'), 'webkit fullscreen request must be attempted');
+assert(dom.includes("PSEUDO_FULLSCREEN_CLASS = 'fullscreen-fallback'"), 'pseudo fullscreen class missing');
+assert(dom.includes('setPseudoFullscreen(true)'), 'fallback enable path missing');
+assert(css.includes('v456-reader-ipad-pseudo-fullscreen-pass'), 'CSS marker missing');
+assert(css.includes('body.fullscreen-fallback #app'), 'app viewport pin CSS missing');
+assert(css.includes('body.fullscreen-fallback .sidebar'), 'sidebar hide CSS missing');
+assert(css.includes('height:100dvh'), 'dynamic viewport height missing');
+assert(dom.includes('v462-viewport-fit-pseudo-fullscreen-refresh-pass'), 'pseudo fullscreen viewport refresh marker missing');
+assert(dom.includes("txt-reader-pseudo-fullscreen-change"), 'pseudo fullscreen viewport refresh event missing');
+console.log('v456-reader-ipad-pseudo-fullscreen-smoke-pass');

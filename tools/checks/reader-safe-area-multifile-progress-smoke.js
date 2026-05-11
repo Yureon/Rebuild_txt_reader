@@ -1,0 +1,14 @@
+const fs = require('fs');
+const assert = require('assert');
+const progress = fs.readFileSync('public/scripts/rebuild/features/reader/progress.mjs', 'utf8');
+assert.ok(progress.includes('v455-safe-area-multi-file-strict-folder-progress-pass'), 'strict folder progress marker missing');
+assert.ok(progress.includes('v429-safe-area-multi-file-overall-progress-pass'), 'legacy safe-area multi-file marker missing');
+assert.ok(progress.includes('getSafeAreaDisplayRatio'), 'safe-area display ratio helper missing');
+assert.ok(progress.includes('c?.novel?.isMultiFile && c?.episode'), 'multi-file episode guard missing');
+assert.ok(progress.includes('return overall;'), 'safe-area must display overall folder ratio for multi-file');
+assert.ok(!progress.includes('return local;'), 'safe-area multi-file display must not return local episode ratio');
+assert.ok(progress.includes("scope: 'folder-document'"), 'safe-area diagnostic scope must be folder-document for multi-file');
+assert.ok(progress.includes("dataset.safeProgressScope = c.novel?.isMultiFile && c.episode ? 'folder-document' : 'document'"), 'safe progress DOM scope must separate multi-file folder progress');
+assert.ok(progress.includes('localRatio: local'), 'local episode ratio diagnostic must be retained');
+assert.ok(progress.includes('folderRatio: overall'), 'folder ratio diagnostic must be retained');
+console.log('v455-reader-safe-area-multifile-progress-smoke-pass');

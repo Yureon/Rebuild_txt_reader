@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#000000">
+<link rel="manifest" href="/manifest.json?v=rebuild-v564">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon/icon-192.png">
+<title>TxT Reader</title>
+<link href="/styles/entry-router.css?v=rebuild-v564" rel="stylesheet">
+<script src="/scripts/entry-router.js?v=rebuild-v564" defer></script>
+</head>
+<body>
+  <main class="route-card" aria-label="TxT Reader entry selector">
+    <div class="kicker">TxT Reader</div>
+    <h1 class="title">페이지를 선택하세요</h1>
+    <p class="desc">자동 이동이 차단된 경우 아래 버튼으로 데스크톱용 사이트 페이지 또는 모바일 전용 페이지를 직접 열 수 있습니다.</p>
+    <div class="actions">
+      <a id="entry-site-link" class="btn primary" href="site.html">사이트 페이지</a>
+      <a id="entry-mobile-link" class="btn" href="mobile.html">모바일 페이지</a>
+    </div>
+    <noscript><div class="nojs">JavaScript가 꺼져 있으면 자동 분기가 동작하지 않습니다. 위 링크 중 하나를 선택하세요.</div></noscript>
+    <div class="hint">주소 직접 진입: <code>/site.html</code>, <code>/mobile.html</code>. 초기화하려면 브라우저 로컬 저장소의 <code>txt-reader.rebuild.preferredEntry</code> 값을 삭제하면 됩니다.</div>
+  </main>
+</body>
+</html>

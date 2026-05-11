@@ -1,0 +1,22 @@
+#!/usr/bin/env node
+const fs = require('fs');
+const path = require('path');
+const assert = require('assert');
+const root = path.resolve(__dirname, '../..');
+const runtime = fs.readFileSync(path.join(root, 'public/scripts/rebuild/features/library-virtual-render-runtime.mjs'), 'utf8');
+const anchor = fs.readFileSync(path.join(root, 'public/scripts/rebuild/features/library-scroll-anchor.mjs'), 'utf8');
+const docs = fs.readFileSync(path.join(root, 'docs/smoke-tests.md'), 'utf8');
+const runner = fs.readFileSync(path.join(root, 'tools/run_smoke_tests.js'), 'utf8');
+assert.ok(runtime.includes("LIBRARY_VIRTUAL_SCROLL_RESTORE_DECISION_PASS = 'v517-library-virtual-scroll-restore-decision-pass'"), 'virtual scroll restore decision marker missing');
+assert.ok(runtime.includes('resolveLibraryVirtualScrollRestoreOptions(options, anchor)'), 'restore decision helper must be used before anchor restore');
+assert.ok(runtime.includes('preferBottomEdge: virtualScroll'), 'virtual scroll should prefer bottom-edge retention near the list end');
+assert.ok(runtime.includes('skipMissingAnchorFallback: virtualScroll'), 'virtual scroll should not reapply stale scrollTop when the anchor row is absent');
+assert.ok(runtime.includes('anchorThresholdPx: virtualScroll ? 4 : 1'), 'virtual scroll row-anchor restore must use a softer threshold');
+assert.ok(anchor.includes("LIBRARY_SCROLL_ANCHOR_VIRTUAL_BOTTOM_RETAIN_PASS = 'v517-library-scroll-anchor-virtual-bottom-retain-pass'"), 'bottom retain marker missing');
+assert.ok(anchor.includes('bottomDistance'), 'captured anchor must include bottom distance');
+assert.ok(anchor.includes('nearBottom: bottomDistance <= bottomRetainThreshold'), 'captured anchor must classify bottom-edge range');
+assert.ok(anchor.includes('options.preferBottomEdge && anchor.nearBottom'), 'restore must prefer bottom edge near the end');
+assert.ok(anchor.includes('if (options.skipMissingAnchorFallback) return false'), 'missing-row fallback must be suppressible during native virtual scroll');
+assert.ok(docs.includes('library-virtual-scroll-restore-decision-smoke.js'), 'smoke docs must mention restore decision smoke');
+assert.ok(runner.includes("nodeCmd('tools/checks/library-virtual-scroll-restore-decision-smoke.js')"), 'runner must include restore decision smoke');
+console.log('v517-library-virtual-scroll-restore-decision-smoke-pass');

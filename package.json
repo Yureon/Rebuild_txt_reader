@@ -1,0 +1,35 @@
+{
+  "name": "txt-reader-multi",
+  "version": "1.0.0",
+  "dependencies": {
+    "express": "^4.18.2",
+    "iconv-lite": "^0.6.3",
+    "jschardet": "^3.1.4"
+  },
+  "scripts": {
+    "check:frontend": "node tools/check_frontend_supervisor.js",
+    "build:frontend-esm": "node tools/check_frontend_supervisor.js",
+    "check:server": "node tools/check_server_structure.js",
+    "check": "npm run check:frontend && npm run check:server",
+    "smoke:server": "node tools/run_smoke_tests.js --server",
+    "docs:scaffold": "node tools/rebuild_doc_scaffold.js",
+    "package:rebuild": "node tools/package_rebuild.js",
+    "docs:release-notes": "node tools/release_notes_from_package.js",
+    "library:reorganize": "node tools/reorganize_library_files.js",
+    "smoke": "node tools/run_smoke_tests.js --standard",
+    "smoke:quick": "node tools/run_smoke_tests.js --quick",
+    "smoke:full": "node tools/run_smoke_tests.js --full",
+    "smoke:docs": "node tools/run_smoke_tests.js --docs",
+    "smoke:cache": "node tools/run_smoke_tests.js --cache",
+    "smoke:security": "node tools/run_smoke_tests.js --security",
+    "smoke:reader": "node tools/run_smoke_tests.js --reader",
+    "smoke:search": "node tools/run_smoke_tests.js --search",
+    "smoke:settings": "node tools/run_smoke_tests.js --settings",
+    "smoke:frontend": "node tools/run_smoke_tests.js --frontend",
+    "verify": "node tools/run_smoke_tests.js --standard",
+    "verify:full": "node tools/run_smoke_tests.js --full",
+    "release:verify": "node tools/release_verify.js",
+    "site-language-packs:install": "sh tools/install_site_language_packs.sh",
+    "site-language-packs:smoke": "node tools/checks/site-language-pack-bundle-smoke.js"
+  }
+}

@@ -1,0 +1,16 @@
+const fs = require('fs');
+const path = require('path');
+const assert = require('assert');
+const root = path.join(__dirname, '../..');
+const PASS = 'v434-block-manifest-conditional-cache-smoke-pass';
+const source = fs.readFileSync(path.join(root, 'server/routes/block-manifest-routes.js'), 'utf8');
+assert.ok(source.includes("BLOCK_MANIFEST_CONDITIONAL_CACHE_PASS = 'v434-block-manifest-conditional-cache-pass'"), 'block manifest conditional cache marker missing');
+assert.ok(source.includes('function buildAuthCacheScope'), 'auth cache scope helper missing');
+assert.ok(source.includes('accessVersion'), 'etag scope must include accessVersion');
+assert.ok(source.includes('accessSig'), 'etag scope must include access signature');
+assert.ok(source.includes("appendVaryHeader(res, 'Cookie')"), 'manifest cache must vary by cookie');
+assert.ok(source.includes("private, max-age=0, must-revalidate"), 'manifest must use private revalidation cache policy');
+assert.ok(source.includes('if-none-match'), 'manifest must handle If-None-Match');
+assert.ok(source.includes('res.status(304).end()'), 'manifest must return 304 for matching etag');
+assert.ok(source.includes('generatedAt'), 'etag clone should explicitly ignore generatedAt');
+console.log(JSON.stringify({ pass: PASS }));

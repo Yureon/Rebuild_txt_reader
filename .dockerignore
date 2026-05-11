@@ -1,0 +1,15 @@
+node_modules
+npm-debug.log*
+.DS_Store
+.git
+.gitignore
+.env
+data
+sync_data.json
+chunk_indexes
+snapshots
+*.zip
+*_work
+work_*
+coverage
+.cache

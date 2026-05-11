@@ -1,0 +1,45 @@
+# dependencies
+node_modules/
+
+# env
+.env
+.env.local
+.env.production
+
+# runtime data
+data/
+cache/
+manifests/
+uploads/
+logs/
+
+# sqlite/db
+*.db
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+
+# temporary
+.tmp/
+tmp/
+*.tmp
+
+# pm2
+.pm2/
+
+# build
+build/
+dist/
+
+# coverage
+coverage/
+
+# OS/editor
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# compressed runtime artifacts
+*.log
+npm-debug.log*

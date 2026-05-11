@@ -1,0 +1,22 @@
+#!/usr/bin/env node
+const fs = require('fs');
+const path = require('path');
+const assert = require('assert');
+const root = path.resolve(__dirname, '..', '..');
+const ui = fs.readFileSync(path.join(root, 'public/scripts/rebuild/features/ui.mjs'), 'utf8');
+const css = fs.readFileSync(path.join(root, 'public/styles/app.css'), 'utf8');
+const runner = fs.readFileSync(path.join(root, 'tools/run_smoke_tests.js'), 'utf8');
+const release = fs.readFileSync(path.join(root, 'docs/release-history.md'), 'utf8');
+const PASS = 'v382-pc-site-sidebar-close-toggle-smoke-pass';
+assert.ok(ui.includes("PC_SITE_SIDEBAR_CLOSE_TOGGLE_PASS = 'v382-pc-site-sidebar-close-toggle-pass'"), 'ui must expose v382 PC sidebar close marker');
+assert.ok(ui.includes("const appRoot = () => app.els?.app || byId('app')"), 'ui must resolve app root for sidebar-hidden compatibility');
+assert.ok(ui.includes('setSiteSidebarCollapsed'), 'ui must centralize site sidebar collapsed state');
+assert.ok(ui.includes('appRoot()?.classList.toggle("sidebar-hidden", next)'), 'ui must sync legacy #app.sidebar-hidden class');
+assert.ok(ui.includes('document.body?.classList.toggle("library-collapsed", next)'), 'ui must sync body.library-collapsed class');
+assert.ok(ui.includes('sidebar.dataset.siteSidebarCollapsed'), 'ui must expose sidebar collapsed dataset for diagnostics');
+assert.ok(ui.includes('if (isOverlayMode()) setSiteSidebarCollapsed(false);'), 'ui must clear docked collapse state when switching to overlay mode');
+assert.ok(css.includes('body[data-client-profile="site"].library-collapsed #app.sidebar-hidden .sidebar'), 'css must collapse PC site sidebar when both guards are set');
+assert.ok(css.includes('flex-basis:0 !important'), 'css must remove sidebar flex basis while collapsed');
+assert.ok(runner.includes('tools/checks/pc-sidebar-close-toggle-smoke.js'), 'smoke runner must include PC sidebar close smoke');
+assert.ok(release.includes(PASS), 'release history must mention v382 PC sidebar close smoke pass');
+console.log(JSON.stringify({ pass: PASS }));

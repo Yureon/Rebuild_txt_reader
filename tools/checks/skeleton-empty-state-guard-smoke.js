@@ -1,0 +1,10 @@
+const fs = require('fs');
+const path = require('path');
+const assert = require('assert');
+const root = path.join(__dirname, '../..');
+const shell = fs.readFileSync(path.join(root, 'public/fragments/app-shell.html'), 'utf8');
+const ui = fs.readFileSync(path.join(root, 'public/scripts/rebuild/features/ui.mjs'), 'utf8');
+assert.ok(shell.includes('v417-skeleton-empty-state-guard-pass'), 'shell empty-state skeleton guard marker missing');
+assert.ok(ui.includes('v417-skeleton-empty-state-guard-pass'), 'ui empty-state skeleton guard marker missing');
+assert.ok(ui.includes('rdmImportPreview') && ui.includes('skeletonEmptyStateGuardPass'), 'read-data import preview cleanup guard missing');
+console.log('v417-skeleton-empty-state-guard-smoke-pass');

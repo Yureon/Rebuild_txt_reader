@@ -1,0 +1,27 @@
+#!/usr/bin/env node
+const fs = require('fs');
+const path = require('path');
+const assert = require('assert');
+const root = path.join(__dirname, '..', '..');
+const runtime = fs.readFileSync(path.join(root, 'public/scripts/rebuild/features/library-virtual-render-runtime.mjs'), 'utf8');
+const bridge = fs.readFileSync(path.join(root, 'public/scripts/rebuild/features/library-core-operations-bridge.mjs'), 'utf8');
+const reporting = fs.readFileSync(path.join(root, 'public/scripts/rebuild/features/library-virtual-render-reporting.mjs'), 'utf8');
+const renderer = fs.readFileSync(path.join(root, 'public/scripts/rebuild/features/library-virtual-window-renderer.mjs'), 'utf8');
+const scrollAnchor = fs.readFileSync(path.join(root, 'public/scripts/rebuild/features/library-scroll-anchor.mjs'), 'utf8');
+const docs = fs.readFileSync(path.join(root, 'docs/smoke-tests.md'), 'utf8');
+const runner = fs.readFileSync(path.join(root, 'tools/run_smoke_tests.js'), 'utf8');
+assert.ok(runtime.includes("LIBRARY_VIRTUAL_SCROLL_ANCHOR_RESTORE_PASS = 'v510-library-virtual-scroll-anchor-restore-pass'"), 'library scroll anchor restore marker missing');
+assert.ok(runtime.includes('captureLibraryVirtualScrollAnchor(app, visibleRows, options, deps)'), 'virtual scroll path must capture top-row anchor');
+assert.ok(runtime.includes('buildLibraryVirtualMetrics(app, visibleRows, { ...options, scrollAnchor: virtualScrollAnchor || options.scrollAnchor || null })'), 'virtual scroll anchor must feed window metrics');
+assert.ok(runtime.includes('restoreLibraryVirtualScrollAnchor(app, virtualScrollAnchor || options.scrollAnchor || null, options, deps)'), 'virtual scroll path must restore captured anchor after window render');
+assert.ok(bridge.includes('getLibraryScrollAnchor, restoreLibraryScrollAnchor'), 'core bridge must pass capture and restore helpers');
+assert.ok(reporting.includes('virtualScrollAnchorPass'), 'render diagnostics must include virtual scroll anchor pass');
+assert.ok(renderer.includes("LIBRARY_VIRTUAL_ANCHOR_SINGLE_RESTORE_PASS = 'v511-library-virtual-anchor-single-restore-pass'"), 'single anchor restore marker missing');
+assert.ok(runtime.includes('restoreScrollTop: !(virtualScrollAnchor || options.scrollAnchor)'), 'runtime must avoid duplicate scrollTop restore when a virtual anchor owns restoration');
+assert.ok(reporting.includes('singleAnchorRestorePass'), 'render diagnostics must include single anchor restore pass');
+assert.ok(scrollAnchor.includes("LIBRARY_SCROLL_ANCHOR_BOTTOM_CLAMP_PASS = 'v511-library-scroll-anchor-bottom-clamp-pass'"), 'bottom clamp marker missing');
+assert.ok(scrollAnchor.includes('setLibraryScrollTopIfNeeded'), 'anchor restore must threshold repeated scrollTop writes');
+assert.ok(scrollAnchor.includes('clampLibraryScrollTop'), 'anchor restore must clamp scrollTop at scroll edge');
+assert.ok(runner.includes("nodeCmd('tools/checks/library-virtual-scroll-anchor-restore-smoke.js')"), 'runner must include library virtual scroll anchor restore smoke');
+assert.ok(docs.includes('library-virtual-scroll-anchor-restore-smoke.js'), 'smoke docs must mention library virtual scroll anchor restore smoke');
+console.log('v511-library-virtual-scroll-anchor-restore-smoke-pass');

@@ -1,0 +1,13 @@
+const fs = require('fs');
+const path = require('path');
+const assert = require('assert');
+const root = path.join(__dirname, '../..');
+const cacheStore = fs.readFileSync(path.join(root, 'public/scripts/rebuild/features/reader/cache-store.mjs'), 'utf8');
+const reader = fs.readFileSync(path.join(root, 'public/scripts/rebuild/features/reader.mjs'), 'utf8');
+assert.ok(cacheStore.includes('v424-reader-multi-file-cached-total-chunks-guard-pass'), 'stale multi-file cache guard marker missing');
+assert.ok(cacheStore.includes('shouldBypassStaleMultiFileTotalChunks'), 'stale multi-file totalChunks helper missing');
+assert.ok(cacheStore.includes('v424-reader-multi-file-current-cache-totalchunks-guard-pass'), 'current-version unverified totalChunks cache guard marker missing');
+assert.ok(reader.includes('v424-reader-manifest-total-chunks-nav-refresh-pass'), 'manifest totalChunks nav refresh marker missing');
+assert.ok(reader.includes('lastReaderManifestTotalChunksRefresh'), 'manifest refresh diagnostic missing');
+assert.ok(reader.includes('updateProgressFromViewport(app);'), 'manifest totalChunks update must refresh nav/progress');
+console.log('v424-reader-multi-file-slider-totalchunks-smoke-pass');

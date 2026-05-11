@@ -1,0 +1,31 @@
+const fs = require('fs');
+const path = require('path');
+const assert = require('assert');
+const root = path.join(__dirname, '../..');
+const lockPath = path.join(root, 'package-lock.json');
+const npmrcPath = path.join(root, '.npmrc');
+const dockerfilePath = path.join(root, 'Dockerfile');
+const PASS = 'v533-package-lock-public-registry-pass';
+const DOCKER_PASS = 'v563-docker-npm-public-registry-pass';
+assert.ok(fs.existsSync(lockPath), 'package-lock.json must exist');
+const st = fs.lstatSync(lockPath);
+assert.ok(st.isFile(), 'package-lock.json must be a regular file');
+assert.ok(!st.isSymbolicLink(), 'package-lock.json must not be a symlink');
+const text = fs.readFileSync(lockPath, 'utf8');
+assert.ok(!/packages\.applied-caas|internal\.api\.openai|artifactory\/api\/npm\/npm-public/.test(text), 'package-lock.json must not contain sandbox/internal registry URLs');
+assert.ok(text.includes('https://registry.npmjs.org/'), 'package-lock.json must use public npm registry resolved URLs');
+const lock = JSON.parse(text);
+for (const [name, meta] of Object.entries(lock.packages || {})) {
+  if (!meta || typeof meta !== 'object' || !meta.resolved) continue;
+  assert.ok(String(meta.resolved).startsWith('https://registry.npmjs.org/'), `${name} resolved URL must use public npm registry`);
+}
+assert.ok(fs.existsSync(npmrcPath), '.npmrc must exist to pin public registry');
+const npmrc = fs.readFileSync(npmrcPath, 'utf8');
+assert.ok(npmrc.includes('registry=https://registry.npmjs.org/'), '.npmrc must pin public npm registry');
+assert.ok(npmrc.includes('audit=false'), '.npmrc must not make Docker builds depend on npm audit network calls');
+const dockerfile = fs.readFileSync(dockerfilePath, 'utf8');
+const npmrcCopyIndex = dockerfile.indexOf('COPY .npmrc ./');
+const npmCiIndex = dockerfile.indexOf('npm ci');
+assert.ok(npmrcCopyIndex >= 0 && npmCiIndex >= 0 && npmrcCopyIndex < npmCiIndex, 'Dockerfile must copy .npmrc before npm ci');
+assert.ok(dockerfile.includes('npm ci --omit=dev --no-audit --no-fund'), 'Dockerfile npm ci must avoid audit/fund network calls');
+console.log(JSON.stringify({ pass: PASS, dockerBuildPass: DOCKER_PASS, bytes: st.size }));
