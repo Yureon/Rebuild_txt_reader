@@ -83,6 +83,7 @@ export function installReader(app) {
     maybeExtendChunks: (targetApp, loader) => maybeExtendChunks(targetApp, loader),
     loadChunk: (chunk, mode, options) => loadChunk(app, chunk, mode, options)
   });
+  app.state.scrollSideEffects = scrollSideEffects;
   const onScroll = throttle(() => {
     if (isProgrammaticSliderScrollEvent(app) || isProgrammaticReaderScrollEvent(app)) {
       scheduleVirtualRender(app);
@@ -187,6 +188,7 @@ export function installReader(app) {
     onResize.cancel?.();
     saveProgressDebounced.cancel?.();
     scrollSideEffects.cancel?.();
+    app.state.scrollSideEffects = null;
     window.clearTimeout(app.state.readerTapNavSaveTimer || 0);
     window.clearTimeout(app.state.readerInteractionWarmupTimer || 0);
     window.clearTimeout(app.state.offlineCoverageRefreshTimer || 0);
@@ -439,7 +441,7 @@ function scrollReaderByPage(app, dir = 1, source = 'tap') {
   app.state.readerTapNavSaveTimer = window.setTimeout(() => {
     updateProgressFromViewport(app);
     saveProgress(app, { immediate: true });
-    scrollSideEffects.schedule();
+    app.state.scrollSideEffects?.schedule();
   }, app.state.prefs?.tapAnim === false ? 80 : duration + 80);
   app.offlineStatus?.update?.(source);
   scheduleReaderInteractionWarmup(app, dir, source);
