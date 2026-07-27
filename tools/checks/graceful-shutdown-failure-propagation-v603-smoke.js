@@ -1,0 +1,10 @@
+'use strict';
+const assert = require('assert');
+const fs = require('fs');
+const path = require('path');
+const source = fs.readFileSync(path.join(__dirname, '../../server/app.js'), 'utf8');
+assert.ok(source.includes('SHUTDOWN_PERSISTENCE_FAILED'), 'shutdown persistence failure marker missing');
+assert.ok(source.includes("result.status === 'rejected'"), 'rejected service stops must be surfaced');
+assert.ok(source.includes('value && value.ok === false'), 'failed flush result must be surfaced');
+assert.ok(source.includes("name === 'user-state'"), 'per-user state close failures must be surfaced');
+console.log(JSON.stringify({ pass:'v603-graceful-shutdown-failure-propagation-pass' }));

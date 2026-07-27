@@ -1,0 +1,48 @@
+{
+  "manifest_version": 3,
+  "name": "TXT Reader Metadata Helper",
+  "description": "로그인된 공식 작품 상세 페이지에서 메타데이터만 캡처해 TXT Reader Multi로 전달합니다.",
+  "version": "6.82.0",
+  "action": {
+    "default_title": "TXT Reader Metadata Helper",
+    "default_popup": "popup.html"
+  },
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://series.naver.com/*",
+    "https://m.series.naver.com/*",
+    "https://nid.naver.com/*",
+    "https://page.kakao.com/*",
+    "https://bff-page.kakao.com/*",
+    "https://accounts.kakao.com/*",
+    "https://kauth.kakao.com/*",
+    "https://novelpia.com/*",
+    "https://www.novelpia.com/*",
+    "https://www.munpia.com/*",
+    "https://munpia.com/*",
+    "https://m.munpia.com/*",
+    "https://mm.munpia.com/*",
+    "https://novel.munpia.com/*",
+    "https://nssl.munpia.com/*",
+    "https://www.joara.com/*",
+    "https://joara.com/*",
+    "https://ssn.so/*",
+    "https://www.ssn.so/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+Y",
+        "mac": "Command+Shift+Y"
+      },
+      "description": "TXT Reader Metadata Helper 열기"
+    }
+  }
+}

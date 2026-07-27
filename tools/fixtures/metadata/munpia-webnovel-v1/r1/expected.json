@@ -1,0 +1,20 @@
+{
+  "adapterKey": "munpia-webnovel-v1",
+  "adapterRevision": 2,
+  "searchQuery": "검증 차원군주",
+  "remoteId": "900002",
+  "sourceUrl": "https://www.munpia.com/novel/detail/900002",
+  "title": "검증 차원군주",
+  "author": "검증작가",
+  "synopsis": "짧은 검증 소개입니다. 두 번째 문장입니다.",
+  "genres": [
+    "현대판타지",
+    "퓨전"
+  ],
+  "tags": [],
+  "publicationStatus": "completed",
+  "publicationYear": 2021,
+  "sourceLanguage": "ko",
+  "coverUrl": "https://cdn1.munpia.com/files/attach/synthetic-cover.jpg",
+  "detailRequests": 1
+}

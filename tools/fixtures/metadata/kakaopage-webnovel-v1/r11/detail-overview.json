@@ -1,0 +1,21 @@
+{
+  "result": {
+    "content": {
+      "series_id": 66136165,
+      "title": "요리의 신이 강림했다",
+      "category_uid": 11,
+      "category": "웹소설",
+      "sub_category": "현판",
+      "authors": ["김촌지"],
+      "thumbnail": "qyydT/hAJq5BhJiK/gD9100kizxrFGd5mZ352Gk",
+      "description": "요리 실력이 성장하는 이야기.",
+      "on_issue": "End",
+      "state": "ST60",
+      "start_sale_dt": "2024-02-01T00:00:00+09:00",
+      "lang": "ko",
+      "operator_property": {"title": "요리의 신이 강림했다"}
+    },
+    "set_list": [],
+    "page_continue": null
+  }
+}

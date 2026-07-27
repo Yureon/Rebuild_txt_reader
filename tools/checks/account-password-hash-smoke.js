@@ -1,0 +1,2 @@
+#!/usr/bin/env node
+const assert=require('assert');const {TXT_READER_MULTI_PASSWORD_HASH_PASS,hashPassword,verifyPassword}=require('../../server/services/account-service');function runAccountPasswordHashSmoke(){const h=hashPassword('password-123');assert.ok(h.startsWith('scrypt:'));assert.ok(verifyPassword('password-123',h));assert.ok(!verifyPassword('wrong',h));return{pass:TXT_READER_MULTI_PASSWORD_HASH_PASS}}if(require.main===module)console.log(JSON.stringify(runAccountPasswordHashSmoke()));module.exports={runAccountPasswordHashSmoke};

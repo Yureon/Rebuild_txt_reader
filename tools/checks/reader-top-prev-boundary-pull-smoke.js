@@ -1,0 +1,12 @@
+const fs = require('fs');
+const assert = require('assert');
+const reader = fs.readFileSync('public/scripts/rebuild/features/reader.mjs', 'utf8');
+const css = fs.readFileSync('public/styles/app.css', 'utf8');
+assert.ok(reader.includes("READER_EPISODE_BOUNDARY_PREV_PULL_PASS = 'v472-reader-episode-boundary-prev-pull-pass'"), 'prev boundary pull marker missing');
+assert.ok(reader.includes('function hasPrevEpisode(current)'), 'hasPrevEpisode helper missing');
+assert.ok(reader.includes('function isReaderAtEpisodeTop(app, tolerancePx = 2)'), 'top boundary helper missing');
+assert.ok(reader.includes("openPrevEpisodeFromBoundary(app, 'top-pull-release')"), 'touch release must open previous episode');
+assert.ok(reader.includes("openPrevEpisodeFromBoundary(app, 'top-overscroll-wheel')"), 'wheel overscroll must open previous episode');
+assert.ok(reader.includes("title.textContent = dir === 'prev' ? '← 이전화로' : '→ 다음화로'"), 'indicator must switch to previous copy');
+assert.ok(css.includes('episode-boundary-pull-indicator'), 'boundary pull indicator css missing');
+console.log('v472-reader-top-prev-boundary-pull-smoke-pass');

@@ -1,0 +1,10 @@
+const fs = require('fs');
+const assert = require('assert');
+const progress = fs.readFileSync('public/scripts/rebuild/features/reader/progress.mjs', 'utf8');
+assert.ok(progress.includes("v485-reader-slider-coast-thumb-settle-pass"), 'coast thumb settle marker missing');
+assert.ok(progress.includes('function shouldHoldNavSliderDuringTouchCoast'), 'coast hold helper missing');
+assert.ok(progress.includes("source === 'touch-coast'"), 'coast hold must be limited to touch-coast');
+assert.ok(progress.includes('readerSliderCoastThumbSettleTimer'), 'coast settle timer missing');
+assert.ok(progress.includes('updateProgressFromViewport(app)'), 'coast settle must refresh progress after inertia window');
+assert.ok(progress.includes('!holdSlider') && progress.includes('navSlider.value'), 'nav slider value must be held during coast');
+console.log('v485-reader-slider-coast-thumb-settle-smoke-pass');

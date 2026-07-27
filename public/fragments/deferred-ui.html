@@ -1,0 +1,1298 @@
+<input type="file" id="shared-font-file" class="visually-offscreen-file" accept=".ttf,.otf,.woff,.woff2" multiple aria-label="공유 글꼴 파일 선택">
+<input type="file" id="recovery-import-file" class="visually-offscreen-file" accept=".json,application/json" aria-label="복구 데이터 파일 선택">
+<div id="bookmark-overlay" aria-hidden="true">
+  <div id="bookmark-modal" data-modal-a11y-pass="v140" role="dialog" aria-modal="true" aria-labelledby="bookmark-modal-title" aria-describedby="bookmark-modal-desc">
+    <div id="bookmark-modal-desc" class="sr-only">현재 작품의 저장된 북마크를 확인하고 현재 위치 저장, 이전/다음 이동, 전체 삭제를 실행합니다.</div>
+    <div class="bm-header">
+      <h3 id="bookmark-modal-title">북마크</h3>
+      <div class="bm-header-actions">
+        <button type="button" id="bookmark-add-current" class="bm-btn">현재 위치 저장</button>
+        <button type="button" id="bookmark-prev-current" class="bm-btn">이전 북마크</button>
+        <button type="button" id="bookmark-next-current" class="bm-btn">다음 북마크</button>
+        <button type="button" id="bookmark-close" class="bm-btn">닫기</button>
+      </div>
+    </div>
+    <div id="bookmark-list" class="bm-body"></div>
+    <div class="bookmark-footer-actions">
+      <button type="button" id="bookmark-clear-all" class="bm-btn danger">전체 삭제</button>
+    </div>
+  </div>
+</div><div id="settings-overlay" class="settings-overlay" aria-hidden="true"></div><section id="settings-panel" class="settings-panel" data-settings-quality-pass="v140" data-settings-density-pass="v140" data-settings-copy-pass="v565" data-settings-information-architecture-pass="v565-settings-information-architecture-pass" data-modal-a11y-pass="v140" role="dialog" aria-modal="true" aria-labelledby="settings-panel-title" aria-describedby="settings-panel-desc">
+  <div class="sp-header">
+    <h2 id="settings-panel-title">환경설정</h2>
+    <div id="settings-panel-desc" class="sr-only">앱 모양, 읽기 화면, 조작과 표시, 데이터 및 계정 설정을 탭별로 조정합니다.</div>
+    <button class="sp-close" id="settings-close" type="button" aria-label="설정 닫기">✕</button>
+  </div>
+  <div id="settings-page-layout" class="settings-page-layout" data-mobile-view="index">
+    <nav class="sp-tabs settings-workspace-nav" role="tablist" aria-label="설정 분류" aria-orientation="vertical">
+      <div class="settings-workspace-nav-intro" data-settings-library-only>
+        <strong>설정 찾기</strong>
+        <span>한 번에 한 영역만 표시합니다.</span>
+      </div>
+      <button id="settings-tab-general" class="sp-tab active" type="button" role="tab" aria-selected="true" aria-controls="general-panel" tabindex="0" data-tab="general-panel" data-settings-contexts="library"><strong>일반</strong><span>앱 모양 · 언어</span></button>
+      <button id="settings-tab-viewer" class="sp-tab" type="button" role="tab" aria-selected="false" aria-controls="viewer-panel" tabindex="-1" data-tab="viewer-panel" data-settings-contexts="library reader"><strong>읽기 화면</strong><span>글꼴 · 색상 · 본문</span></button>
+      <button id="settings-tab-function" class="sp-tab" type="button" role="tab" aria-selected="false" aria-controls="func-panel" tabindex="-1" data-tab="func-panel" data-settings-contexts="library reader"><strong>조작 · 표시</strong><span>동작 · 상태 표시</span></button>
+      <button id="settings-tab-data" class="sp-tab" type="button" role="tab" aria-selected="false" aria-controls="data-panel" tabindex="-1" data-tab="data-panel" data-settings-contexts="library"><strong>데이터 · 계정</strong><span>기기 · 백업 · 계정</span></button>
+      <button id="settings-tab-debug" class="sp-tab" type="button" role="tab" aria-selected="false" aria-controls="debug-panel" tabindex="-1" data-tab="debug-panel" data-settings-contexts="reader"><strong>고급</strong><span>관리 도구 · 진단</span></button>
+    </nav>
+    <section class="settings-workspace-main" aria-label="설정 상세">
+      <div class="settings-mobile-detail-header" id="settings-mobile-detail-header" data-settings-library-only>
+        <button class="settings-mobile-back" id="settings-mobile-back" type="button" aria-label="설정 목록으로 돌아가기">←</button>
+        <div class="settings-mobile-detail-copy"><strong id="settings-mobile-detail-title">설정</strong><span id="settings-mobile-detail-description">설정 항목을 조정합니다.</span></div>
+        <span class="settings-mobile-scope" id="settings-mobile-scope">계정 설정</span>
+      </div>
+      <div id="settings-panel-body" class="sp-body" data-settings-main-body="tabs" data-settings-tab-panels-owner="general viewer func data debug" data-settings-containment-pass="v231" tabindex="0" aria-label="설정 세부 항목">
+
+    <!-- ===== 일반 탭 ===== -->
+    <div class="sp-tab-panel active" id="general-panel" role="tabpanel" data-settings-contexts="library" aria-labelledby="settings-tab-general" data-settings-panel-level="sp-body-child">
+      <div class="sp-tab-body" data-settings-tab-body="general">
+<div class="setting-scope-note">읽기 위치·북마크·최근 열람은 기기 간 공유됩니다. 기기별 옵션은 각 항목의 설명과 관리 모달에서 따로 확인합니다.</div>
+      <div class="setting-block">
+        <div class="setting-block-title">앱 모양</div>
+
+      <!-- 테마 -->
+      <div class="sp-section">
+        <div class="sp-label">테마 색상</div>
+        <div class="setting-help tight">앱 전체 패널과 본문 색 조합을 한 번에 바꿉니다.</div>
+        <button id="open-theme-editor-btn" class="theme-launch-btn" type="button">
+          <span>
+            <span class="theme-launch-title">색 조합 변경</span>
+            <span class="theme-launch-sub">프리셋 선택 또는 직접 색상 지정</span>
+          </span>
+          <span class="theme-launch-preview" id="theme-launch-preview">
+            <span class="theme-launch-dot" data-role="bg"></span>
+            <span class="theme-launch-dot" data-role="surface"></span>
+            <span class="theme-launch-dot" data-role="accent"></span>
+            <span class="theme-launch-dot" data-role="reader"></span>
+          </span>
+        </button>
+      </div>
+
+
+      <!-- 사이트 언어 -->
+      <div class="sp-section" data-site-language-setting="v558">
+        <div class="sp-label">사이트 언어</div>
+        <div class="setting-help tight">브라우저 언어, owner가 배포한 공통 언어팩, 직접 입력한 사용자 정의 언어를 선택할 수 있습니다.</div>
+        <div id="site-language-combobox" class="site-language-combobox" data-site-language-combobox="v670" data-open="false">
+          <button id="site-language-trigger" class="site-language-trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="site-language-list">
+            <span id="site-language-trigger-label">시스템 기본</span>
+            <span class="site-language-trigger-caret" aria-hidden="true">▾</span>
+          </button>
+          <div id="site-language-list" class="site-language-list" role="listbox" aria-label="사이트 언어 선택" hidden></div>
+          <select id="site-language-select" class="site-language-native-select" aria-label="사이트 언어 선택" tabindex="-1" aria-hidden="true">
+            <option value="auto">시스템 기본</option>
+            <option value="ko">한국어</option>
+            <option value="en">English</option>
+          </select>
+        </div>
+        <div id="site-language-status" class="setting-help tight">현재: 시스템 기본 · 한국어</div>
+        <div class="site-language-actions" data-site-language-editor-entry="v564">
+          <button id="open-site-custom-language-modal-btn" class="setting-action-btn" type="button">사용자 정의 언어 편집</button>
+        </div>
+      </div>
+
+      <!-- UI 글자 크기 -->
+      <div class="sp-section">
+        <div class="sp-label">UI 글자 크기</div>
+        <div class="setting-help tight">메뉴, 버튼, 설정창 같은 인터페이스 글자 크기를 조절합니다.</div>
+        <div class="settings-inline-stepper ui-font-stepper" role="group" aria-label="UI 글자 크기 미세 조정">
+          <button id="ui-fs-minus" class="ui-font-step-btn" type="button" aria-label="UI 글자 크기 줄이기"><span aria-hidden="true">−</span></button>
+          <output id="ui-fs-val" class="ui-font-value" for="ui-fs-slider" aria-live="polite">15px</output>
+          <button id="ui-fs-plus" class="ui-font-step-btn" type="button" aria-label="UI 글자 크기 키우기"><span aria-hidden="true">+</span></button>
+        </div>
+        <div class="settings-inline-slider-row ui-font-slider-row">
+          <span class="settings-range-edge-label">작게</span>
+          <input class="settings-range-fill" type="range" id="ui-fs-slider" min="12" max="20" step="1" value="15" aria-label="UI 글자 크기">
+          <span class="settings-range-edge-label">크게</span>
+        </div>
+      </div>
+
+      <!-- UI 전환 속도 -->
+      <div class="sp-section">
+        <div class="sp-label">UI 전환 속도</div>
+        <div class="setting-help tight">패널 열림, 닫힘, 강조 효과처럼 앱 전환이 느껴지는 속도를 정합니다.</div>
+        <div class="slider-wrap">
+          <input class="slider" type="range" id="anim-range" min="0" max="600" value="220" aria-label="애니메이션 강도">
+          <span class="slider-value" id="anim-val">220ms</span>
+        </div>
+      </div>
+
+      </div>
+
+      </div>
+    </div>
+
+    <!-- ===== 데이터 · 계정 탭 ===== -->
+    <div class="sp-tab-panel" id="data-panel" role="tabpanel" data-settings-contexts="library" aria-labelledby="settings-tab-data" data-settings-panel-level="sp-body-child">
+      <div class="sp-tab-body" data-settings-tab-body="data">
+        <div class="setting-scope-note"><strong>데이터와 계정</strong> 동기화·기기·백업·계정처럼 독서 화면과 직접 관련 없는 관리 기능을 분리했습니다.</div>
+      <div class="setting-block">
+        <div class="setting-block-title">데이터 · 계정</div>
+        <div class="data-adv-grid">
+
+          <div class="data-adv-card">
+            <div class="data-adv-card-title">관리</div>
+            <div class="data-adv-card-desc">기기와 독서 기록, 사용자 CSS, 문제 진단 도구를 한곳에서 관리합니다.</div>
+
+            <div class="data-adv-group">
+              <div class="data-adv-row"><div class="data-adv-label"><strong>기기 관리</strong><span>기기 이름, 우선 기기, 원격 위치를 관리합니다.</span></div></div>
+              <div class="data-adv-actions data-adv-actions--stack"><button id="open-device-management-btn" type="button" class="setting-action-btn setting-action-btn--full">기기 관리 열기</button></div>
+            </div>
+
+            <div class="data-adv-group">
+              <div class="data-adv-row"><div class="data-adv-label"><strong>독서 데이터</strong><span>읽기 위치·북마크·최근 열람을 확인하고 정리합니다.</span></div></div>
+              <div class="data-adv-actions data-adv-actions--stack"><button id="open-read-data-btn" type="button" class="setting-action-btn setting-action-btn--full">독서 데이터 관리</button></div>
+            </div>
+
+            <div class="data-adv-group">
+              <div class="data-adv-row"><div class="data-adv-label"><strong>사용자 CSS</strong><span>기본 옵션으로 부족한 화면 스타일을 직접 보정합니다.</span></div></div>
+              <div class="data-adv-actions data-adv-actions--stack"><button type="button" id="open-custom-css-btn" class="setting-action-btn setting-action-btn--full">CSS 수정</button></div>
+            </div>
+
+          </div>
+
+          <div class="data-adv-card">
+            <div class="data-adv-card-title">백업 · 복원</div>
+            <div class="data-adv-card-desc">화면·조작·동기화 설정만 내보내거나 다시 불러옵니다.</div>
+            <div class="data-adv-actions">
+              <button type="button" id="settings-export-btn" class="setting-action-btn setting-action-btn--flex">설정 내보내기</button>
+              <button type="button" id="settings-import-btn" class="setting-action-btn setting-action-btn--flex">설정 가져오기</button>
+            </div>
+            <input id="settings-import-file" class="settings-file-input-hidden" type="file" accept="application/json,.json" aria-label="설정 파일 가져오기">
+            <!-- v367 fixed library movement delay: data-settings-relocated-from="func-panel-v143" setting UI removed; delay is 650ms. -->
+            <div class="data-adv-note">독서 위치와 북마크는 독서 데이터 관리에서 따로 다룹니다. 라이브러리 이동의 폴더 자동 펼침 지연은 650ms로 고정됩니다.</div>
+            <details class="data-adv-reset">
+              <summary>설정 초기화 <span class="data-adv-reset-hint">필요한 경우만 펼치기</span></summary>
+              <div class="data-adv-reset-body">
+                <div class="data-adv-actions">
+                  <button type="button" id="settings-reset-appearance-btn" class="setting-action-btn setting-action-btn--flex">화면 설정 초기화</button>
+                  <button type="button" id="settings-reset-controls-btn" class="setting-action-btn setting-action-btn--flex">조작 설정 초기화</button>
+                  <button type="button" id="settings-reset-sync-btn" class="setting-action-btn setting-action-btn--flex">기기 · 동기화 초기화</button>
+                  <button type="button" id="settings-reset-shared-btn" class="setting-action-btn setting-action-btn--flex">공유 설정만 초기화</button>
+                  <button type="button" id="settings-reset-device-btn" class="setting-action-btn setting-action-btn--flex">이 기기 설정만 초기화</button>
+                  <div id="settings-reset-sync-status" class="setting-help tight settings-reset-sync-status" role="status" aria-live="polite"></div>
+                  <button type="button" id="settings-reset-preprocess-btn" class="setting-action-btn setting-action-btn--flex">전처리 설정 초기화</button>
+                  <button type="button" id="settings-reset-all-btn" class="setting-action-btn setting-action-btn--flex">전체 설정 초기화</button>
+                </div>
+                <div class="data-adv-note warn">독서 데이터는 유지되고 설정만 되돌립니다.</div>
+              </div>
+            </details>
+          </div>
+
+
+
+          <div class="data-adv-card" data-account-password-card="v564">
+            <div class="data-adv-card-title">계정 비밀번호</div>
+            <div class="data-adv-card-desc">비밀번호 변경 창을 열어 현재 계정 비밀번호를 변경합니다.</div>
+            <div class="data-adv-actions data-adv-actions--stack">
+              <button id="open-account-password-modal-btn" class="setting-action-btn setting-action-btn--full" type="button">비밀번호 변경 열기</button>
+            </div>
+            <div id="account-password-status" class="data-adv-note">현재 계정의 비밀번호를 변경할 수 있습니다.</div>
+          </div>
+        </div>
+      </div>
+      <div class="settings-bottom-actions" data-settings-bottom-actions="v564">
+        <div class="settings-bottom-action-card shortcut-settings-card mobile-site-hidden">
+          <div class="data-adv-card-title">단축키</div>
+          <div class="data-adv-card-desc">리더와 앱 조작 단축키를 확인하고 수정합니다. 모바일 사이트에서는 표시하지 않습니다.</div>
+          <div class="data-adv-actions data-adv-actions--stack"><button id="open-shortcut-btn" class="setting-action-btn setting-action-btn--full" type="button">단축키 설정</button></div>
+        </div>
+
+        <div class="settings-bottom-action-card" data-account-logout-card="v564">
+          <div class="data-adv-card-title">계정</div>
+          <div class="data-adv-card-desc">현재 기기에서 로그인 세션을 종료합니다.</div>
+          <div class="data-adv-actions data-adv-actions--stack">
+            <button id="settings-logout-btn" class="setting-action-btn setting-action-btn--full settings-logout-btn-danger" type="button">로그아웃</button>
+          </div>
+          <div id="settings-logout-status" class="data-adv-note" hidden></div>
+        </div>
+      </div>
+      </div>
+    </div>
+
+    <!-- ===== 고급 탭 ===== -->
+    <div class="sp-tab-panel" id="debug-panel" role="tabpanel" aria-labelledby="settings-tab-debug" data-settings-panel-level="sp-body-child" data-settings-contexts="reader">
+      <div class="sp-tab-body" data-settings-tab-body="debug">
+        <div class="setting-scope-note"><strong>고급</strong> 기기, 독서 데이터와 사용자 CSS를 관리하고 필요한 경우에만 개발자 진단 도구를 엽니다.</div>
+
+        <div class="setting-block advanced-management-block">
+          <div class="setting-block-title">관리 도구</div>
+          <div class="advanced-management-grid">
+            <article class="advanced-management-card">
+              <div class="advanced-management-icon" aria-hidden="true">⌁</div>
+              <div class="advanced-management-copy"><strong>기기 관리</strong><span>기기 이름, 우선 기기와 원격 독서 위치를 관리합니다.</span></div>
+              <button id="open-device-management-advanced-btn" type="button" class="setting-action-btn setting-action-btn--full">기기 관리 열기</button>
+            </article>
+            <article class="advanced-management-card">
+              <div class="advanced-management-icon" aria-hidden="true">▤</div>
+              <div class="advanced-management-copy"><strong>독서 데이터 관리</strong><span>읽기 위치, 북마크, 최근 열람과 즐겨찾기를 확인합니다.</span></div>
+              <button id="open-read-data-advanced-btn" type="button" class="setting-action-btn setting-action-btn--full">독서 데이터 관리</button>
+            </article>
+            <article class="advanced-management-card">
+              <div class="advanced-management-icon" aria-hidden="true">{ }</div>
+              <div class="advanced-management-copy"><strong>사용자 CSS</strong><span>공유 또는 이 기기에만 적용할 화면 스타일을 편집합니다.</span></div>
+              <button id="open-custom-css-advanced-btn" type="button" class="setting-action-btn setting-action-btn--full">사용자 CSS 편집</button>
+            </article>
+          </div>
+        </div>
+
+        <div class="setting-block developer-debug-block">
+          <div class="setting-block-title">개발자 디버그</div>
+          <div class="data-adv-card dev-debug-settings-card">
+            <div class="data-adv-card-title">진단 · 복구</div>
+            <div class="data-adv-card-desc">문제 분석용 상태값, 리더 수동 진단, 캐시와 복구 도구를 확인합니다. 일반 사용 중에는 열 필요가 없습니다.</div>
+            <div class="data-adv-actions data-adv-actions--stack">
+              <button id="open-dev-debug-btn" class="setting-action-btn setting-action-btn--full devdbg-launch" type="button">개발자 디버그 열기</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 뷰어 탭 ===== -->
+    <div class="sp-tab-panel" id="viewer-panel" role="tabpanel" data-settings-contexts="library reader" aria-labelledby="settings-tab-viewer" data-settings-panel-level="sp-body-child">
+      <div class="sp-tab-body" data-settings-tab-body="viewer">
+<div class="setting-scope-note setting-scope-note--shared"><strong>적용 범위</strong> 이 탭의 설정은 항목마다 적용 범위가 다릅니다. 배지와 상태 문구가 현재 저장 위치와 동기화 방식을 함께 설명합니다.</div>
+      <div class="setting-overview"><div class="setting-overview-title">뷰어 설정</div><div class="setting-overview-sub">글자, 색상, 전처리 옵션을 실제 읽기 화면 기준으로 조정합니다.</div></div>
+      <div class="viewer-preview-card">
+        <div class="viewer-preview-head">
+          <div>
+            <div class="viewer-preview-title">뷰어 미리보기</div>
+            <div class="viewer-preview-meta">현재 읽기 화면 설정을 미리 보고 바로 조정합니다.</div>
+          </div>
+          <div id="viewer-preview-stats" class="viewer-preview-stats"></div>
+        </div>
+        <div class="viewer-preview-body">
+          <div class="viewer-preview-frame">
+            <div id="viewer-preview-content" class="viewer-preview-content">
+              <span class="viewer-preview-chapter">프롤로그</span>
+              <div class="viewer-preview-copy">밤바람이 창문 사이로 스며들고, 페이지를 넘기는 소리만 남았다. <span class="viewer-preview-accent">지금 설정한 글자와 색상</span>이 실제 읽기 화면에서 어떤 느낌인지 짧게 확인할 수 있다.</div>
+            </div>
+          </div>
+          <div class="viewer-preview-toolbar">
+            <div class="viewer-preview-quickbar">
+              <div class="viewer-preview-control-group">
+                <span class="viewer-preview-label">글자</span>
+                <button id="viewer-preview-size-down" class="viewer-mini-btn" type="button" aria-label="글자 크기 줄이기">−</button>
+                <button id="viewer-preview-size-up" class="viewer-mini-btn" type="button" aria-label="글자 크기 키우기">+</button>
+              </div>
+              <div class="viewer-preview-control-group">
+                <span class="viewer-preview-label">밝기</span>
+                <input id="viewer-preview-brightness" class="viewer-preview-range" type="range" min="50" max="130" value="100" aria-label="읽기 화면 밝기">
+              </div>
+            </div>
+            <div class="viewer-preview-swatches">
+              <div class="viewer-preview-swatch-row">
+                <span class="viewer-preview-label">배경</span>
+                <button class="viewer-preview-swatch color-faf7f2" type="button" data-preview-bg="#faf7f2" aria-label="배경색 기본"></button>
+                <button class="viewer-preview-swatch color-ffffff" type="button" data-preview-bg="#ffffff" aria-label="배경색 흰색"></button>
+                <button class="viewer-preview-swatch color-1a1612" type="button" data-preview-bg="#1a1612" aria-label="배경색 어두움"></button>
+                <button class="viewer-preview-swatch color-0d1117" type="button" data-preview-bg="#0d1117" aria-label="배경색 남색"></button>
+              </div>
+              <div class="viewer-preview-swatch-row">
+                <span class="viewer-preview-label">글자</span>
+                <button class="viewer-preview-swatch color-2a2118" type="button" data-preview-text="#2a2118" aria-label="글자색 기본"></button>
+                <button class="viewer-preview-swatch color-000000" type="button" data-preview-text="#000000" aria-label="글자색 검정"></button>
+                <button class="viewer-preview-swatch color-ddd4c4" type="button" data-preview-text="#ddd4c4" aria-label="글자색 밝은 회색"></button>
+                <button class="viewer-preview-swatch color-ffffff" type="button" data-preview-text="#ffffff" aria-label="글자색 흰색"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="viewer-section-grid">
+        <div class="viewer-section-stack">
+          <div class="setting-block">
+            <div class="setting-block-title">글자</div>
+
+            <div class="sp-section">
+              <div class="sp-label">글꼴</div>
+              <div class="setting-help tight">본문 기본 글꼴을 선택합니다.</div>
+              <button type="button" id="font-modal-btn">
+                <span>현재: <span id="current-font-name">Noto 명조</span></span>
+                <span class="settings-select-caret" aria-hidden="true">▾</span>
+              </button>
+            </div>
+
+            <div class="sp-section">
+              <div class="sp-label">글자 크기</div>
+              <div class="setting-help tight">본문 글자 크기를 조절합니다.</div>
+              <div class="font-stepper"><button type="button" id="fs-minus">−</button><span id="fs-val">17px</span><button type="button" id="fs-plus">+</button></div>
+            </div>
+
+            <div class="sp-section">
+              <div class="sp-label">행간</div>
+              <div class="setting-help tight">줄 사이 간격을 조절합니다.</div>
+              <div class="btn-group">
+                <button class="grp-btn" type="button" data-lh="1.7">좁게</button>
+                <button class="grp-btn active" type="button" data-lh="2.1">보통</button>
+                <button class="grp-btn" type="button" data-lh="2.6">넓게</button>
+              </div>
+              <div class="settings-inline-slider-row settings-inline-slider-row--reader">
+                <input class="settings-range-fill" type="range" id="lh-slider" min="1.0" max="3.0" step="0.1" value="1.6" aria-label="줄 간격">
+                <span id="lh-value" class="settings-range-value settings-range-value--compact">1.6</span>
+              </div>
+            </div>
+
+            <div class="sp-section">
+              <div class="sp-label">줄 길이</div>
+              <div class="setting-help tight">한 줄의 최대 길이를 조절합니다.</div>
+              <div class="btn-group">
+                <button class="grp-btn" type="button" data-lw="480">좁게</button>
+                <button class="grp-btn active" type="button" data-lw="680">보통</button>
+                <button class="grp-btn" type="button" data-lw="900">넓게</button>
+                <button class="grp-btn" type="button" data-lw="9999">화면 맞춤</button>
+              </div>
+              <div class="settings-inline-slider-row settings-inline-slider-row--reader">
+                <input class="settings-range-fill" type="range" id="lw-slider" min="300" max="1400" step="20" value="680" aria-label="본문 너비">
+                <span id="lw-value" class="settings-range-value">680px</span>
+              </div>
+            </div>
+
+            <div class="sp-section">
+              <div class="sp-label">여백</div>
+              <div class="setting-help tight">본문 바깥 여백을 조절합니다.</div>
+              <div class="settings-field-row settings-field-row--stacked">
+                <span class="settings-field-label">좌우</span>
+                <input class="slider settings-range-fill" type="range" id="pad-h-slider" min="0" max="80" step="4" value="28" aria-label="가로 여백">
+                <span class="slider-value" id="pad-h-val">28px</span>
+              </div>
+              <div class="settings-field-row">
+                <span class="settings-field-label">상하</span>
+                <input class="slider settings-range-fill" type="range" id="pad-v-slider" min="0" max="80" step="4" value="40" aria-label="세로 여백">
+                <span class="slider-value" id="pad-v-val">40px</span>
+              </div>
+            </div>
+
+            <div class="sp-section">
+              <div class="sp-label">텍스트 전처리</div>
+              <div class="setting-help tight">줄바꿈·잡음 제거 같은 전처리를 조정합니다.</div>
+              <button id="open-preprocess-editor-btn" class="preprocess-launch-btn" type="button">
+                <span class="preprocess-launch-main">
+                  <span class="preprocess-launch-title">전처리 상세 설정</span>
+                  <span id="preprocess-launch-summary" class="preprocess-launch-sub">현재 작품 본문에 적용할 전처리 옵션을 조절합니다.</span>
+                </span>
+                <span aria-hidden="true">▾</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="viewer-section-stack">
+          <div class="setting-block">
+            <div class="setting-block-title">색상</div>
+
+            <div class="sp-section">
+              <div class="sp-label">밝기</div>
+              <div class="setting-help tight">현재 기기 화면에서 읽기 편한 체감 밝기로 조정합니다.</div>
+              <div class="slider-wrap">
+                <input class="slider" type="range" id="brightness-range" min="40" max="160" value="100" aria-label="리더 밝기">
+                <span class="slider-value" id="brightness-val">100%</span>
+              </div>
+            </div>
+
+            <div class="sp-section">
+              <div class="sp-label">배경색 · 글자색</div>
+              <div class="setting-help tight">본문 배경과 글자색을 직접 맞춰 눈의 피로를 줄입니다.</div>
+              <div class="palette-row">
+                <span class="palette-label">배경</span>
+                <div class="swatches" id="bg-swatches">
+                  <div class="swatch color-faf7f2" data-c="#faf7f2"></div>
+                  <div class="swatch color-ffffff" data-c="#ffffff"></div>
+                  <div class="swatch color-f5f0e8" data-c="#f5f0e8"></div>
+                  <div class="swatch color-eaf0e8" data-c="#eaf0e8"></div>
+                  <div class="swatch color-e8eaf5" data-c="#e8eaf5"></div>
+                  <div class="swatch color-1a1612" data-c="#1a1612"></div>
+                  <div class="swatch color-0d1117" data-c="#0d1117"></div>
+                  <label class="swatch-custom" title="직접 선택"><input type="color" id="custom-bg">+</label>
+                </div>
+              </div>
+              <div class="palette-row">
+                <span class="palette-label">글자</span>
+                <div class="swatches" id="text-swatches">
+                  <div class="swatch color-2a2118" data-c="#2a2118"></div>
+                  <div class="swatch color-000000" data-c="#000000"></div>
+                  <div class="swatch color-3d3530" data-c="#3d3530"></div>
+                  <div class="swatch color-1a2a3a" data-c="#1a2a3a"></div>
+                  <div class="swatch color-ddd4c4" data-c="#ddd4c4"></div>
+                  <div class="swatch color-e8e0d5" data-c="#e8e0d5"></div>
+                  <div class="swatch color-ffffff" data-c="#ffffff"></div>
+                  <label class="swatch-custom" title="직접 선택"><input type="color" id="custom-text">+</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="viewer-inline-note">
+              미리보기는 현재 글자 크기, 글꼴, 행간, 줄 길이, 여백, 배경색, 글자색, 밝기를 함께 반영합니다.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      </div>
+    </div>
+
+    <!-- ===== 기능 탭 ===== -->
+    <div class="sp-tab-panel" id="func-panel" role="tabpanel" data-settings-contexts="library reader" aria-labelledby="settings-tab-function" data-settings-panel-level="sp-body-child">
+      <div class="sp-tab-body" data-settings-tab-body="func">
+<div class="setting-scope-note setting-scope-note--shared"><strong>적용 범위</strong> 이 탭의 토글과 위치 설정은 항목마다 저장 위치가 다릅니다. 각 항목 아래 상태 문구에서 현재 범위를 확인할 수 있습니다.</div>
+      <div class="vsp-tabs">
+        <button type="button" class="vsp-tab active" data-ftab="fcontrol-panel">읽기 조작</button>
+        <button type="button" class="vsp-tab" data-ftab="fstatusbar-panel">상단 표시</button>
+      </div>
+
+      <div class="vsp-panel active" id="fcontrol-panel">
+        <div class="func-group-shell">
+          <section class="sp-section func-card func-card-primary">
+            <div class="func-card-head">
+              <div>
+                <div class="sp-label">탭 내비게이션</div>
+                <div class="setting-help tight">화면을 탭해서 위아래 또는 좌우로 이동합니다.</div>
+              </div>
+              <span class="func-chip">핵심</span>
+            </div>
+            <div class="toggle-row compact-row">
+              <span class="toggle-label">탭 기능 사용</span>
+              <label class="toggle"><input type="checkbox" id="tap-nav-toggle" checked><span class="toggle-track"><span class="toggle-thumb"></span></span></label>
+            </div>
+          </section>
+
+          <section class="sp-section func-card func-dependent-control" id="tap-nav-details-section" data-control-dependent="tap-nav">
+            <div class="sp-label">탭 방향 · 이동 거리</div>
+            <div class="setting-help tight">탭 이동 방향과 거리를 정합니다.</div>
+            <div class="func-segment-row">
+              <button type="button" class="grp-btn active" id="tap-dir-v" data-dir="vertical">상하</button>
+              <button type="button" class="grp-btn" id="tap-dir-h" data-dir="horizontal">좌우</button>
+            </div>
+            <div id="tap-scroll-section" class="func-inline-range">
+              <span class="func-inline-label">이동 거리</span>
+              <input class="settings-range-fill" type="range" id="tap-scroll-slider" min="30" max="100" step="5" value="90" aria-label="탭 스크롤 거리">
+              <span id="tap-scroll-val" class="func-inline-value">90%</span>
+            </div>
+          </section>
+
+          <section class="sp-section func-card">
+            <div class="sp-label">스크롤 애니메이션</div>
+            <div class="setting-help tight">탭 이동을 즉시 또는 부드럽게 처리합니다.</div>
+            <div class="toggle-row compact-row">
+              <span class="toggle-label">애니메이션 사용</span>
+              <label class="toggle"><input type="checkbox" id="tap-anim-toggle" checked><span class="toggle-track"><span class="toggle-thumb"></span></span></label>
+            </div>
+            <div id="tap-speed-section" class="func-speed-box func-dependent-control" data-control-dependent="tap-anim">
+              <div class="func-inline-range dual-edge">
+                <span class="func-inline-edge">빠름</span>
+                <input class="settings-range-fill" type="range" id="tap-speed-slider" min="100" max="800" step="50" value="400" aria-label="탭 스크롤 속도">
+                <span class="func-inline-edge">느림</span>
+              </div>
+              <div class="func-speed-value"><span id="tap-speed-val">400ms</span></div>
+            </div>
+          </section>
+
+          <section class="sp-section func-card">
+            <div class="func-card-head">
+              <div>
+                <div class="sp-label">스와이프 내비게이션</div>
+                <div class="setting-help tight">모바일에서 스와이프로 이동합니다.</div>
+              </div>
+              <span class="func-chip subtle">모바일</span>
+            </div>            <div class="toggle-row compact-row">
+              <span class="toggle-label">스와이프 기능 사용</span>
+              <label class="toggle"><input type="checkbox" id="swipe-nav-toggle" checked><span class="toggle-track"><span class="toggle-thumb"></span></span></label>
+            </div>
+            <div id="swipe-threshold-section" class="func-inline-range func-inline-range--spaced func-dependent-control" data-control-dependent="swipe-nav">
+              <span class="func-inline-label">스와이프 감도</span>
+              <input class="settings-range-fill" type="range" id="swipe-threshold-slider" min="24" max="100" step="2" value="50" aria-label="스와이프 감도">
+              <span id="swipe-threshold-val" class="func-inline-value">50px</span>
+            </div>
+          </section>
+
+          <section class="sp-section func-card" data-reader-episode-boundary-mode="v362">
+            <div class="func-card-head">
+              <div>
+                <div class="sp-label">화 경계 이동</div>
+                <div class="setting-help tight">폴더형 작품에서 현재 화의 실제 100% 바닥 이후 동작을 선택합니다.</div>
+              </div>
+              <span class="func-chip subtle">폴더형</span>
+            </div>
+            <div class="btn-group func-segment-row" role="group" aria-label="화 경계 이동 방식">
+              <button type="button" class="grp-btn active" id="reader-episode-boundary-manual-btn" data-reader-episode-boundary-mode-value="manual">수동</button>
+              <button type="button" class="grp-btn" id="reader-episode-boundary-auto-btn" data-reader-episode-boundary-mode-value="scrollBeyond">자동</button>
+            </div>
+            <div class="setting-help tight"><strong>수동</strong>: 다음 화는 하단 다음 버튼이나 단축키로만 이동합니다.</div>
+            <div class="setting-help tight"><strong>자동</strong>: 현재 화가 실제 100% 바닥에 있을 때 한 번 더 아래로 스크롤하면 다음 화로 이동합니다.</div>
+            <div id="reader-episode-boundary-mode-status" class="setting-help tight">현재: 수동 — 다음 화는 하단 다음 버튼이나 단축키로만 이동합니다.</div>
+          </section>
+
+        </div>
+      </div>
+
+      <div class="vsp-panel vsp-panel--flush-top" id="fstatusbar-panel">
+        <div class="safe-area-layout-note" data-safe-area-ux-marker="slot-guide"><strong>상단 safe-area 표시</strong><span>시계 · 독서 진행률 · 네트워크 상태는 상단 안전영역 내부 슬롯에 배치됩니다. 네트워크 상태의 자동 배치는 시계와 진행률 위치를 피해 안쪽 슬롯으로 이동합니다.</span></div>
+        <div class="func-group-shell status-grid">
+          <section class="sp-section func-card status-card wide">
+            <div class="func-card-head">
+              <div>
+                <div class="sp-label">시계</div>
+                <div class="setting-help tight">상단 safe-area 내부 슬롯에 현재 시간을 표시합니다.</div>
+              </div>
+              <span class="func-chip">시간</span>
+            </div>
+            <div class="toggle-row compact-row">
+              <span class="toggle-label">시계 기능 사용</span>
+              <label class="toggle"><input type="checkbox" id="safe-clock-toggle" checked><span class="toggle-track"><span class="toggle-thumb"></span></span></label>
+            </div>
+            <div id="safe-clock-pos-wrap" class="func-expand-wrap">
+              <div class="func-field-grid two-up">
+                <div class="func-field">
+                  <div class="func-field-label">표시 위치</div>
+                  <select id="safe-clock-pos" aria-label="시계 위치">
+                    <option value="left">왼쪽 외곽 슬롯</option><option value="center">가운데 슬롯</option><option value="right">오른쪽 외곽 슬롯</option>
+                  </select>
+                </div>
+                <div class="func-field">
+                  <div class="func-field-label">시계 형식</div>
+                  <select id="clock-format-select" aria-label="시계 형식">
+                    <option value="24">24시간 (14:30)</option><option value="12">12시간 (2:30)</option>
+                  </select>
+                </div>
+              </div>
+              <div id="clock-ampm-wrap" class="func-expand-wrap nested-collapsed">
+                <div class="toggle-row compact-row nested-row">
+                  <span class="toggle-label">오전/오후 표기</span>
+                  <label class="toggle"><input type="checkbox" id="clock-ampm-toggle"><span class="toggle-track"><span class="toggle-thumb"></span></span></label>
+                </div>
+              </div>
+              <div class="func-field single-line">
+                <div class="func-field-label">타임존</div>
+                <select id="timezone-select" aria-label="시간대 선택">
+                  <option value="Asia/Seoul">한국 (KST, UTC+9)</option>
+                  <option value="Asia/Tokyo">일본 (JST, UTC+9)</option>
+                  <option value="Asia/Shanghai">중국 (CST, UTC+8)</option>
+                  <option value="Asia/Singapore">싱가포르 (SGT, UTC+8)</option>
+                  <option value="Asia/Bangkok">태국 (ICT, UTC+7)</option>
+                  <option value="Asia/Kolkata">인도 (IST, UTC+5:30)</option>
+                  <option value="Europe/London">영국 (GMT/BST)</option>
+                  <option value="Europe/Paris">유럽 중부 (CET)</option>
+                  <option value="America/New_York">미국 동부 (EST/EDT)</option>
+                  <option value="America/Chicago">미국 중부 (CST/CDT)</option>
+                  <option value="America/Los_Angeles">미국 서부 (PST/PDT)</option>
+                  <option value="UTC">UTC</option>
+                  <option value="custom">기타 (직접 입력)</option>
+                </select>
+              </div>
+              <div id="tz-custom-wrap" class="func-expand-wrap nested-collapsed">
+                <div class="func-field single-line nested-field">
+                  <div class="func-field-label">UTC 오프셋 (분 단위, 예: 540 = UTC+9)</div>
+                  <input id="tz-custom-input" type="number" placeholder="예: 540" aria-label="사용자 시간대">
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="sp-section func-card status-card">
+            <div class="func-card-head">
+              <div>
+                <div class="sp-label">독서 진행률</div>
+                <div class="setting-help tight">상단 safe-area 내부 슬롯에 현재 읽기 위치를 퍼센트로 표시합니다.</div>
+              </div>
+              <span class="func-chip">진행률</span>
+            </div>
+            <div class="toggle-row compact-row">
+              <span class="toggle-label">독서 진행률 사용</span>
+              <label class="toggle"><input type="checkbox" id="safe-progress-toggle" checked><span class="toggle-track"><span class="toggle-thumb"></span></span></label>
+            </div>
+            <div id="safe-progress-pos-wrap" class="func-expand-wrap collapsed">
+              <div class="func-field single-line">
+                <div class="func-field-label">표시 위치</div>
+                <select id="safe-progress-pos" aria-label="진행률 위치">
+                  <option value="left">왼쪽 외곽 슬롯</option><option value="center">가운데 슬롯</option><option value="right">오른쪽 외곽 슬롯</option>
+                </select>
+              </div>
+            </div>
+          </section>
+
+          <section class="sp-section func-card status-card">
+            <div class="func-card-head">
+              <div>
+                <div class="sp-label">네트워크 상태</div>
+                <div class="setting-help tight">네트워크와 프리패치 모드를 상단 safe-area 내부 배지로 표시합니다.</div>
+              </div>
+              <span class="func-chip">상태</span>
+            </div>
+            <div class="toggle-row compact-row">
+              <span class="toggle-label">네트워크 상태 표시</span>
+              <label class="toggle"><input type="checkbox" id="safe-network-toggle" checked><span class="toggle-track"><span class="toggle-thumb"></span></span></label>
+            </div>
+            <div id="safe-network-pos-wrap" class="func-expand-wrap collapsed">
+              <div class="func-field single-line">
+                <div class="func-field-label">표시 위치</div>
+                <select id="safe-network-pos" aria-label="네트워크 표시 위치">
+                  <option value="auto">자동 배치 (시계/진행률 겹침 회피)</option><option value="left">왼쪽 외곽 슬롯</option><option value="left-inner">왼쪽 안쪽 슬롯</option><option value="center">가운데 보조 슬롯</option><option value="right-inner">오른쪽 안쪽 슬롯</option><option value="right">오른쪽 외곽 슬롯</option>
+                </select>
+              </div>
+            </div>
+          </section>
+
+          <section class="sp-section func-card status-card">
+            <div class="func-card-head">
+              <div>
+                <div class="sp-label">남은 시간</div>
+                <div class="setting-help tight">현재 읽기 속도를 기준으로 남은 예상 시간을 함께 보여줍니다.</div>
+              </div>
+              <span class="func-chip subtle">보조</span>
+            </div>
+            <div class="toggle-row compact-row">
+              <span class="toggle-label">독서율 옆에 남은 시간 표시</span>
+              <label class="toggle"><input type="checkbox" id="safe-remaining-toggle"><span class="toggle-track"><span class="toggle-thumb"></span></span></label>
+            </div>
+          </section>
+
+          <section class="sp-section func-card status-card wide" id="safe-area-fit-card">
+            <div class="func-card-head">
+              <div>
+                <div class="sp-label">브라우저 전체화면 보정</div>
+                <div class="setting-help tight">브라우저마다 전체화면 viewport가 다르게 잡힐 수 있어 기본은 수동 보정 중심으로 둡니다.</div>
+              </div>
+              <span class="func-chip">보정</span>
+            </div>
+            <div class="toggle-row compact-row">
+              <span class="toggle-label">자동 보정 사용(선택)</span>
+              <label class="toggle"><input type="checkbox" id="safe-viewport-auto-toggle"><span class="toggle-track"><span class="toggle-thumb"></span></span></label>
+            </div>
+            <div class="func-field-grid two-up safe-fit-fields">
+              <div class="func-field">
+                <div class="func-field-label">상단 추가 보정 <span id="safe-top-extra-val">0px</span></div>
+                <input id="safe-top-extra-slider" type="range" min="-12" max="180" value="0" step="1" aria-label="상단 안전영역 추가 높이">
+              </div>
+              <div class="func-field">
+                <div class="func-field-label">하단 추가 보정 <span id="safe-bottom-extra-val">0px</span></div>
+                <input id="safe-bottom-extra-slider" type="range" min="-12" max="240" value="0" step="1" aria-label="하단 안전영역 추가 높이">
+              </div>
+            </div>
+            <div id="safe-inset-preset-btns" class="safe-inset-preset-row">
+              <button type="button" class="setting-action-btn safe-preset-btn" data-safe-preset="0,0">기본</button>
+              <button type="button" class="setting-action-btn safe-preset-btn" data-safe-preset="24,28">약하게</button>
+              <button type="button" class="setting-action-btn safe-preset-btn" data-safe-preset="48,56">보통</button>
+              <button type="button" class="setting-action-btn safe-preset-btn" data-safe-preset="72,84">강하게</button>
+            </div>
+            <details class="safe-profile-box safe-profile-advanced">
+              <summary class="safe-profile-summary">
+                <span>
+                  <span class="sp-label micro">사용자 프리셋 / 고급 보정</span>
+                  <span id="safe-viewport-context" class="setting-help tight safe-profile-summary-context">현재 화면 모드 확인 중</span>
+                </span>
+                <span class="safe-profile-summary-action">열기</span>
+              </summary>
+              <div class="safe-profile-advanced-body">
+                <div class="safe-profile-head">
+                  <div>
+                    <div class="sp-label micro">브라우저별 사용자 프리셋</div>
+                    <div class="setting-help tight">기본 보정값으로 부족할 때만 열어 브라우저/PWA별 값을 저장합니다.</div>
+                  </div>
+                </div>
+                <select id="safe-viewport-profile-select" class="safe-profile-select" aria-label="전체화면 보정 프리셋"></select>
+                <div class="safe-profile-actions">
+                  <button type="button" id="safe-viewport-profile-save" class="setting-action-btn">현재값 저장</button>
+                  <button type="button" id="safe-viewport-profile-new" class="setting-action-btn">새 프리셋</button>
+                  <button type="button" id="safe-viewport-profile-rename" class="setting-action-btn">이름 변경</button>
+                  <button type="button" id="safe-viewport-profile-delete" class="setting-action-btn danger">삭제</button>
+                </div>
+                <div id="safe-viewport-profile-status" class="safe-profile-status">현재 컨텍스트에 맞는 프리셋을 확인 중입니다.</div>
+                <div class="safe-template-box">
+                  <div class="safe-template-head">
+                    <div>
+                      <div class="sp-label micro">권장 템플릿</div>
+                      <div class="setting-help tight">현재 브라우저/화면 모드에 맞는 사용자 프리셋을 만듭니다. 이후 슬라이더로 미세 조정하세요.</div>
+                    </div>
+                  </div>
+                  <div id="safe-viewport-template-btns" class="safe-template-actions">
+                    <button type="button" class="setting-action-btn" data-safe-template="current-soft">현재 모드 약하게</button>
+                    <button type="button" class="setting-action-btn" data-safe-template="current-balanced">현재 모드 보통</button>
+                    <button type="button" class="setting-action-btn" data-safe-template="current-strong">현재 모드 강하게</button>
+                    <button type="button" class="setting-action-btn" data-safe-template="browser-punchhole">브라우저 펀치홀</button>
+                    <button type="button" class="setting-action-btn" data-safe-template="pwa-punchhole">PWA 펀치홀</button>
+                  </div>
+                </div>
+                <div class="safe-debug-box">
+                  <div class="safe-debug-head">
+                    <span>Viewport 디버그</span>
+                    <button type="button" id="safe-viewport-debug-copy" class="setting-action-btn mini">복사</button>
+                  </div>
+                  <pre id="safe-viewport-debug" class="safe-debug-output">측정 대기 중</pre>
+                </div>
+              </div>
+            </details>
+            <div class="setting-help tight safe-fit-help">기본/약하게/보통/강하게 보정만으로 충분하면 고급 사용자 프리셋은 열지 않아도 됩니다. 브라우저별 편차가 클 때만 사용자 프리셋을 저장하세요.</div>
+          </section>
+        </div>
+      </div>
+
+      </div>
+    </div>
+  </div>
+      </div>
+    </section>
+  </div>
+</section>
+</div>
+<div id="device-management-overlay" class="settings-submodal-overlay" aria-hidden="true"></div>
+<div id="device-management-modal" class="settings-submodal device-management-modal" data-device-quality-pass="v140" data-device-ux-marker="modal-shell" data-modal-a11y-pass="v140" role="dialog" aria-modal="true" aria-labelledby="device-management-title" aria-describedby="device-management-desc">
+  <div class="settings-submodal-head">
+    <div>
+      <div id="device-management-title" class="settings-submodal-title">기기 관리</div>
+      <div id="device-management-desc" class="settings-submodal-sub">현재 기기 이름, 우선 기기, 원격 읽기 위치와 알림 설정을 한곳에서 확인합니다.</div>
+    </div>
+    <button id="device-management-close" class="settings-submodal-close" type="button" aria-label="기기 관리 닫기">✕</button>
+  </div>
+  <div class="settings-submodal-body device-management-body">
+        <div id="settings-sync-live-panel" class="settings-sync-live-panel" data-device-ux-marker="sync-panel">
+          <div class="device-management-note" data-device-ux-marker="scope-note">
+            <strong>저장 범위</strong>
+            <span>기기 이름과 우선 기기 선택은 공유 동기화 정책에 저장됩니다. 위치/접속 알림은 원격 읽기 위치 제안과 toast 표시만 제어합니다.</span>
+          </div>
+          <div class="settings-sync-live-head">
+            <div class="settings-sync-live-title">기기 · 동기화 상태</div>
+            <div class="settings-sync-live-sub" id="sync-device-summary">서버 동기화 상태를 불러오는 중입니다.</div>
+          </div>
+          <div class="settings-sync-live-chips" id="sync-device-chips" aria-label="기기 상태 요약"></div>
+          <div class="device-management-overview" data-device-ux-marker="overview-cards">
+            <div class="device-management-overview-card"><span class="k">동기화 범위</span><span class="v" id="sync-device-scope-summary">서버 상태 확인 중</span></div>
+            <div class="device-management-overview-card"><span class="k">원격 위치</span><span class="v" id="sync-device-remote-summary">서버 상태 확인 중</span></div>
+          </div>
+          <div class="settings-sync-live-grid">
+            <div class="settings-sync-stat"><span class="k">현재 기기</span><span class="v" id="sync-current-device-name">-</span></div>
+            <div class="settings-sync-stat"><span class="k">우선 기기</span><span class="v" id="sync-preferred-device-name">-</span></div>
+          </div>
+          <section class="device-management-section" data-device-ux-marker="current-device-section" aria-label="현재 기기 이름">
+            <div class="device-management-section-head">
+              <div class="device-management-section-title">현재 기기</div>
+              <div class="device-management-section-sub">이 브라우저를 식별할 이름입니다. 저장 후 다른 기기 목록에도 반영됩니다.</div>
+            </div>
+            <div class="settings-sync-device-edit">
+              <label class="settings-sync-select-label" for="sync-device-name-input">기기 이름</label>
+              <input id="sync-device-name-input" class="settings-sync-text-input" type="text" maxlength="60" autocomplete="off" placeholder="이 기기 이름">
+              <button id="sync-device-name-save" class="setting-action-btn" type="button">이름 저장</button>
+              <button id="sync-current-device-id-copy" class="setting-action-btn" type="button">ID 복사</button>
+            </div>
+          </section>
+          <section class="device-management-section" data-device-ux-marker="priority-device-section" aria-label="우선 기기 정책">
+            <div class="device-management-section-head">
+              <div class="device-management-section-title">우선 기기</div>
+              <div class="device-management-section-sub">여러 기기의 읽기 위치가 충돌할 때 원격 위치 판단에 우선 반영할 기기입니다.</div>
+            </div>
+            <div class="settings-sync-policy-note" id="sync-policy-note">우선 기기 정책을 확인하는 중입니다.</div>
+            <div class="settings-sync-control-row">
+              <label class="settings-sync-select-label" for="sync-preferred-select">우선 기기 선택</label>
+              <select id="sync-preferred-select" class="settings-sync-select"></select>
+              <button id="sync-preferred-save" class="setting-action-btn" type="button">우선 기기 저장</button>
+              <button id="sync-status-refresh" class="setting-action-btn" type="button">상태 새로고침</button>
+            </div>
+          </section>
+          <section class="device-management-section" data-device-ux-marker="notification-section" aria-label="다른 기기 알림">
+            <div class="device-management-section-head">
+              <div class="device-management-section-title">다른 기기 알림</div>
+              <div class="device-management-section-sub">원격 위치 제안과 다른 기기 접속 toast를 분리해서 제어합니다.</div>
+            </div>
+            <div class="settings-sync-toggle-grid">
+              <label class="settings-sync-toggle"><input type="checkbox" id="sync-other-device-alert-toggle"><span>다른 기기 위치 알림</span></label>
+              <label class="settings-sync-toggle"><input type="checkbox" id="sync-other-device-connect-toggle"><span>다른 기기 접속 알림</span></label>
+            </div>
+            <div class="device-management-inline-note" data-device-ux-marker="notification-copy">위치 알림은 저장된 읽기 위치 제안에만, 접속 알림은 최근 활동 toast에만 적용됩니다.</div>
+          </section>
+          <div class="settings-sync-remote" id="sync-remote-resume-card" data-device-ux-marker="remote-resume-card" hidden>
+            <div>
+              <div class="settings-sync-remote-title">다른 기기에서 저장된 위치</div>
+              <div class="settings-sync-remote-desc" id="sync-remote-resume-text">-</div>
+            </div>
+            <button id="sync-remote-resume-btn" class="setting-action-btn" type="button">그 위치로 이동</button>
+          </div>
+          <section class="device-management-section device-management-section--list" data-device-ux-marker="device-list-section" aria-label="등록된 기기 목록">
+            <div class="device-management-section-head">
+              <div class="device-management-section-title">등록된 기기</div>
+              <div class="device-management-section-sub">현재 서버 정책에 남아 있는 기기와 최근 상태입니다.</div>
+            </div>
+            <div class="settings-sync-live-list" id="sync-device-list"><div class="settings-lazy-skeleton" data-skeleton-ui-pass="v417-settings-lazy-skeleton-pass" aria-hidden="true"><div class="skeleton-line title"></div><div class="skeleton-row"></div><div class="skeleton-row mid"></div></div></div>
+          </section>
+        </div>
+  </div>
+</div>
+<div id="read-data-overlay" aria-hidden="true"><div id="read-data-modal" data-modal-a11y-pass="v140" role="dialog" aria-modal="true" aria-labelledby="read-data-title" aria-describedby="read-data-desc"><div id="read-data-desc" class="sr-only">독서 위치, 북마크, 최근 열람, 즐겨찾기 데이터를 내보내고 가져오거나 삭제합니다.</div><div class="rdm-header"><h3 id="read-data-title">독서 데이터 관리</h3><button class="rdm-close" id="rdm-close-btn" type="button" aria-label="독서 데이터 관리 닫기">✕</button></div><div class="rdm-toolbar" id="rdm-tabs"></div><div class="rdm-summary" id="rdm-summary"><div class="settings-lazy-skeleton settings-lazy-skeleton--compact" data-skeleton-ui-pass="v417-read-data-skeleton-pass" aria-hidden="true"><div class="skeleton-line short"></div><div class="skeleton-line mid"></div></div></div><div class="rdm-import-preview" id="rdm-import-preview" hidden data-skeleton-empty-state-guard-pass="v417-skeleton-empty-state-guard-pass"></div><div class="rdm-body" id="rdm-body"><div class="settings-lazy-skeleton" data-skeleton-ui-pass="v417-read-data-skeleton-pass" aria-hidden="true"><div class="skeleton-row"></div><div class="skeleton-row"></div><div class="skeleton-row short"></div></div></div><div class="rdm-footer"><div class="rdm-actions"><button class="rdm-export" id="rdm-export-btn" type="button">내보내기</button><button class="rdm-import" id="rdm-import-btn" type="button">가져오기</button><input id="rdm-import-file" class="visually-offscreen-file" type="file" accept="application/json,.json" aria-label="독서 데이터 파일 가져오기"></div><button type="button" class="rdm-del-all" id="rdm-del-all-btn">현재 탭 전체 삭제</button></div></div>
+</div>
+<div id="custom-css-overlay" class="custom-css-overlay" aria-hidden="true"></div>
+<div id="custom-css-panel" class="custom-css-panel" data-custom-css-quality-pass="v140" data-modal-a11y-pass="v140" role="dialog" aria-modal="true" aria-labelledby="custom-css-title" aria-describedby="custom-css-desc">
+  <div class="custom-css-head">
+    <div class="custom-css-title-wrap">
+      <span id="custom-css-title" class="custom-css-title">사용자 CSS 편집</span>
+      <span id="custom-css-desc" class="custom-css-desc">공유 CSS와 기기 전용 CSS를 분리해 편집합니다. 전체 탭은 합산 미리보기입니다.</span>
+    </div>
+    <div class="custom-css-head-actions">
+      <button id="reset-custom-css-btn" class="custom-css-btn" type="button">초기화</button>
+      <button id="apply-custom-css-btn" class="custom-css-btn custom-css-btn--primary" type="button">적용</button>
+      <button id="close-custom-css-btn" class="custom-css-close" type="button" aria-label="사용자 CSS 편집 닫기">×</button>
+    </div>
+  </div>
+
+  <div class="custom-css-scope-tabs" data-custom-css-ux-marker="scope-tabs" role="tablist" aria-label="사용자 CSS 저장 범위">
+    <span class="custom-css-scope-label">범위</span>
+    <button id="css-theme-shared-tab" class="custom-css-tab is-active" type="button" role="tab" aria-selected="true">공유</button>
+    <button id="css-theme-device-tab" class="custom-css-tab" type="button" role="tab" aria-selected="false">기기</button>
+    <button id="css-theme-all-tab" class="custom-css-tab" type="button" role="tab" aria-selected="false">전체</button>
+  </div>
+  <div id="custom-css-scope-status" class="custom-css-scope-status" data-custom-css-ux-marker="scope-status" aria-live="polite">공유 CSS를 편집합니다. 모든 기기에 동기화됩니다.</div>
+
+  <div id="css-view-tabs" class="custom-css-view-tabs" data-custom-css-ux-marker="mobile-view-tabs">
+    <div class="custom-css-view-tabs-inner" role="tablist" aria-label="사용자 CSS 모바일 보기">
+      <button id="css-view-editor-btn" class="custom-css-view-btn is-active" type="button" role="tab" aria-selected="true">편집기</button>
+      <button id="css-view-guide-btn" class="custom-css-view-btn" type="button" role="tab" aria-selected="false">가이드</button>
+    </div>
+  </div>
+
+  <div id="css-body" class="custom-css-body" data-custom-css-ux-marker="editor-guide-layout">
+    <div id="css-editor-pane" class="custom-css-editor-pane">
+      <textarea id="custom-css-editor" class="custom-css-editor" spellcheck="false" aria-label="사용자 CSS 코드 편집기"></textarea>
+      <div class="custom-css-editor-help">Ctrl+S 로 적용 · Tab 키로 들여쓰기 · Esc 로 닫기</div>
+    </div>
+
+    <div id="css-guide-pane" class="custom-css-guide-pane css-guide-pane">
+      <div class="custom-css-guide-title">가이드</div>
+      <div class="custom-css-guide-body">
+        <div class="custom-css-guide-block"><strong>핵심 예시</strong><br><code>:root { --rd-pad-v: 40px; }</code></div>
+        <div class="custom-css-guide-block"><strong>저장 규칙</strong><br>
+          <code>공유</code>: <span class="custom-css-muted">모든 기기 공통</span><br>
+          <code>기기</code>: <span class="custom-css-muted">이 기기만</span><br>
+          <code>전체</code>: <span class="custom-css-muted">공유+기기 합산, 보기 전용</span>
+        </div>
+        <div class="custom-css-guide-subtitle">주요 변수</div>
+        <div class="custom-css-var-grid">
+          <div><code>--accent</code> <span>강조색</span></div>
+          <div><code>--bg</code> <span>앱 배경</span></div>
+          <div><code>--border</code> <span>테두리</span></div>
+          <div><code>--reader-bg</code> <span>뷰어 배경</span></div>
+          <div><code>--reader-text</code> <span>뷰어 글자</span></div>
+          <div><code>--ui-fs</code> <span>UI 크기</span></div>
+          <div><code>--rd-pad-v</code> <span>상하 여백</span></div>
+          <div><code>--rd-pad-h</code> <span>좌우 여백</span></div>
+          <div><code>--sidebar-w</code> <span>사이드바</span></div>
+          <div><code>--safe-h</code> <span>안전영역</span></div>
+          <div><code>--text</code> <span>메인 글자</span></div>
+          <div><code>--text2</code> <span>보조 글자</span></div>
+          <div><code>--text3</code> <span>약한 글자</span></div>
+          <div><code>--bg2</code> <span>패널 배경</span></div>
+          <div><code>--bg3</code> <span>서브 배경</span></div>
+          <div><code>--surface</code> <span>모달 표면</span></div>
+          <div><code>--brightness</code> <span>밝기</span></div>
+          <div><code>--tr</code> <span>전환속도</span></div>
+          <div><code>--font-ui</code> <span>UI 폰트</span></div>
+          <div><code>--font-rd</code> <span>뷰어 폰트</span></div>
+          <div><code>--font-coding</code> <span>코드 폰트</span></div>
+          <div><code>--font-nanum-g</code> <span>나눔고딕</span></div>
+          <div><code>--font-nanum-m</code> <span>나눔명조</span></div>
+          <div><code>--font-nanum-bg</code> <span>나눔바른</span></div>
+          <div><code>--font-noto-sans</code> <span>NotoSans</span></div>
+          <div><code>--font-ibm</code> <span>IBM Plex</span></div>
+          <div><code>--cat-bg</code> <span>카테고리 배경</span></div>
+          <div><code>--cat-text</code> <span>카테고리 글자</span></div>
+          <div><code>--accent2</code> <span>보조 강조색</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- shared-font-library-enabled -->
+
+<div id="site-language-editor-overlay" class="settings-submodal-overlay" aria-hidden="true"></div>
+<div id="site-language-editor-modal" class="settings-submodal site-language-editor-modal" data-modal-a11y-pass="v140" data-site-custom-language-setting="v564" role="dialog" aria-modal="true" aria-labelledby="site-language-editor-title" aria-describedby="site-language-editor-desc">
+  <div class="settings-submodal-head">
+    <div>
+      <div id="site-language-editor-title" class="settings-submodal-title">사용자 정의 언어</div>
+      <div id="site-language-editor-desc" class="settings-submodal-sub">언어 이름과 코드를 만들고, 표시할 문구를 직접 입력합니다. 공통 언어팩과 같은 코드를 쓰면 개인 문구가 우선 적용됩니다.</div>
+    </div>
+    <button id="site-language-editor-close" class="settings-submodal-close" type="button" aria-label="사용자 정의 언어 닫기">✕</button>
+  </div>
+  <div class="settings-submodal-body">
+    <div class="site-custom-language-panel">
+      <div class="site-custom-language-grid">
+        <label class="site-custom-language-field">
+          <span>언어 이름</span>
+          <input id="site-custom-language-name" class="setting-input" type="text" maxlength="40" placeholder="예: Español, 日本語">
+        </label>
+        <label class="site-custom-language-field">
+          <span>언어 코드</span>
+          <input id="site-custom-language-code" class="setting-input" type="text" maxlength="32" placeholder="예: es, ja-custom">
+        </label>
+      </div>
+      <textarea id="site-custom-language-map" class="setting-textarea site-custom-language-map" rows="8" spellcheck="false" data-i18n-skip aria-label="사용자 정의 언어 표시 문구"></textarea>
+      <div class="setting-help tight">예: <code>설정=Settings</code> 또는 JSON <code>{"설정":"Settings"}</code>. 입력하지 않은 문구는 기본 한국어/영어 fallback을 사용합니다.</div>
+      <div class="site-custom-language-actions">
+        <button id="site-custom-language-template" class="grp-btn" type="button">템플릿 채우기</button>
+        <button id="site-custom-language-save" class="grp-btn" type="button">언어 저장</button>
+        <button id="site-custom-language-use" class="grp-btn" type="button">저장 후 사용</button>
+        <button id="site-custom-language-delete" class="grp-btn danger" type="button" disabled>삭제</button>
+      </div>
+      <div id="site-custom-language-status" class="setting-help tight" data-i18n-skip></div>
+    </div>
+  </div>
+</div>
+
+<div id="shortcut-overlay" class="legacy-modal-overlay shortcut-modal-overlay" data-inline-cleanup-pass="v140" aria-hidden="true"></div>
+
+<div id="account-password-overlay" class="settings-submodal-overlay" aria-hidden="true"></div>
+<div id="account-password-modal" class="settings-submodal" data-modal-a11y-pass="v140" role="dialog" aria-modal="true" aria-labelledby="account-password-modal-title">
+  <div class="settings-submodal-head">
+    <div>
+      <div id="account-password-modal-title" class="settings-submodal-title">계정 비밀번호 변경</div>
+      <div class="settings-submodal-sub">현재 세션은 유지하고 다른 기기의 기존 세션은 만료합니다.</div>
+    </div>
+    <button id="account-password-modal-close" class="settings-submodal-close" type="button" aria-label="비밀번호 변경 닫기">✕</button>
+  </div>
+  <div class="settings-submodal-body">
+    <div class="data-adv-actions data-adv-actions--stack account-password-fields">
+      <label class="sr-only" for="account-current-password">현재 비밀번호</label><input id="account-current-password" data-credential-autofill="allow" class="settings-text-input settings-password-input" type="password" autocomplete="current-password" placeholder="현재 비밀번호">
+      <label class="sr-only" for="account-new-password">새 비밀번호</label><input id="account-new-password" data-credential-autofill="allow" class="settings-text-input settings-password-input" type="password" autocomplete="new-password" minlength="8" placeholder="새 비밀번호">
+      <label class="sr-only" for="account-new-password-confirm">새 비밀번호 확인</label><input id="account-new-password-confirm" data-credential-autofill="allow" class="settings-text-input settings-password-input" type="password" autocomplete="new-password" minlength="8" placeholder="새 비밀번호 확인">
+      <button id="account-password-change-btn" class="setting-action-btn setting-action-btn--full" type="button">비밀번호 변경</button>
+    </div>
+  </div>
+</div>
+
+<div id="shortcut-panel" class="legacy-modal-panel shortcut-modal-panel" data-modal-a11y-pass="v140" data-inline-cleanup-pass="v140" role="dialog" aria-modal="true" aria-labelledby="shortcut-title" aria-describedby="shortcut-desc"><div class="shortcut-panel-head"><span id="shortcut-title" class="shortcut-panel-title">단축키 설정</span><span id="shortcut-desc" class="sr-only">리더와 앱 조작에 사용하는 단축키를 확인하고 변경합니다.</span><div class="shortcut-panel-actions"><button id="reset-shortcut-btn" class="shortcut-panel-reset" type="button">기본값 복원</button><button id="close-shortcut-btn" class="shortcut-panel-close" type="button" aria-label="단축키 설정 닫기">×</button></div></div><div class="shortcut-panel-body"><div class="shortcut-panel-help">키를 클릭한 뒤 원하는 키를 누르세요. Esc는 취소, Backspace는 단축키 해제입니다.</div><div id="shortcut-list"></div></div>
+</div><div id="nsearch-overlay" class="legacy-modal-overlay nsearch-modal-overlay" data-inline-cleanup-pass="v140" aria-hidden="true"></div>
+<div id="nsearch-panel" class="legacy-modal-panel nsearch-modal-panel" data-modal-a11y-pass="v140" data-inline-cleanup-pass="v140" role="dialog" aria-modal="true" aria-labelledby="nsearch-title" aria-describedby="nsearch-desc"><div class="nsearch-head"><div class="nsearch-head-top"><div class="nsearch-head-top-left"><span class="nsearch-head-icon" aria-hidden="true">🔍</span><span id="nsearch-title" class="nsearch-head-title">소설 내용 검색</span><span id="nsearch-desc" class="sr-only">기본값은 표시중/캐시 chunk 검색이며, 전체검색을 켜면 서버 content API를 사용해 작품 전체를 검색합니다.</span></div><div class="nsearch-head-right"><span id="nsearch-network-mode" class="search-mode-badge normal" title="현재 본문 검색 범위"><span class="dot"></span><span class="label">캐시 검색</span></span><span id="nsearch-count"></span><button id="nsearch-close" type="button" aria-label="검색 닫기">×</button></div></div><div class="nsearch-head-bottom"><div class="nsearch-input-wrap"><label class="sr-only" for="nsearch-input">소설 내용 검색어</label><input id="nsearch-input" type="search" enterkeyhint="search" placeholder="검색어를 입력하세요..." autocomplete="off"><button id="nsearch-run" class="nsearch-run-btn" type="button" disabled>검색</button></div></div></div><div class="nsearch-toolbar"><div class="nsearch-toolbar-options"><label class="nsearch-mode-toggle"><input type="checkbox" id="nsearch-allchunks"><span class="nsearch-toggle-track" aria-hidden="true"><span class="nsearch-toggle-thumb"></span></span><span class="nsearch-check-text"><span>전체검색</span><span class="nsearch-check-hint">OFF: 표시중/캐시만 · ON: 서버 전체 검색</span></span></label></div><div class="nsearch-toolbar-actions"><button id="nsearch-prev-btn" class="nsearch-nav-btn" type="button">▲ 이전</button><button id="nsearch-next-btn" class="nsearch-nav-btn" type="button">▼ 다음</button></div></div><div id="nsearch-filterbar" class="nsearch-filterbar" hidden><button class="nsearch-filter-btn active" type="button" data-nsearch-filter="all">전체</button><button class="nsearch-filter-btn" type="button" data-nsearch-filter="cache">캐시</button><button class="nsearch-filter-btn" type="button" data-nsearch-filter="network">네트워크</button></div><div id="nsearch-results" class="nsearch-results-scroll"></div><div id="nsearch-status" class="nsearch-status-line"></div><div id="nsearch-retrybar" class="nsearch-retrybar" hidden><div id="nsearch-coverage-summary" class="nsearch-coverage-summary">검색 가능 범위를 확인하세요.</div><div id="nsearch-chunk-details" class="nsearch-chunk-details" hidden></div><div class="nsearch-retry-actions"><button id="nsearch-coverage-refresh" class="nsearch-mini-btn" type="button">범위 확인</button><button id="nsearch-retry-missing" class="nsearch-mini-btn" type="button">누락 재검색</button><button id="nsearch-retry-failed" class="nsearch-mini-btn" type="button">실패 재시도</button></div></div>
+</div>
+
+<div id="search-nav-remote" data-reader-overlay-pass="v140" data-reader-overlay-role="search-remocon" aria-label="검색 결과 이동 리모컨" aria-hidden="true">
+  <button id="search-nav-remote-prev" class="search-nav-remote-btn" type="button" aria-label="이전 검색 결과">▲</button>
+  <div class="search-nav-remote-main">
+    <div id="search-nav-remote-count" class="search-nav-remote-count">검색 결과 0 / 0</div>
+    <div id="search-nav-remote-text" class="search-nav-remote-text">검색 결과 이동 리모컨</div>
+  </div>
+  <button id="search-nav-remote-next" class="search-nav-remote-btn" type="button" aria-label="다음 검색 결과">▼</button>
+  <button id="search-nav-remote-open" class="search-nav-remote-btn primary" type="button" aria-label="검색 결과 다시 열기">🔍</button>
+  <button id="search-nav-remote-close" class="search-nav-remote-btn" type="button" aria-label="리모컨 닫기">✕</button>
+</div>
+
+<div id="preprocess-editor-overlay" aria-hidden="true"></div>
+<div id="preprocess-editor-modal" data-preprocess-quality-pass="v140" data-modal-a11y-pass="v140" role="dialog" aria-modal="true" aria-labelledby="preprocess-editor-title" aria-describedby="preprocess-editor-desc">
+  <div class="pem-head">
+    <div class="pem-head-main">
+      <h3 id="preprocess-editor-title">텍스트 전처리 설정</h3>
+      <div id="preprocess-editor-desc" class="pem-head-sub">프리셋 적용과 세부 옵션 변경은 명시적인 버튼 동작으로만 반영됩니다.</div>
+    </div>
+    <button id="preprocess-editor-close" class="pem-close" type="button" aria-label="텍스트 전처리 설정 닫기">✕</button>
+  </div>
+  <div class="pem-body">
+    <div class="pem-section pem-preset-section" data-preprocess-ux-marker="preset-zone">
+      <div class="pem-section-head">
+        <div>
+          <div class="pem-label">1. 프리셋</div>
+          <div class="pem-section-sub">프리셋을 고른 뒤 적용 범위를 선택합니다. 현재 옵션은 적용 버튼을 누르기 전까지 유지됩니다.</div>
+        </div>
+        <span class="pem-section-badge">명시적 적용</span>
+      </div>
+      <div class="pem-preset-row">
+        <select id="preprocess-preset-select" class="pem-preset-select" aria-label="전처리 프리셋 선택"></select>
+        <button id="preprocess-preset-apply" class="pem-btn" type="button">선택 항목 적용</button>
+        <button id="preprocess-preset-apply-all" class="pem-btn" type="button">전체 적용</button>
+      </div>
+      <div id="preprocess-preset-meta" class="pem-preset-meta" aria-live="polite">프리셋을 선택하세요.</div>
+      <div class="pem-preset-help" data-preprocess-ux-marker="partial-apply-help">‘선택 항목 적용’은 아래 체크된 항목만 프리셋 값으로 덮어쓰고, 체크 해제 항목은 현재 옵션을 그대로 둡니다. ‘전체 적용’은 모든 전처리 옵션을 프리셋 값으로 바꿉니다.</div>
+      <div class="pem-preset-actions">
+        <button id="preprocess-preset-save" class="pem-btn" type="button">현재값 저장</button>
+        <button id="preprocess-preset-rename" class="pem-btn" type="button">이름 변경</button>
+        <button id="preprocess-preset-delete" class="pem-btn danger" type="button">삭제</button>
+      </div>
+      <div class="pem-preset-partial">
+        <div class="pem-preset-partial-title"><span>부분 적용 항목</span><small>체크된 항목만 덮어쓰기</small></div>
+        <label><input type="checkbox" id="preprocess-preset-key-remove-noise"> 광고·링크</label>
+        <label><input type="checkbox" id="preprocess-preset-key-chapter-spacing"> 장 제목</label>
+        <label><input type="checkbox" id="preprocess-preset-key-collapse-breaks"> 줄바꿈</label>
+        <label><input type="checkbox" id="preprocess-preset-key-split-dense"> 문장 띄우기</label>
+        <label><input type="checkbox" id="preprocess-preset-key-dialogue-break"> 대화문</label>
+        <label><input type="checkbox" id="preprocess-preset-key-paragraph-optimize"> 문단 밀도</label>
+        <label><input type="checkbox" id="preprocess-preset-key-aggressive"> 후기·공지</label>
+      </div>
+    </div>
+    <div class="pem-section" data-preprocess-ux-marker="fine-settings-zone">
+      <div class="pem-section-head">
+        <div>
+          <div class="pem-label">2. 세부 옵션</div>
+          <div class="pem-section-sub">현재 열람 중인 작품에 적용할 전처리 규칙을 직접 조정합니다.</div>
+        </div>
+      </div>
+      <div class="pem-option-list">
+        <div class="pem-option"><div class="pem-option-main"><div class="pem-option-title">광고·링크성 줄 제거</div><div class="pem-option-desc">URL, 메신저 홍보, 배포 문구처럼 본문이 아닌 줄을 보수적으로 제거합니다.</div></div><label class="toggle"><input type="checkbox" id="pre-opt-remove-noise"><span class="toggle-track"><span class="toggle-thumb"></span></span></label></div>
+        <div class="pem-option"><div class="pem-option-main"><div class="pem-option-title">장·화 제목 앞 여백 정리</div><div class="pem-option-desc">프롤로그, 제1화 같은 제목 앞뒤 간격을 읽기 좋게 맞춥니다.</div></div><label class="toggle"><input type="checkbox" id="pre-opt-chapter-spacing"><span class="toggle-track"><span class="toggle-thumb"></span></span></label></div>
+        <div class="pem-option"><div class="pem-option-main"><div class="pem-option-title">과도한 줄바꿈 보정</div><div class="pem-option-desc">빈 줄이 지나치게 많을 때 최대 두 줄까지만 유지합니다.</div></div><label class="toggle"><input type="checkbox" id="pre-opt-collapse-breaks"><span class="toggle-track"><span class="toggle-thumb"></span></span></label></div>
+        <div class="pem-option"><div class="pem-option-main"><div class="pem-option-title">붙어 있는 문장 사이 띄우기</div><div class="pem-option-desc">마침표나 느낌표 뒤 공백이 전혀 없는 문장을 자연스럽게 띄웁니다.</div></div><label class="toggle"><input type="checkbox" id="pre-opt-split-dense"><span class="toggle-track"><span class="toggle-thumb"></span></span></label></div>
+        <div class="pem-option"><div class="pem-option-main"><div class="pem-option-title">대화문 기준 줄바꿈</div><div class="pem-option-desc">따옴표 대화문이나 대사 시작 패턴이 길게 이어질 때 줄을 나눠 읽기 쉽게 정리합니다.</div></div><label class="toggle"><input type="checkbox" id="pre-opt-dialogue-break"><span class="toggle-track"><span class="toggle-thumb"></span></span></label></div>
+        <div class="pem-option"><div class="pem-option-main"><div class="pem-option-title">문단 밀도 자동 최적화</div><div class="pem-option-desc">너무 빽빽한 긴 줄만 적당히 나누고, 과도하게 잘게 쪼개진 줄은 자연스럽게 이어 붙입니다.</div></div><label class="toggle"><input type="checkbox" id="pre-opt-paragraph-optimize"><span class="toggle-track"><span class="toggle-thumb"></span></span></label></div>
+        <div class="pem-option"><div class="pem-option-main"><div class="pem-option-title">후기·공지 제거 강화</div><div class="pem-option-desc">작가 후기, 공지, 배포 관련 안내처럼 본문 외 요소를 더 강하게 걷어냅니다.</div></div><label class="toggle"><input type="checkbox" id="pre-opt-aggressive"><span class="toggle-track"><span class="toggle-thumb"></span></span></label></div>
+      </div>
+    </div>
+    <div class="pem-section" data-preprocess-ux-marker="preview-zone">
+      <div class="pem-section-head">
+        <div>
+          <div class="pem-label">3. 미리보기</div>
+          <div class="pem-section-sub">현재 chunk를 다시 불러와 전처리 결과 샘플과 적용 요약을 확인합니다.</div>
+        </div>
+      </div>
+      <div class="pem-preview-box">
+        <div class="pem-preview-head">
+          <div id="preprocess-preview-meta" class="pem-preview-meta" aria-live="polite">현재 위치의 본문을 기준으로 전처리 결과를 미리 봅니다.</div>
+          <button id="preprocess-preview-refresh" class="pem-btn" type="button">미리보기 새로고침</button>
+        </div>
+        <div id="preprocess-preview-body" class="pem-preview-body">작품을 열면 현재 위치 기준 미리보기가 표시됩니다.</div>
+        <div id="preprocess-preview-stats" class="pem-preview-stats">적용 예정 옵션 요약이 여기에 표시됩니다.</div>
+      </div>
+    </div>
+  </div>
+  <div class="pem-actions">
+    <button id="preprocess-editor-cancel" class="pem-btn" type="button">취소</button>
+    <button id="preprocess-editor-apply" class="pem-btn primary" type="button">적용</button>
+  </div>
+</div>
+
+<div id="font-modal-overlay" aria-hidden="true"></div>
+<div id="font-modal" data-modal-a11y-pass="v140" role="dialog" aria-modal="true" aria-labelledby="font-modal-title" aria-describedby="font-modal-desc">
+  <div id="font-modal-header">
+    <div>
+      <span id="font-modal-title">글꼴 선택</span>
+      <div id="font-modal-desc" class="font-modal-subtitle">시스템 글꼴, 내 계정 기본 글꼴, 이 기기 전용 글꼴을 구분해 적용합니다.</div>
+    </div>
+    <button id="font-modal-close" type="button" aria-label="글꼴 선택 닫기">✕</button>
+  </div>
+  <div class="font-modal-summary">
+    <div class="font-modal-current">
+      <span class="font-modal-current-k">적용 중</span>
+      <strong id="font-active-name">Noto Serif KR</strong>
+      <span id="font-active-scope" class="font-scope-chip">내 계정 기본</span>
+    </div>
+    <button id="clear-device-font-btn" class="font-clear-device" type="button">이 기기 전용 해제</button>
+  </div>
+  <div id="font-modal-body">
+    <section class="fmp font-panel-system" aria-labelledby="font-system-title">
+      <div class="fmp-title-row">
+        <div id="font-system-title" class="fmp-title">시스템 글꼴</div>
+        <span class="fmp-badge">내장</span>
+      </div>
+      <div class="fmp-help">앱에 정의된 기본 글꼴입니다. 내 계정 적용은 로그인 계정의 모든 기기 기준값, 이 기기 적용은 현재 기기 override입니다.</div>
+      <div class="font-choice-list" id="font-modal-builtin"></div>
+      <div id="font-preview">가나다라마바사 아름다운 한글 폰트 미리보기입니다. The quick brown fox jumps.</div>
+    </section>
+    <section class="fmp font-panel-custom" aria-labelledby="font-custom-title">
+      <div class="fmp-title-row">
+        <div id="font-custom-title" class="fmp-title">내 계정 전용 글꼴</div>
+        <span class="fmp-badge" data-font-account-scope-marker="v427">계정 전용</span>
+      </div>
+      <div class="fmp-help">업로드한 글꼴은 현재 로그인한 계정의 전용 글꼴 라이브러리에 저장됩니다. owner와 다른 일반 사용자에게 공유되지 않으며, 삭제 시 적용 중인 사용자 글꼴은 안전하게 기본값으로 되돌립니다.</div>
+      <div id="shared-font-empty" class="font-empty">내 계정에 업로드된 글꼴이 없습니다.</div>
+      <div id="shared-font-btns" class="font-choice-list"></div>
+      <button id="add-shared-font-btn" class="font-upload-btn" type="button">+ 내 계정 글꼴 추가 (.ttf · .otf · .woff · .woff2)</button>
+      <div id="shared-font-status" class="font-library-status"></div>
+    </section>
+  </div>
+</div>
+
+<div id="recovery-center-overlay" aria-hidden="true"></div>
+<div id="recovery-center-modal" data-modal-a11y-pass="v140" role="dialog" aria-modal="true" aria-labelledby="recovery-center-title" aria-describedby="recovery-center-desc">
+  <div class="recovery-center-head">
+    <div class="recovery-center-head-main">
+      <div id="recovery-center-title" class="recovery-center-title">복구 센터</div>
+      <!-- legacy contract: 일반 복구는 요약·캐시·검색만 표시 -->
+      <div id="recovery-center-desc" class="recovery-center-desc">읽기 문제를 먼저 요약하고 안전한 복구 작업만 전면에 표시합니다. 원본 로그·수동 진단·초기화는 고급 영역으로 분리합니다.</div>
+    </div>
+    <div class="recovery-center-head-right">
+      <span id="recovery-center-badge" class="recovery-badge warn">점검 권장</span>
+      <button id="recovery-center-close" class="recovery-center-close-btn" type="button" aria-label="닫기">✕</button>
+    </div>
+  </div>
+  <div class="recovery-center-toolbar" data-recovery-toolbar-pass="v140">
+    <div class="recovery-center-primary-actions" aria-label="복구 센터 주요 작업">
+      <button id="recovery-center-retry" class="devdbg-btn primary" type="button">보류 저장 다시 전송</button>
+      <button id="recovery-center-refresh" class="devdbg-btn" type="button">상태 다시 확인</button>
+    </div>
+    <details id="recovery-center-more" class="recovery-center-more">
+      <summary class="recovery-center-more-summary devdbg-btn">백업 및 고급 작업 <span aria-hidden="true">▾</span></summary>
+      <div class="recovery-center-more-menu">
+        <span class="recovery-action-group-label">백업</span>
+        <button id="recovery-center-export" class="devdbg-btn" type="button">복구 JSON 내보내기</button>
+        <button id="recovery-center-import" class="devdbg-btn" type="button">복구 JSON 가져오기</button>
+        <button id="recovery-center-regression-copy" class="devdbg-btn" type="button">회귀 체크리스트 복사</button>
+        <span class="recovery-action-group-label">캐시 정리</span>
+        <button id="recovery-center-clear-prefetch" class="devdbg-btn" type="button">프리패치만 정리</button>
+        <button id="recovery-center-clear-cache" class="devdbg-btn recovery-risk-action" type="button">오프라인 캐시 전체 정리</button>
+        <span class="recovery-action-group-label danger">초기화</span>
+        <button id="recovery-center-clear-userdata" class="devdbg-btn recovery-risk-action danger" type="button">현재 사용자 데이터 초기화</button>
+      </div>
+    </details>
+  </div>
+  <nav class="recovery-center-nav recovery-center-nav-compact" data-recovery-nav-pass="v140" data-recovery-general-dev-nav-pass="v421-recovery-center-general-dev-nav-pass" aria-label="복구 센터 섹션 바로가기">
+    <button class="recovery-center-nav-btn" type="button" data-recovery-jump="summary">복구 요약</button>
+    <button class="recovery-center-nav-btn" type="button" data-recovery-jump="cache-management">캐시 관리</button>
+    <button class="recovery-center-nav-btn" type="button" data-recovery-jump="search-coverage">검색 복구</button>
+    <details class="recovery-center-nav-more" data-recovery-dev-diagnostics-nav-pass="v421-recovery-center-dev-diagnostics-nav-pass">
+      <summary class="recovery-center-nav-more-summary">고급 진단</summary>
+      <div class="recovery-center-nav-more-menu">
+        <button class="recovery-center-nav-btn" type="button" data-recovery-jump="diagnostics">원본 상태</button>
+        <button class="recovery-center-nav-btn" type="button" data-recovery-jump="reader-manual-diagnostics">수동 기록</button>
+        <button class="recovery-center-nav-btn" type="button" data-recovery-jump="policy">정책</button>
+      </div>
+    </details>
+  </nav>
+  <div class="recovery-center-section-label"><strong>핵심 상태</strong><span>이 네 항목부터 확인하십시오.</span></div>
+  <div class="recovery-center-grid recovery-center-grid-primary" data-recovery-compact-status-pass="v419-recovery-center-compact-status-pass">
+    <div class="recovery-center-card"><div class="k">본문 캐시</div><div class="v" id="recovery-card-offline">-</div></div>
+    <div class="recovery-center-card"><div class="k">전송 대기</div><div class="v" id="recovery-card-queue">-</div></div>
+    <div class="recovery-center-card"><div class="k">서버 동기화</div><div class="v" id="recovery-card-server-sync">-</div></div>
+    <div class="recovery-center-card"><div class="k">저장 실패</div><div class="v" id="recovery-card-sync-fail">-</div></div>
+  </div>
+  <details class="recovery-center-status-more">
+    <summary>상세 상태</summary>
+    <div class="recovery-center-grid recovery-center-grid-secondary">
+      <div class="recovery-center-card"><div class="k">마지막 체크포인트</div><div class="v" id="recovery-card-checkpoint">-</div></div>
+      <div class="recovery-center-card"><div class="k">고아 데이터</div><div class="v" id="recovery-card-orphan">-</div></div>
+    </div>
+  </details>
+
+  <div id="recovery-center-body" class="recovery-center-body" data-recovery-manual-diagnostics-owner="v273">
+  <section class="recovery-section recovery-manual-diagnostics-panel" data-recovery-section="reader-manual-diagnostics" data-reader-manual-diagnostics-pass="v260" data-reader-manual-diagnostics-relocated-from-settings="v260">
+    <div class="recovery-section-title">수동 스크롤 진단</div>
+    <div class="recovery-section-desc">설정 일반 탭에서 분리한 진단 전용 패널입니다. PC 드래그와 모바일 스크롤 체감 결과를 reader diagnostics history에 저장합니다.</div>
+    <div class="recovery-action-panel" data-reader-manual-diagnostics-inline-form="v260">
+      <div class="data-adv-inline-form reader-manual-diagnostics-inline-form">
+        <label class="mini-check"><input id="reader-manual-diagnostics-pc-smooth" type="checkbox" checked> PC 드래그 부드러움</label>
+        <label class="mini-check"><input id="reader-manual-diagnostics-mobile-smooth" type="checkbox" checked> 모바일 스크롤 부드러움</label>
+        <input id="reader-manual-diagnostics-notes" class="setting-inline-input" type="text" maxlength="160" placeholder="메모 선택 입력" aria-label="수동 진단 메모">
+      </div>
+      <div class="recovery-action-row recovery-manual-diagnostics-actions">
+        <button id="reader-manual-diagnostics-record-btn" class="devdbg-btn" type="button">스크롤 진단 기록</button>
+        <button id="reader-manual-diagnostics-export-btn" class="devdbg-btn" type="button">진단 기록 내보내기</button>
+        <button id="reader-manual-diagnostics-import-btn" class="devdbg-btn" type="button">진단 기록 가져오기</button>
+        <input id="reader-manual-diagnostics-import-file" type="file" accept="application/json,.json" hidden aria-label="수동 진단 파일 가져오기">
+        <button id="reader-manual-diagnostics-clear-btn" class="devdbg-btn" type="button">진단 기록 비우기</button>
+      </div>
+      <div id="reader-manual-diagnostics-status" class="recovery-cache-empty reader-manual-diagnostics-status">최근 수동 스크롤 진단 기록 없음</div>
+    </div>
+  </section>
+    <div class="recovery-center-loading" data-skeleton-empty-state-guard-pass="v417-skeleton-empty-state-guard-pass"><div class="settings-lazy-skeleton" data-skeleton-ui-pass="v417-recovery-skeleton-pass" aria-hidden="true"><div class="skeleton-line title"></div><div class="skeleton-row"></div><div class="skeleton-row mid"></div><div class="skeleton-row short"></div></div></div>
+  </div>
+</div>
+
+<div id="theme-editor-overlay" aria-hidden="true"></div>
+<div id="theme-editor-modal" data-theme-quality-pass="v140" data-modal-a11y-pass="v140" role="dialog" aria-modal="true" aria-labelledby="theme-editor-title" aria-describedby="theme-editor-desc">
+  <div class="tem-head">
+    <div class="tem-head-main">
+      <h3 id="theme-editor-title">테마 색상</h3>
+      <div id="theme-editor-desc" class="tem-head-sub">프리셋, 저장된 사용자 테마, 직접 지정 색상을 한 화면에서 조정합니다.</div>
+    </div>
+    <button id="theme-editor-close" class="tem-close" type="button" aria-label="테마 색상 닫기">✕</button>
+  </div>
+  <div class="tem-body">
+    <div class="tem-section" data-theme-ux-marker="preset-custom-section">
+      <div class="tem-label">프리셋</div>
+      <div class="tem-section-sub">기본 프리셋을 선택하면 오른쪽 미리보기에 먼저 반영됩니다. 적용 전까지 저장값은 바뀌지 않습니다.</div>
+      <div id="theme-preset-grid" class="tem-preset-grid"></div>
+      <div class="tem-label tem-label--spaced">사용자 테마</div>
+      <div class="tem-custom-box">
+        <div class="tem-custom-row">
+          <select id="theme-custom-select" class="tem-select" aria-label="저장된 사용자 테마"></select>
+          <button id="theme-custom-save" class="tem-btn" type="button">현재값 저장</button>
+        </div>
+        <div class="tem-custom-actions">
+          <button id="theme-custom-rename" class="tem-btn" type="button">이름 변경</button>
+          <button id="theme-custom-delete" class="tem-btn danger" type="button">삭제</button>
+          <button id="theme-custom-export" class="tem-btn" type="button">내보내기</button>
+          <button id="theme-custom-import" class="tem-btn" type="button">가져오기</button>
+          <input id="theme-custom-import-file" class="theme-import-file" type="file" accept="application/json,.json" hidden aria-label="사용자 테마 파일 가져오기">
+        </div>
+        <div id="theme-custom-empty" class="tem-help">저장된 사용자 테마가 없습니다.</div>
+      </div>
+      <div class="tem-label tem-label--spaced">직접 지정</div>
+      <div class="tem-color-grid">
+        <div class="tem-color-field"><label for="theme-color-bg">앱 배경</label><input id="theme-color-bg" type="color"><span class="tem-color-code" data-color-code="theme-color-bg"></span></div>
+        <div class="tem-color-field"><label for="theme-color-surface">패널</label><input id="theme-color-surface" type="color"><span class="tem-color-code" data-color-code="theme-color-surface"></span></div>
+        <div class="tem-color-field"><label for="theme-color-text">글자</label><input id="theme-color-text" type="color"><span class="tem-color-code" data-color-code="theme-color-text"></span></div>
+        <div class="tem-color-field"><label for="theme-color-accent">강조</label><input id="theme-color-accent" type="color"><span class="tem-color-code" data-color-code="theme-color-accent"></span></div>
+        <div class="tem-color-field"><label for="theme-color-reader-bg">본문 배경</label><input id="theme-color-reader-bg" type="color"><span class="tem-color-code" data-color-code="theme-color-reader-bg"></span></div>
+        <div class="tem-color-field"><label for="theme-color-reader-text">본문 글자</label><input id="theme-color-reader-text" type="color"><span class="tem-color-code" data-color-code="theme-color-reader-text"></span></div>
+      </div>
+    </div>
+    <div class="tem-section" data-theme-ux-marker="preview-section">
+      <div class="tem-label">미리보기 <span id="theme-current-name" class="tem-current-name">현재 색상</span></div>
+      <div class="tem-section-sub">색상 입력 변경은 즉시 미리보기만 갱신하고, 실제 적용은 하단 적용 버튼으로 실행됩니다.</div>
+      <div id="theme-preview-card" class="tem-preview-card">
+        <div id="theme-preview-toolbar" class="tem-preview-toolbar">
+          <div class="tem-preview-dots"><span></span><span></span><span></span></div>
+          <span id="theme-preview-pill" class="tem-preview-pill">미리보기</span>
+        </div>
+        <div id="theme-preview-reader" class="tem-preview-reader">
+          <div class="tem-preview-meta">소설 뷰어 · 미리보기</div>
+          밤바람이 살짝 스며들고, 페이지는 현재 선택한 색 조합으로 표시됩니다.
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="tem-actions">
+    <button id="theme-editor-reset" class="tem-btn" type="button">현재 테마 다시 읽기</button>
+    <button id="theme-editor-apply" class="tem-btn primary" type="button">적용</button>
+  </div>
+</div>
+
+<div id="devdbg-modal-overlay" aria-hidden="true"></div>
+<div id="devdbg-modal" data-devdbg-quality-pass="v140" data-modal-a11y-pass="v140" role="dialog" aria-modal="true" aria-labelledby="devdbg-title" aria-describedby="devdbg-desc">
+  <div class="devdbg-modal-head">
+    <div>
+      <div id="devdbg-title" class="devdbg-modal-title">개발자 디버그</div>
+      <div id="devdbg-desc" class="devdbg-modal-sub">앱/리더/검색/동기화/기기/스토리지/DOM/캐시/오류/성능 상태</div>
+    </div>
+    <div class="devdbg-modal-actions" data-devdbg-nav-pass="v140" aria-label="개발자 디버그 작업 그룹">
+      <div class="devdbg-action-group" data-devdbg-action-group="snapshot" aria-label="스냅샷 작업">
+        <button class="devdbg-btn" id="devdbg-refresh-btn" type="button">새로고침</button>
+        <button class="devdbg-btn" id="devdbg-copy-btn" type="button">복사</button>
+      </div>
+      <div class="devdbg-action-group" data-devdbg-action-group="recovery" aria-label="복구 센터 바로가기">
+        <button class="devdbg-btn" id="devdbg-recovery-btn" type="button">복구 센터</button>
+        <button class="devdbg-btn" id="devdbg-library-virtual-btn" type="button">개발자 진단</button>
+        <button class="devdbg-btn" id="devdbg-recovery-cache-btn" type="button">캐시 관리</button>
+        <button class="devdbg-btn" id="devdbg-recovery-search-btn" type="button">검색 진단</button>
+      </div>
+      <button class="devdbg-btn" id="devdbg-close-btn" type="button">닫기</button>
+    </div>
+  </div>
+  <div class="devdbg-grid">
+    <div class="devdbg-side">
+      <div class="devdbg-toggles">
+        <div class="devdbg-row"><span class="devdbg-label">디버그 표시</span><label class="toggle"><input type="checkbox" id="devdbg-enable"><span class="toggle-track"><span class="toggle-thumb"></span></span></label></div>
+        <div class="devdbg-row"><span class="devdbg-label">앱 상태</span><label class="toggle"><input type="checkbox" id="devdbg-app"><span class="toggle-track"><span class="toggle-thumb"></span></span></label></div>
+        <div class="devdbg-row"><span class="devdbg-label">UI/테마</span><label class="toggle"><input type="checkbox" id="devdbg-ui"><span class="toggle-track"><span class="toggle-thumb"></span></span></label></div>
+        <div class="devdbg-row"><span class="devdbg-label">리더 상태</span><label class="toggle"><input type="checkbox" id="devdbg-reader"><span class="toggle-track"><span class="toggle-thumb"></span></span></label></div>
+        <div class="devdbg-row"><span class="devdbg-label">검색 상태</span><label class="toggle"><input type="checkbox" id="devdbg-search"><span class="toggle-track"><span class="toggle-thumb"></span></span></label></div>
+        <div class="devdbg-row"><span class="devdbg-label">동기화 상태</span><label class="toggle"><input type="checkbox" id="devdbg-sync"><span class="toggle-track"><span class="toggle-thumb"></span></span></label></div>
+        <div class="devdbg-row"><span class="devdbg-label">기기/공유 상태</span><label class="toggle"><input type="checkbox" id="devdbg-device"><span class="toggle-track"><span class="toggle-thumb"></span></span></label></div>
+        <div class="devdbg-row"><span class="devdbg-label">스토리지</span><label class="toggle"><input type="checkbox" id="devdbg-storage"><span class="toggle-track"><span class="toggle-thumb"></span></span></label></div>
+        <div class="devdbg-row"><span class="devdbg-label">DOM/목록</span><label class="toggle"><input type="checkbox" id="devdbg-dom"><span class="toggle-track"><span class="toggle-thumb"></span></span></label></div>
+        <div class="devdbg-row"><span class="devdbg-label">캐시</span><label class="toggle"><input type="checkbox" id="devdbg-cache"><span class="toggle-track"><span class="toggle-thumb"></span></span></label></div>
+        <div class="devdbg-row"><span class="devdbg-label">네트워크/API</span><label class="toggle"><input type="checkbox" id="devdbg-network"><span class="toggle-track"><span class="toggle-thumb"></span></span></label></div>
+        <div class="devdbg-row"><span class="devdbg-label">오류 로그</span><label class="toggle"><input type="checkbox" id="devdbg-errors"><span class="toggle-track"><span class="toggle-thumb"></span></span></label></div>
+        <div class="devdbg-row"><span class="devdbg-label">성능</span><label class="toggle"><input type="checkbox" id="devdbg-perf"><span class="toggle-track"><span class="toggle-thumb"></span></span></label></div>
+      </div>
+    </div>
+    <div class="devdbg-main">
+      <div class="devdbg-stats">
+        <div class="devdbg-stat"><div class="devdbg-stat-k">테마</div><div class="devdbg-stat-v" id="devdbg-stat-theme">-</div></div>
+        <div class="devdbg-stat"><div class="devdbg-stat-k">현재 작품</div><div class="devdbg-stat-v" id="devdbg-stat-novel">-</div></div>
+        <div class="devdbg-stat"><div class="devdbg-stat-k">검색 결과</div><div class="devdbg-stat-v" id="devdbg-stat-results">0</div></div>
+        <div class="devdbg-stat"><div class="devdbg-stat-k">로드 단위 수</div><div class="devdbg-stat-v" id="devdbg-stat-chunks">0</div></div>
+        <div class="devdbg-stat"><div class="devdbg-stat-k">최근 오류</div><div class="devdbg-stat-v" id="devdbg-stat-errors">0</div></div>
+        <div class="devdbg-stat"><div class="devdbg-stat-k">마지막 갱신</div><div class="devdbg-stat-v" id="devdbg-stat-updated">-</div></div>
+        <div class="devdbg-stat"><div class="devdbg-stat-k">오프라인 캐시</div><div class="devdbg-stat-v" id="devdbg-stat-offline">0</div></div>
+        <div class="devdbg-stat"><div class="devdbg-stat-k">보류 저장</div><div class="devdbg-stat-v" id="devdbg-stat-queue">0</div></div>
+        <div class="devdbg-stat"><div class="devdbg-stat-k">검색 캐시</div><div class="devdbg-stat-v" id="devdbg-stat-cache">0</div></div>
+      </div>
+      <div class="devdbg-statusline" id="devdbg-statusline">대기 중</div>
+      <pre class="devdbg-output" id="devdbg-output"></pre>
+    </div>
+  </div>
+</div>

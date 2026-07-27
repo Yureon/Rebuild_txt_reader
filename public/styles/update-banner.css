@@ -1,0 +1,63 @@
+/* rebuild-v651: critical service-worker update UI loaded before registration */
+.txt-reader-update-banner{
+  position:fixed;
+  right:max(12px,env(safe-area-inset-right));
+  bottom:max(12px,env(safe-area-inset-bottom));
+  z-index:2147483000;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  box-sizing:border-box;
+  width:auto;
+  max-width:min(560px,calc(100vw - 24px));
+  margin:0;
+  padding:10px 12px;
+  border:1px solid rgba(184,137,90,.48);
+  border-color:color-mix(in srgb,var(--accent,#b8895a) 38%,var(--border,rgba(255,255,255,.15)));
+  border-radius:12px;
+  background:#241e19;
+  background:var(--surface,var(--bg2,#241e19));
+  color:#fff;
+  color:var(--text,#fff);
+  box-shadow:0 14px 38px rgba(0,0,0,.3);
+  font:600 12px/1.45 var(--font-ui,system-ui,-apple-system,"Segoe UI",sans-serif);
+  text-align:left;
+  isolation:isolate;
+}
+.txt-reader-update-banner span{min-width:0;flex:1;overflow-wrap:anywhere}
+.txt-reader-update-banner button{
+  appearance:none;
+  min-width:0;
+  min-height:36px;
+  margin:0;
+  padding:7px 10px;
+  border:1px solid var(--accent,#b8895a);
+  border-radius:8px;
+  background:var(--accent,#b8895a);
+  color:#fff;
+  font:inherit;
+  cursor:pointer;
+  white-space:nowrap;
+}
+.txt-reader-update-banner button.secondary{
+  background:transparent;
+  color:var(--text,#fff);
+  border-color:var(--border,rgba(255,255,255,.2));
+}
+.txt-reader-update-banner button:disabled{opacity:.65;cursor:wait}
+html[data-service-worker-ui="silent"] .txt-reader-update-banner{display:none!important}
+@media(max-width:640px){
+  .txt-reader-update-banner{
+    left:max(10px,env(safe-area-inset-left));
+    right:max(10px,env(safe-area-inset-right));
+    bottom:max(10px,env(safe-area-inset-bottom));
+    width:auto;
+    max-width:none;
+    flex-wrap:wrap;
+    gap:7px;
+    padding:11px;
+  }
+  .txt-reader-update-banner span{flex-basis:100%}
+  .txt-reader-update-banner button{flex:1 1 120px;white-space:normal}
+}
+@media(prefers-reduced-motion:reduce){.txt-reader-update-banner{scroll-behavior:auto}}

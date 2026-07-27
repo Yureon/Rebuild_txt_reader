@@ -1,0 +1,13 @@
+'use strict';
+const assert = require('assert');
+const fs = require('fs');
+const path = require('path');
+const source = fs.readFileSync(path.join(__dirname, '../../server/routes/auth-routes.js'), 'utf8');
+const createAt = source.indexOf('const token = sessionStore.createSession(sessionMeta);');
+const flushAt = source.indexOf("await sessionStore.flush()", createAt);
+const cookieAt = source.indexOf("res.setHeader('Set-Cookie', createSessionCookie(token, 604800));", createAt);
+assert.ok(createAt >= 0 && flushAt > createAt, 'login must durably flush the new session');
+assert.ok(cookieAt > flushAt, 'session cookie must not be issued before durable persistence succeeds');
+assert.ok(source.includes("error:'session_persistence_failed'"), 'login persistence failure must be explicit');
+assert.ok(source.includes("auth.login.persistence_failed"), 'session persistence failure must be auditable');
+console.log(JSON.stringify({ pass:'v606-login-session-durability-pass' }));

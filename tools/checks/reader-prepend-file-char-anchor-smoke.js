@@ -1,0 +1,10 @@
+const fs = require('fs');
+const assert = require('assert');
+const layout = fs.readFileSync('public/scripts/rebuild/features/reader/virtual-layout.mjs', 'utf8');
+assert.ok(layout.includes("v485-reader-prepend-file-char-anchor-pass"), 'prepend file-char anchor marker missing');
+assert.ok(layout.includes('function enrichPrependAnchorWithFileChar'), 'prepend file-char capture helper missing');
+assert.ok(layout.includes('function applyPrependFileCharAnchor'), 'prepend file-char restore helper missing');
+assert.ok(layout.includes('enrichPrependAnchorWithFileChar(app, v, traceCapturedAnchor'), 'prepend capture must be enriched with file char');
+assert.ok(layout.includes('applyPrependFileCharAnchor(app, v, reader, anchor'), 'prepend restore must try file char before row/prefix fallback');
+assert.ok(layout.includes('lastPrependAnchorRestoredAt'), 'prepend restore timestamp missing');
+console.log('v485-reader-prepend-file-char-anchor-smoke-pass');

@@ -1,0 +1,20 @@
+#!/usr/bin/env node
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
+const ui = fs.readFileSync(path.join(root, 'public/scripts/rebuild/features/ui.mjs'), 'utf8');
+assert(ui.includes("return !!app.els[resolvedPanelKey]?.classList.contains('open');"), 'page presentation must be tracked from the panel, not the hidden overlay');
+assert(!ui.includes("return !!app.els[overlayKey]?.classList.contains('open');\n    }\n    return !!(app.els[overlayKey]"), 'stale overlay-only page check remains');
+assert(ui.includes("settingsChildLayerKeys.has(overlayKey) && isLayerOpen(overlayKey, panelKey)"), 'closing settings page must not churn every closed child layer');
+assert(ui.includes("const SETTINGS_PAGE_HISTORY_KEY = 'txtReaderSettingsPageV654'"));
+assert(ui.includes("const SETTINGS_PAGE_VIEW_KEY = 'txtReaderSettingsViewV654'"));
+assert(ui.includes("let settingsPageHistoryToken = ''"));
+assert(ui.includes('history.state?.[SETTINGS_PAGE_HISTORY_KEY] === settingsPageHistoryToken'), 'close must only consume the history entry created by the active settings page');
+assert(ui.includes('[SETTINGS_PAGE_HISTORY_KEY]:settingsPageHistoryToken'), 'each opening must create a fresh history entry');
+assert(ui.includes("[SETTINGS_PAGE_VIEW_KEY]:isLibrarySettingsMobile() ? 'index' : 'detail'"), 'opening must choose index/detail from viewport');
+assert(!ui.includes('history.go(detail ? -2 : -1)'), 'explicit settings close must not over-navigate browser history');
+assert(ui.includes("setSettingsMobileView('index');"), 'mobile detail back must return to the settings category index without browser navigation');
+assert(ui.includes("settingsPageHistoryToken = `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`"));
+console.log(JSON.stringify({ pass:'v653-settings-page-state-smoke-pass', layerTracking:'panel', historyToken:true, boundedChildClose:true }));

@@ -1,0 +1,11 @@
+const fs = require('fs');
+const assert = require('assert');
+const read = rel => fs.readFileSync(rel, 'utf8');
+const metadataCss = read('public/styles/metadata-page.css');
+const appCss = read('public/styles/app.css');
+const shell = read('public/fragments/app-shell.html');
+assert(metadataCss.includes('.metadata-work-more[hidden]{display:none!important}'), 'metadata load-more hidden contract missing');
+for (const selector of ['.library-shelf-favorite-btn,.library-shelf-menu-btn','.toolbar .tbtn']) assert(appCss.includes(selector), `touch target selector missing: ${selector}`);
+for (const token of ['aria-label="서재 메뉴"','aria-label="전체 화면"','aria-label="리더 설정"','aria-label="독서 진행 위치"','aria-label="이동할 독서 위치"','aria-label="이동할 진행률"']) assert(shell.includes(token), `reader accessible name missing: ${token}`);
+assert(appCss.includes('grid-template-areas:"heading heading" "search search" "view view" "scope scope" "status status" "chips chips"'), 'mobile library compact header grid missing');
+console.log('v597-ux-core-smoke-pass');

@@ -1,0 +1,21 @@
+#!/usr/bin/env node
+const assert = require('assert');
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '../..');
+const html = fs.readFileSync(path.join(root, 'public/fragments/app-shell.html'), 'utf8') + '\n' + fs.readFileSync(path.join(root, 'public/fragments/deferred-ui.html'), 'utf8');
+const js = fs.readFileSync(path.join(root, 'public/scripts/rebuild/features/settings/tab-switching.mjs'), 'utf8');
+const css = fs.readFileSync(path.join(root, 'public/styles/app.css'), 'utf8') + '\n' + fs.readFileSync(path.join(root, 'public/styles/deferred-ui.css'), 'utf8');
+const PASS = 'v565-settings-information-architecture-smoke-pass';
+assert.ok(html.includes('data-settings-information-architecture-pass="v565-settings-information-architecture-pass"'), 'settings IA marker missing');
+for (const marker of ['data-tab="general-panel"','data-tab="viewer-panel"','data-tab="func-panel"','data-tab="data-panel"','id="data-panel"','data-settings-tab-body="data"']) assert.ok(html.includes(marker), `missing ${marker}`);
+const general = html.slice(html.indexOf('id="general-panel"'), html.indexOf('id="data-panel"'));
+const data = html.slice(html.indexOf('id="data-panel"'), html.indexOf('id="viewer-panel"'));
+assert.ok(!general.includes('id="open-device-management-btn"'), 'data management must be removed from general tab');
+assert.ok(data.includes('id="open-device-management-btn"'), 'device management must be in data tab');
+assert.ok(data.includes('id="settings-logout-btn"'), 'logout must be in data tab');
+assert.ok(js.includes("SETTINGS_TAB_ACCESSIBILITY_PASS = 'v653-settings-tab-visibility-pass'"), 'tab accessibility marker missing');
+assert.ok(js.includes("event?.key === 'ArrowRight'"), 'keyboard tab navigation missing');
+assert.ok(js.includes("setAttribute?.('aria-selected'"), 'ARIA selected state update missing');
+assert.ok(css.includes('v565 settings information architecture and keyboard navigation'), 'settings IA CSS missing');
+console.log(JSON.stringify({ pass: PASS }));

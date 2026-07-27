@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="TxT Reader">
+<link rel="apple-touch-icon" sizes="180x180" href="/icon/apple-icon-180x180.png?v=rebuild-v682">
+<link rel="icon" type="image/png" sizes="32x32" href="/icon/favicon-32x32.png?v=rebuild-v682">
+<link rel="icon" type="image/png" sizes="16x16" href="/icon/favicon-16x16.png?v=rebuild-v682">
+<link rel="manifest" href="/manifest.json?v=rebuild-v682">
+<meta name="theme-color" content="#000000">
+  <link rel="preload" as="style" href="/styles/update-banner.css?v=rebuild-v682" data-update-banner-critical="v651">
+  <script data-cfasync="false" src="/service-worker-register.js?v=rebuild-v682"></script>
+  <script data-cfasync="false" src="/scripts/theme-boot.js?v=rebuild-v682"></script>
+  <link href="/styles/non-auth-autofill-guard.css?v=rebuild-v682" rel="stylesheet">
+  <script data-cfasync="false" src="/scripts/non-auth-autofill-guard.js?v=rebuild-v682"></script>
+  <link href="/styles/update-banner.css?v=rebuild-v682" rel="stylesheet" data-update-banner-full="v651">
+<title>TXT Reader 서재</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link id="builtin-font-defaults" crossorigin="anonymous" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500&family=Pretendard:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="styles/app.css?v=rebuild-v682" rel="stylesheet">
+<link rel="modulepreload" href="/scripts/rebuild/core/app-shell.mjs">
+<link rel="modulepreload" href="/scripts/rebuild/main.mjs">
+<link rel="modulepreload" href="/scripts/rebuild/core/api.mjs">
+<link rel="modulepreload" href="/scripts/rebuild/core/utils.mjs">
+<link rel="modulepreload" href="/scripts/rebuild/state/app-state.mjs">
+<link rel="modulepreload" href="/scripts/rebuild/features/ui.mjs">
+<link rel="modulepreload" href="/scripts/rebuild/core/user-scope-bootstrap.mjs">
+<link rel="modulepreload" href="/scripts/rebuild/features/lazy-features.mjs">
+<link rel="modulepreload" href="/scripts/rebuild/features/library.mjs">
+<meta content="light dark" name="color-scheme">
+  <link href="/styles/scroll-to-top.css?v=rebuild-v682" rel="stylesheet">
+  <script data-cfasync="false" src="/scripts/scroll-to-top.js?v=rebuild-v682" defer></script>
+<link rel="stylesheet" href="/styles/skeleton-v675.css?v=rebuild-v682">
+  <link rel="stylesheet" href="/styles/library-tree-paging.css?v=rebuild-v682">
+</head>
+<body data-client-profile="library" class="reader-library">
+<div id="boot-skeleton" class="app-skeleton-shell library-boot-skeleton" data-skeleton-ui-pass="v675-library-entry-skeleton-pass" data-shell-profile="library" aria-hidden="true">
+  <div class="library-boot-frame">
+    <header class="library-boot-header">
+      <div class="skeleton-line title"></div>
+      <div class="library-boot-actions"><span class="skeleton-pill"></span><span class="skeleton-pill"></span><span class="skeleton-pill short"></span></div>
+    </header>
+    <div class="library-boot-search skeleton-input"></div>
+    <div class="library-boot-tabs"><span class="skeleton-pill active"></span><span class="skeleton-pill"></span><span class="skeleton-pill"></span></div>
+    <main class="library-boot-grid">
+      <article class="skeleton-card"></article><article class="skeleton-card"></article><article class="skeleton-card"></article><article class="skeleton-card"></article>
+      <article class="skeleton-card"></article><article class="skeleton-card"></article><article class="skeleton-card"></article><article class="skeleton-card"></article>
+    </main>
+  </div>
+</div>
+<script data-cfasync="false" type="module" src="scripts/rebuild/library-page.mjs?v=rebuild-v682"></script>
+</body>
+</html>

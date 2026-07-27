@@ -1,0 +1,20 @@
+#!/usr/bin/env node
+'use strict';
+const assert=require('assert');
+const fs=require('fs');
+const manifest=JSON.parse(fs.readFileSync('extensions/metadata-login-helper/manifest.json','utf8'));
+const html=fs.readFileSync('extensions/metadata-login-helper/popup.html','utf8');
+const css=fs.readFileSync('extensions/metadata-login-helper/popup.css','utf8');
+const js=fs.readFileSync('extensions/metadata-login-helper/popup.js','utf8');
+const packageVersion=JSON.parse(fs.readFileSync('package.json','utf8')).version;
+assert.equal(manifest.version,packageVersion);
+assert(manifest.commands?._execute_action,'_execute_action command missing');
+assert.equal(manifest.commands._execute_action.suggested_key.default,'Ctrl+Shift+Y');
+assert(css.includes('--popup-width: 380px'),'fixed popup width token missing');
+assert(css.includes('width: var(--popup-width)')&&css.includes('min-width: var(--popup-width)')&&css.includes('max-width: var(--popup-width)'),'html/body fixed width contract missing');
+assert(!css.includes('max-width: 100vw'),'viewport-width popup regression returned');
+assert(!/@media\s*\(max-width:\s*(?:270|300)px\)/.test(css),'narrow viewport media regression returned');
+assert(html.includes('id="action-stack" class="action-stack" hidden')&&html.includes('id="import-button" type="button" hidden'),'blank action should be hidden in markup');
+assert(js.includes('importButton.hidden = !normalizedLabel'),'blank action runtime guard missing');
+assert(js.includes('chrome.commands.getAll')&&js.includes("item.name === '_execute_action'"),'shortcut discovery missing');
+console.log(JSON.stringify({pass:'v678-extension-popup-fixed-width-smoke-pass',width:380,shortcut:true,blankActionHidden:true}));

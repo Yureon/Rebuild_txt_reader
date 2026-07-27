@@ -1,0 +1,20 @@
+#!/usr/bin/env node
+'use strict';
+const assert=require('assert');
+const fs=require('fs');
+const path=require('path');
+const root=path.resolve(__dirname,'../..');
+const read=rel=>fs.readFileSync(path.join(root,rel),'utf8');
+const html=read('public/admin/users.html');
+const ui=read('public/scripts/admin/library-cleanup.js');
+const css=read('public/styles/admin-users.css');
+const route=read('server/routes/admin-users-routes.js');
+assert(html.includes('v642-library-cleanup-similarity-ui-pass'));
+for(const id of ['library-cleanup-alternate','library-cleanup-suspected']) assert(html.includes(`id="${id}"`));
+for(const text of ['본문 시작','본문 중간','대표로 지정','이 묶음에서 제외','이 둘은 묶지 않기','자동 선정으로 되돌리기','다시 묶음 허용']) assert(ui.includes(text));
+assert(ui.includes('/api/admin/library-cleanup/preferences'));
+assert(route.includes("'/admin/library-cleanup/preferences'"));
+assert(route.includes("'clear-representative'") && route.includes('excluded:false') === false);
+assert(ui.includes('excluded:false'));
+assert(css.includes('.library-cleanup-similarity-grid'));
+console.log(JSON.stringify({pass:'v642-library-cleanup-similarity-ui-pass',controls:7}));

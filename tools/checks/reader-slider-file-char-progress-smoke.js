@@ -1,0 +1,12 @@
+const fs = require('fs');
+const assert = require('assert');
+const progress = fs.readFileSync('public/scripts/rebuild/features/reader/progress.mjs', 'utf8');
+const layout = fs.readFileSync('public/scripts/rebuild/features/reader/virtual-layout.mjs', 'utf8');
+assert.ok(progress.includes("v485-reader-slider-file-char-progress-pass"), 'slider file-char progress marker missing');
+assert.ok(progress.includes('function resolveNavSliderProgress'), 'resolveNavSliderProgress helper missing');
+assert.ok(progress.includes('address?.fileCharDocumentRatio'), 'slider progress must prefer fileCharDocumentRatio');
+assert.ok(progress.includes('readerSliderProgressSource'), 'slider source dataset missing');
+assert.ok(progress.includes('lastReaderSliderProgressDiagnostic'), 'slider diagnostic missing');
+assert.ok(layout.includes('fileCharDocumentRatio:'), 'viewport address must expose fileCharDocumentRatio');
+assert.ok(layout.includes('guardedDocumentRatio:'), 'viewport address must expose guardedDocumentRatio separately');
+console.log('v485-reader-slider-file-char-progress-smoke-pass');

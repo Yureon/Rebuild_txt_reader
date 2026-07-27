@@ -1,0 +1,37 @@
+#!/usr/bin/env node
+const fs = require('fs');
+const assert = require('assert');
+function read(p){ return fs.readFileSync(p, 'utf8'); }
+const service = read('server/services/site-language-service.js');
+const routes = read('server/routes/site-language-routes.js');
+const app = read('server/app.js');
+const adminHtml = read('public/admin/users.html');
+const adminMain = read('public/scripts/admin-users.js');
+const adminLang = read('public/scripts/admin/site-languages.js');
+const siteLang = read('public/scripts/rebuild/features/settings/site-language.mjs');
+const siteRuntime = read('public/scripts/rebuild/features/settings/site-language-runtime.mjs');
+const paths = read('server/config/paths.js');
+const runtime = read('server/config/runtime-dirs.js');
+assert(service.includes('v560-site-language-pack-service-pass'), 'site language service pass missing');
+assert(service.includes('v564-site-language-bundle-fallback-pass'), 'bundled language fallback pass missing');
+assert(service.includes('createSiteLanguageService'), 'site language service factory missing');
+assert(routes.includes("router.get('/site-languages'"), 'public site language endpoint missing');
+assert(routes.includes("router.post('/admin/site-languages'"), 'admin site language create endpoint missing');
+assert(routes.includes("router.delete('/admin/site-languages/:languageId'"), 'admin site language delete endpoint missing');
+assert(app.includes('createSiteLanguageService'), 'app must instantiate site language service');
+assert(app.includes('createSiteLanguageRouter'), 'app must mount site language router');
+assert(app.includes('bundledSiteLanguagesDir: paths.SITE_LANGUAGE_PACKS_DIR'), 'app must provide bundled site language packs directory');
+assert(paths.includes('SITE_LANGUAGES_DIR'), 'site language path missing');
+assert(paths.includes('SITE_LANGUAGE_PACKS_DIR'), 'bundled site language path missing');
+assert(runtime.includes('paths.SITE_LANGUAGES_DIR'), 'site language runtime directory missing');
+assert(adminHtml.includes('data-admin-tab="languages"'), 'admin language tab missing');
+assert(adminHtml.includes('language-pack-form'), 'admin language form missing');
+assert(adminHtml.includes('/scripts/admin/site-languages.js?v=rebuild-v679'), 'admin language script missing or wrong cachebuster');
+assert(adminMain.includes('AdminSiteLanguages'), 'admin main must bind language actions');
+assert(adminLang.includes('bindSiteLanguageActions'), 'admin language actions binding missing');
+assert(adminLang.includes('lang.bundled') && adminLang.includes('기본 제공 언어팩은 삭제할 수 없습니다.'), 'admin language list must mark bundled packs read-only');
+assert(siteRuntime.includes('SITE_LANGUAGE_PACK_PREFIX'), 'client site language prefix support missing');
+assert(siteRuntime.includes("fetch('/api/site-languages'"), 'client must load shared language packs');
+assert(siteRuntime.includes('activeCustomLanguageMap?.[compact] || activeSiteLanguageMap?.[compact]'), 'personal override must beat shared language pack');
+assert(siteLang.includes("from './site-language-runtime.mjs'"), 'editor must share the language runtime');
+console.log(JSON.stringify({ ok:true, pass:'v560-site-shared-language-packs-smoke-pass' }));

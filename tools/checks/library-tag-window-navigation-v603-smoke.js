@@ -1,0 +1,5 @@
+#!/usr/bin/env node
+const assert=require('assert');const fs=require('fs');const path=require('path');
+function read(rel){return fs.readFileSync(path.join(__dirname,'../..',rel),'utf8');}
+function run(){const source=read('public/scripts/rebuild/features/library-shelf-filters.mjs');const controls=read('public/scripts/rebuild/features/library-tag-filter-controls.mjs');const state=read('public/scripts/rebuild/state/app-state.mjs');const html=read('public/fragments/app-shell.html');assert(source.includes('const TAG_RENDER_LIMIT = 180'));assert(source.includes('inactive.slice(renderOffset, renderOffset+room)'),'tag list must render a bounded window');assert(controls.includes("on(app.els.libraryTagPrevious, 'click'"),'previous tag page control missing');assert(controls.includes('nextOffset < loadedCount'),'next control must use already-loaded pages before fetching');assert(state.includes('libraryTagRenderOffset: 0'));assert(html.includes('id="library-tag-previous"'));console.log(JSON.stringify({pass:'v603-library-tag-window-navigation-pass'}));}
+if(require.main===module){try{run();}catch(e){console.error(e.stack||e);process.exitCode=1;}}module.exports={run};

@@ -1,0 +1,55 @@
+#!/usr/bin/env node
+const assert = require('assert');
+const fs = require('fs');
+const PASS = 'v604-release-verify-current-coverage-smoke-pass';
+const source = fs.readFileSync('tools/release_verify.js', 'utf8');
+const required = [
+  'json-file-store-durability-v603-smoke.js',
+  'sync-state-durable-flush-v603-smoke.js',
+  'session-store-retry-shutdown-v603-smoke.js',
+  'graceful-shutdown-failure-propagation-v603-smoke.js',
+  'user-state-durable-admin-v603-smoke.js',
+  'user-state-cache-eviction-v603-smoke.js',
+  'content-cache-inflight-invalidation-v603-smoke.js',
+  'disk-cache-janitor-async-v603-smoke.js',
+  'admin-diagnostics-filesystem-async-v603-smoke.js',
+  'metadata-queue-async-durability-v603-smoke.js',
+  'metadata-bulk-async-io-v603-smoke.js',
+  'metadata-cover-async-v603-smoke.js',
+  'account-auth-async-v603-smoke.js',
+  'account-request-scrypt-async-v603-smoke.js',
+  'account-signup-persistence-rollback-v603-smoke.js',
+  'signup-registration-commit-v603-smoke.js',
+  'admin-user-delete-state-rollback-v603-smoke.js',
+  'audit-log-async-security-v603-smoke.js',
+  'security-express-fingerprint-v603-smoke.js',
+  'site-language-async-security-v603-smoke.js',
+  'font-async-atomic-v603-smoke.js',
+  'font-filename-collision-v603-smoke.js',
+  'library-tag-browser-v603-smoke.mjs',
+  'library-tag-window-navigation-v603-smoke.js',
+  'library-user-tag-facet-priority-v603-smoke.js',
+  'json-backup-recovery-v604-smoke.js',
+  'service-backup-recovery-v604-smoke.js',
+  'user-state-api-durability-v604-smoke.js',
+  'metadata-playwright-backup-v604-smoke.js',
+  'auth-asset-revalidation-v604-smoke.js',
+  'metadata-provider-settings-owner-v604-smoke.js',
+  'release-verify-current-coverage-v604-smoke.js',
+  'immutable-icon-versioning-v604-smoke.js',
+  'metadata-provider-profile-privacy-v604-smoke.js',
+  'site-language-backup-only-v604-smoke.js',
+  'recovery-status-async-v604-smoke.js',
+  'build-mismatch-boundary-v604-smoke.js',
+  'session-store-backup-migration-v604-smoke.js',
+  'account-signup-backup-heal-v604-smoke.js',
+  'build-mismatch-client-v604-smoke.js',
+  'service-worker-build-boundary-v604-smoke.js',
+  'user-access-snapshot-payload-v604-smoke.mjs',
+  'service-backup-heal-v604-smoke.js',
+  'metadata-job-isolation-v604-smoke.js',
+  'metadata-job-requester-scale-v604-smoke.js',
+  'metadata-light-context-v604-smoke.js'
+];
+for (const name of required) assert(source.includes(`tools/checks/${name}`), `release verifier is missing current critical smoke: ${name}`);
+console.log(JSON.stringify({ pass:PASS, required:required.length }));

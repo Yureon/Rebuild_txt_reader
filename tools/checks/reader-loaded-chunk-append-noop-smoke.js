@@ -1,0 +1,10 @@
+const assert = require('assert');
+const fs = require('fs');
+const src = fs.readFileSync('public/scripts/rebuild/features/reader.mjs', 'utf-8');
+assert(src.includes("READER_LOADED_CHUNK_APPEND_NOOP_PASS = 'v456-reader-loaded-chunk-append-noop-pass'"), 'missing v456 loaded chunk noop marker');
+assert(src.includes('const loadedChunk = app.state.loadedChunks.get(targetChunk);'), 'loadChunk must fetch cached payload');
+assert(src.includes("if (loadedChunk && mode !== 'replace')"), 'append/prepend loaded path must be guarded');
+assert(src.includes('const rowsReady = hasVirtualChunkRows(app, targetChunk);'), 'loaded path must inspect virtual rows');
+assert(src.includes('if (!rowsReady) {\n      rebuildVirtualRows(app, mode, targetChunk, options);\n    }'), 'loaded path may rebuild only missing rows');
+assert(src.includes("reason: rowsReady ? 'already-loaded chunk kept virtual rows without rebuild' : 'already-loaded chunk rebuilt missing virtual rows'"), 'diagnostic reason missing');
+console.log('v456-reader-loaded-chunk-append-noop-smoke-pass');

@@ -1,0 +1,20 @@
+const fs = require('fs');
+const path = require('path');
+const assert = require('assert');
+const root = path.join(__dirname, '../..');
+function r(p){ return fs.readFileSync(path.join(root, p), 'utf8'); }
+const page = r('public/admin/users.html');
+const main = r('public/scripts/admin-users.js');
+const auditActions = r('public/scripts/admin/audit-actions.js');
+const signupActions = r('public/scripts/admin/signup-actions.js');
+assert.ok(page.includes('/scripts/admin/audit-actions.js?v=rebuild-v679'), 'audit action module must be loaded');
+assert.ok(page.includes('/scripts/admin/signup-actions.js?v=rebuild-v679'), 'signup action module must be loaded');
+assert.ok(auditActions.includes('v416-admin-audit-actions-split-pass'), 'audit action marker missing');
+assert.ok(signupActions.includes('v491-admin-signup-actions-folder-mutation-picker-pass'), 'signup action marker missing');
+for (const token of ['loadAuditLog', 'downloadAuditLog', 'bindAuditActions', '/api/admin/audit-log']) assert.ok(auditActions.includes(token), token + ' must live in audit action module');
+for (const token of ['loadSignupCodes', 'createSignupCode', 'deleteSignupCode', 'bindSignupActions', '/api/admin/signup-codes', 'folderMutationAccess']) assert.ok(signupActions.includes(token), token + ' must live in signup action module');
+assert.ok(main.includes('AdminAuditActions') && main.includes('bindAuditActions'), 'main must delegate audit action wiring');
+assert.ok(main.includes('AdminSignupActions') && main.includes('bindSignupActions'), 'main must delegate signup action wiring');
+assert.ok(!main.includes('/api/admin/audit-log') && !main.includes('/api/admin/signup-codes'), 'main must not directly call audit/signup APIs');
+assert.ok(!main.includes('function createSignupCode') && !main.includes('function deleteSignupCode') && !main.includes('function loadAuditLog'), 'main must not define audit/signup actions');
+console.log('v416-admin-signup-audit-actions-split-smoke-pass');

@@ -1,0 +1,9 @@
+const fs=require('fs');const path=require('path');const cp=require('child_process');const dns=require('dns').promises;
+const root=path.resolve(__dirname,'..');
+const out=process.env.PREDEPLOY_GATE_JSON||path.join(root,'data','diagnostics','predeploy-environment-last.json');
+function command(name,args=['--version']){const r=cp.spawnSync(name,args,{encoding:'utf8',timeout:15000});return{available:!r.error&&r.status===0,status:r.status,error:r.error?.message||'',output:String(r.stdout||r.stderr||'').trim().slice(0,500)}}
+async function main(){const checks={node:{ok:Number(process.versions.node.split('.')[0])>=20,version:process.version},npm:command('npm',['--version']),docker:command('docker',['version','--format','{{.Server.Version}}']),podman:command('podman',['version','--format','{{.Server.Version}}']),chromium:command('chromium',['--version']),googleChrome:command('google-chrome',['--version'])};
+ const hosts=['ssn.so','series.naver.com','page.kakao.com'];checks.dns={};for(const h of hosts){try{checks.dns[h]={ok:true,addresses:await dns.resolve4(h)};}catch(e){checks.dns[h]={ok:false,error:e.code||e.message};}}
+ const required={runtime:checks.node.ok,container:checks.docker.available||checks.podman.available,browser:checks.chromium.available||checks.googleChrome.available,providerNetwork:Object.values(checks.dns).every(x=>x.ok)};
+ const payload={schemaVersion:1,pass:'v641-predeploy-environment-gate-pass',generatedAt:new Date().toISOString(),required,checks,blocked:Object.entries(required).filter(([,ok])=>!ok).map(([k])=>k)};fs.mkdirSync(path.dirname(out),{recursive:true});fs.writeFileSync(out,JSON.stringify(payload,null,2)+'\n');console.log(JSON.stringify(payload,null,2));if(process.env.PREDEPLOY_GATE_STRICT==='1'&&payload.blocked.length)process.exitCode=2;}
+main().catch(e=>{console.error(e);process.exitCode=1});

@@ -1,0 +1,30 @@
+#!/usr/bin/env node
+const assert = require('assert');
+const fs = require('fs');
+const os = require('os');
+const path = require('path');
+const { createAccountService, hashPassword } = require('../../server/services/account-service');
+const { createSignupCodeService, hashSignupCode } = require('../../server/services/signup-code-service');
+
+const root = fs.mkdtempSync(path.join(os.tmpdir(), 'txt-reader-v604-account-backup-'));
+const accountsPath = path.join(root, 'accounts.json');
+const signupCodesPath = path.join(root, 'signup-codes.json');
+const now = new Date().toISOString();
+const accountDoc = { version:1, users:[{ id:'backup-user', username:'backup-user', passwordHash:hashPassword('correct horse battery staple'), enabled:true, sessionVersion:1, accessVersion:1, createdAt:now, updatedAt:now, libraryAccess:{mode:'all',folders:[]}, folderMutationAccess:{moveFolders:[],deleteFolders:[]}, appPermissions:{fullSearch:true,metadataAccess:false} }] };
+const signupDoc = { version:1, codes:[{ id:'backup-code', codeHash:hashSignupCode('ABCD-EFGH-JKLM-NPQR'), label:'backup', enabled:true, maxUses:1, usedCount:0, expiresAt:new Date(Date.now()+86400000).toISOString(), createdAt:now, updatedAt:now, createdBy:'__owner__', libraryAccess:{mode:'none',folders:[]}, folderMutationAccess:{moveFolders:[],deleteFolders:[]}, appPermissions:{fullSearch:true,metadataAccess:false}, defaultEnabled:true }] };
+fs.writeFileSync(accountsPath, '{broken', 'utf8');
+fs.writeFileSync(`${accountsPath}.bak`, JSON.stringify(accountDoc), 'utf8');
+fs.writeFileSync(signupCodesPath, '{broken', 'utf8');
+fs.writeFileSync(`${signupCodesPath}.bak`, JSON.stringify(signupDoc), 'utf8');
+const errors=[];
+const logger={ error:(...args)=>errors.push(args.join(' ')) };
+const accountService=createAccountService({accountsPath,logger});
+const signupService=createSignupCodeService({signupCodesPath,logger});
+accountService.load();
+signupService.load();
+assert.strictEqual(accountService.listUsers().length,1);
+assert.strictEqual(signupService.listCodes().length,1);
+assert.doesNotThrow(()=>JSON.parse(fs.readFileSync(accountsPath,'utf8')));
+assert.doesNotThrow(()=>JSON.parse(fs.readFileSync(signupCodesPath,'utf8')));
+assert.strictEqual(errors.length,0);
+console.log(JSON.stringify({pass:'v604-account-signup-backup-heal-smoke-pass'}));

@@ -1,0 +1,54 @@
+#!/usr/bin/env node
+const fs = require('fs');
+const path = require('path');
+const assert = require('assert');
+const root = path.join(__dirname, '../..');
+const read = rel => fs.readFileSync(path.join(root, rel), 'utf8');
+
+const shell = read('public/fragments/app-shell.html');
+const css = read('public/styles/app.css');
+const runtime = read('public/scripts/rebuild/features/library-shelf-runtime.mjs');
+const api = read('public/scripts/rebuild/core/api.mjs');
+const navigation = read('public/scripts/rebuild/features/library-navigation-actions.mjs');
+const loader = read('public/scripts/rebuild/features/library-catalog-loader.mjs');
+const state = read('public/scripts/rebuild/state/app-state.mjs');
+
+assert(shell.includes('data-library-view="shelf"'), 'shelf view tab missing');
+assert(shell.includes('data-library-view="files"'), 'file browser fallback tab missing');
+assert(shell.includes('data-library-view="explorer"'), 'Windows-style explorer tab missing');
+assert(shell.includes('data-library-scope="favorites"'), 'favorites scope tab missing');
+assert(shell.includes('data-library-scope="recent"'), 'recent scope tab missing');
+assert((shell.match(/aria-controls="novel-list"/g) || []).length >= 6, 'shelf tabs must expose list controls');
+assert(runtime.includes("export const LIBRARY_SHELF_PAGE_SIZE = 48"), 'shelf page budget missing');
+assert(runtime.includes('libraryShelfAbortController?.abort?.()'), 'superseded shelf request cancellation missing');
+assert(runtime.includes("source:'favorite-scope-remove'"), 'favorites scope optimistic removal missing');
+assert(runtime.includes("dataset:{ novelId:novel.id, libraryShelfCard:'1' }"), 'direct-open shelf card contract missing');
+assert(runtime.includes("role:'listitem'"), 'shelf cards must participate in the list semantic');
+assert(runtime.includes("event.key === 'ArrowRight'"), 'keyboard tab navigation missing');
+assert(runtime.includes("LIBRARY_SHELF_AUTOLOAD_COOLDOWN_MS = 1200"), 'shelf autoload cooldown missing');
+assert(runtime.includes("class:'library-shelf-auto-loader'"), 'autoload sentinel missing');
+assert(runtime.includes("const remaining = Math.max(0, box.scrollHeight - box.scrollTop - box.clientHeight)"), 'near-bottom autoload trigger missing');
+assert(runtime.includes("loading:'lazy'"), 'cover lazy-loading contract missing');
+assert(runtime.includes("const shelfMode = mode === 'shelf'"), 'shelf/files/explorer mode boundary missing');
+assert(api.includes("'/api/novels/shelf'") || api.includes('`/api/novels/shelf?'), 'lightweight shelf API client missing');
+assert(api.includes("/episodes`"), 'lazy episode summary client missing');
+assert(navigation.includes('ensureNovelEpisodesLoaded'), 'multi-file lazy episode loading missing');
+assert(/libraryViewMode\s*===\s*['\"]shelf['\"]/.test(loader), 'default shelf loader boundary missing');
+assert(state.includes("loadLocal('libraryViewMode', 'shelf')"), 'shelf must be the persisted default');
+assert(css.includes('.library-shelf-grid'), 'shelf grid CSS missing');
+assert(css.includes('.library-shelf-card'), 'shelf card CSS missing');
+assert(css.includes('@media (max-width:340px)'), 'narrow mobile shelf fallback missing');
+assert(css.includes('@media (prefers-reduced-motion:reduce)'), 'reduced-motion shelf handling missing');
+
+assert(shell.includes('id="library-filter-popover"'), 'shelf filter popover missing');
+assert(shell.includes('id="library-active-filters"'), 'active filter chip list missing');
+assert(runtime.includes('app.api.novelTree(') && runtime.includes('LIBRARY_TREE_PAGED_CATALOG_PASS'), 'paged compact tree API must be used for file view');
+assert(runtime.includes('prepareTreeNavigationTargetRuntime'), 'tree focus restoration missing');
+assert(runtime.includes('installLibraryShelfFilterControls'), 'shelf filter controls missing');
+assert(api.includes("novelShelfFilters(options)"), 'shelf facet API client missing');
+assert(api.includes('novelTree({ cursor') && api.includes('/api/novels/tree'), 'paged compact tree API client missing');
+assert(css.includes('.library-filter-panel'), 'shelf filter panel CSS missing');
+assert(css.includes('.library-shelf-card.active'), 'focused shelf card CSS missing');
+assert(css.includes('.library-explorer-shell'), 'Windows-style explorer workspace CSS missing');
+assert(css.includes('.library-header-compact'), 'collapsing library header CSS missing');
+console.log('v566-library-shelf-ui-smoke-pass');

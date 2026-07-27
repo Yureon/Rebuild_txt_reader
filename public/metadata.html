@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#000000">
+  <link rel="preload" as="style" href="/styles/update-banner.css?v=rebuild-v682" data-update-banner-critical="v651">
+  <script data-cfasync="false" src="/service-worker-register.js?v=rebuild-v682"></script>
+  <script data-cfasync="false" src="/scripts/theme-boot.js?v=rebuild-v682"></script>
+  <link href="/styles/non-auth-autofill-guard.css?v=rebuild-v682" rel="stylesheet">
+  <script data-cfasync="false" src="/scripts/non-auth-autofill-guard.js?v=rebuild-v682"></script>
+  <link href="/styles/update-banner.css?v=rebuild-v682" rel="stylesheet" data-update-banner-full="v651">
+<link rel="manifest" href="/manifest.json?v=rebuild-v682">
+<link rel="icon" type="image/png" sizes="32x32" href="/icon/favicon-32x32.png?v=rebuild-v682">
+<title>TXT Reader 메타데이터</title>
+<link href="/styles/app.css?v=rebuild-v682" rel="stylesheet">
+<link href="/styles/metadata-page.css?v=rebuild-v682" rel="stylesheet">
+  <link href="/styles/scroll-to-top.css?v=rebuild-v682" rel="stylesheet">
+  <script data-cfasync="false" src="/scripts/scroll-to-top.js?v=rebuild-v682" defer></script>
+</head>
+<body data-client-profile="metadata" data-build-version="rebuild-v682" class="metadata-page-body">
+<div id="metadata-page" class="metadata-page-shell">
+  <header class="metadata-page-header">
+    <div class="metadata-page-title-block">
+      <a class="metadata-page-back" href="/library.html" aria-label="작품 서재로 돌아가기">←</a>
+      <div><div class="metadata-page-title-row"><h1>웹 메타데이터 관리</h1><span class="metadata-build-badge" title="현재 실행 중인 프런트엔드 빌드">v682</span></div><p>표지·소개글·태그 수집 결과를 작품별로 검토합니다.</p></div>
+    </div>
+    <div class="metadata-page-header-menu">
+      <details class="metadata-page-overflow">
+        <summary class="metadata-page-button" aria-label="메타데이터 페이지 메뉴">더보기</summary>
+      </details>
+      <div class="metadata-page-header-actions">
+        <button id="metadata-page-refresh" class="metadata-page-button" type="button">새로고침</button>
+        <a class="metadata-page-button" href="/library.html">서재 열기</a>
+        <button id="metadata-page-logout" class="metadata-page-button metadata-page-logout" type="button">로그아웃</button>
+      </div>
+    </div>
+  </header>
+
+  <section id="metadata-page-summary" class="metadata-page-summary" aria-label="메타데이터 상태 요약">
+    <article><span>공급자</span><strong id="metadata-summary-providers">-</strong><small>활성 / 전체</small></article>
+    <article><span>대기 작업</span><strong id="metadata-summary-queued">-</strong><small>queued</small></article>
+    <article><span>실행 작업</span><strong id="metadata-summary-running">-</strong><small>running</small></article>
+    <article><span>최근 실패</span><strong id="metadata-summary-failed">-</strong><small>최근 100건</small></article>
+  </section>
+
+  <nav class="metadata-page-tabs" role="tablist" aria-label="메타데이터 관리 영역">
+    <button class="metadata-page-tab active" type="button" role="tab" aria-selected="true" data-metadata-page-tab="works">작품 관리</button>
+    <button class="metadata-page-tab" type="button" role="tab" aria-selected="false" data-metadata-page-tab="jobs">수집 작업</button>
+  </nav>
+
+  <section id="metadata-bulk-banner" class="metadata-bulk-banner" aria-labelledby="metadata-bulk-title">
+    <div class="metadata-bulk-icon" aria-hidden="true">✦</div>
+    <div class="metadata-bulk-copy"><strong id="metadata-bulk-title">서재 전체 메타데이터 관리</strong><span>설정된 신뢰 임계값 이상 후보는 공급자 우선순위에 따라 적용하고, 후보가 없는 작품은 순차 수집합니다.</span></div>
+    <div class="metadata-page-bulk-actions">
+      <button id="metadata-apply-pending-btn" class="metadata-page-button" type="button">미적용 후보 일괄 적용</button>
+      <button id="metadata-collect-missing-btn" class="metadata-page-button primary" type="button">전체 수집 시작</button>
+    </div>
+  </section>
+
+  <main class="metadata-page-main">
+    <section id="metadata-page-works" class="metadata-page-panel active" data-metadata-page-panel="works">
+      <aside class="metadata-work-browser">
+        <div class="metadata-work-toolbar">
+          <label class="metadata-work-search"><span class="sr-only">작품 검색</span><input id="metadata-work-query" type="search" placeholder="작품명·작가 검색" autocomplete="off"></label>
+          <button id="metadata-work-search-btn" class="metadata-page-button" type="button">검색</button>
+        </div>
+        <div class="metadata-work-filters" aria-label="작품 메타데이터 필터">
+          <label><span>메타데이터</span><select id="metadata-work-status-filter">
+            <option value="all">전체</option>
+            <option value="applied">메타데이터 있음</option>
+            <option value="missing">메타데이터 없음</option>
+          </select></label>
+          <label><span>적용 출처</span><select id="metadata-work-provider-filter"><option value="">전체 Provider</option><option value="manual">수동 입력 (직접 추가)</option></select></label>
+          <details id="metadata-work-folder-disclosure" class="metadata-work-folder-disclosure">
+            <summary>
+              <span class="metadata-work-folder-disclosure-title">폴더 필터</span>
+              <span id="metadata-work-folder-summary" class="metadata-work-folder-disclosure-summary">전체 폴더</span>
+            </summary>
+            <div class="metadata-work-folder-panel">
+              <label class="metadata-work-folder-field"><span>서재 폴더</span><select id="metadata-work-folder-filter"><option value="">전체 폴더</option></select></label>
+              <label class="metadata-work-folder-search-field"><span>폴더 검색</span><input id="metadata-work-folder-query" type="search" maxlength="160" placeholder="폴더 경로 검색" autocomplete="off"></label>
+              <button id="metadata-work-folder-search" class="metadata-page-button" type="button">폴더 찾기</button>
+              <button id="metadata-work-folder-more" class="metadata-page-button" type="button" hidden>폴더 더 보기</button>
+            </div>
+          </details>
+          <button id="metadata-work-filter-clear" class="metadata-page-button metadata-work-filter-clear" type="button" hidden>필터 초기화</button>
+        </div>
+        <div class="metadata-work-bulk-row">
+          <span id="metadata-work-count">작품을 불러오는 중…</span>
+          <span id="metadata-work-bulk-state">전체 수집 대기 없음</span>
+        </div>
+        <div id="metadata-work-list" class="metadata-work-list" role="listbox" aria-label="작품 목록"></div>
+        <button id="metadata-work-more" class="metadata-page-button metadata-work-more" type="button" hidden>다음 작품 불러오기</button>
+      </aside>
+      <section class="metadata-work-detail" aria-live="polite" aria-label="선택 작품 메타데이터 상세">
+        <div id="metadata-work-detail-empty" class="metadata-detail-empty">
+          <div aria-hidden="true">📚</div><strong>관리할 작품을 선택하세요.</strong><p>왼쪽 목록에서 작품을 선택하면 적용 정보와 수집 후보를 표시합니다.</p>
+        </div>
+        <div id="metadata-work-detail-content" hidden>
+          <div class="metadata-detail-heading">
+            <button id="metadata-detail-mobile-back" class="metadata-page-button metadata-detail-mobile-back" type="button" aria-label="작품 목록으로 돌아가기">← 목록</button>
+            <div class="metadata-detail-title-copy"><h2 id="metadata-detail-title" tabindex="-1">작품</h2><p id="metadata-detail-subtitle"></p></div>
+            <a id="metadata-detail-reader-link" class="metadata-page-button" href="/library.html">서재에서 보기</a>
+          </div>
+          <div id="metadata-detail-status" class="metadata-page-status" role="status" aria-live="polite" hidden></div>
+          <div id="metadata-detail-body" class="metadata-detail-body"></div>
+        </div>
+      </section>
+    </section>
+
+    <section id="metadata-page-jobs" class="metadata-page-panel" data-metadata-page-panel="jobs" hidden>
+      <div class="metadata-panel-heading"><div><h2>수집 작업</h2><p>대기·실행·완료·실패 작업을 확인하고 실행 중 작업을 취소합니다.</p></div><button id="metadata-jobs-refresh" class="metadata-page-button" type="button">작업 새로고침</button></div>
+      <div id="metadata-jobs-list" class="metadata-page-card-list"></div>
+    </section>
+
+  </main>
+</div>
+
+<div id="metadata-page-toast" class="metadata-page-toast" role="status" aria-live="polite" hidden></div>
+<script data-cfasync="false" type="module" src="/scripts/rebuild/metadata-page.mjs?v=rebuild-v682"></script>
+</body>
+</html>

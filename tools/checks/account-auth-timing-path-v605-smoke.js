@@ -1,0 +1,6 @@
+#!/usr/bin/env node
+'use strict';
+const assert=require('assert');const crypto=require('crypto');const fs=require('fs');const os=require('os');const path=require('path');const account=require('../../server/services/account-service');
+(async()=>{const root=fs.mkdtempSync(path.join(os.tmpdir(),'account-timing-v605-'));const accountsPath=path.join(root,'accounts.json');fs.writeFileSync(accountsPath,JSON.stringify({version:1,users:[{id:'disabled',username:'disabled',passwordHash:account.DUMMY_PASSWORD_HASH,enabled:false,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()}]}));const service=account.createAccountService({accountsPath,logger:{error(){}}});service.load();
+const original=crypto.scrypt;let calls=0;crypto.scrypt=(password,salt,keylen,options,cb)=>{calls+=1;queueMicrotask(()=>cb(null,Buffer.alloc(keylen)));};try{assert.equal(await service.authenticateUserAsync('missing','wrong'),null);assert.equal(await service.authenticateUserAsync('disabled','wrong'),null);assert.equal(calls,2,'missing and disabled users must execute dummy scrypt');}finally{crypto.scrypt=original;fs.rmSync(root,{recursive:true,force:true});}
+console.log(JSON.stringify({pass:'v605-account-auth-timing-path-smoke-pass',calls}));})().catch(e=>{console.error(e.stack||e);process.exitCode=1;});

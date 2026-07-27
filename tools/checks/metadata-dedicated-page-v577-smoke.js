@@ -1,0 +1,24 @@
+#!/usr/bin/env node
+const fs = require('fs');
+const assert = require('assert');
+const html = fs.readFileSync('public/metadata.html','utf8');
+const runtime = fs.readFileSync('public/scripts/rebuild/metadata-page.mjs','utf8');
+const styles = fs.readFileSync('public/styles/metadata-page.css','utf8');
+const shell = fs.readFileSync('public/fragments/app-shell.html','utf8');
+const modal = fs.readFileSync('public/scripts/rebuild/features/library-metadata-runtime.mjs','utf8');
+const cache = fs.readFileSync('server/middleware/cache-policy.js','utf8');
+const admin = fs.readFileSync('public/admin/users.html','utf8');
+assert.ok(html.includes('data-client-profile="metadata"'));
+assert.ok(html.includes('data-metadata-page-tab="works"') && html.includes('data-metadata-page-tab="jobs"'));
+assert.ok(!html.includes('data-metadata-page-tab="providers"'), 'owner-only provider settings must not remain on the collection page');
+assert.ok(admin.includes('data-admin-tab="metadata"') && admin.includes('data-admin-section="metadata"'), 'owner console must expose metadata settings');
+assert.ok(html.includes('metadata-work-more'), 'metadata work browser must page instead of rendering the whole library');
+assert.ok(runtime.includes("limit:60"), 'metadata work page size must be bounded');
+assert.ok(runtime.includes('page.canEdit = false') && runtime.includes('page.canEdit !== true'), 'metadata management controls need permission-aware rendering');
+assert.ok(runtime.includes('METADATA_PAGE_PASS'));
+assert.ok(styles.includes('.metadata-work-browser') && styles.includes('.metadata-page-tabs'));
+assert.ok(shell.includes('href="/metadata.html"'), 'library header must expose dedicated metadata management');
+assert.ok(modal.includes('/metadata.html?novelId='), 'per-work modal must deep-link to the dedicated page');
+assert.ok(cache.includes("normalizedPath.endsWith('/metadata.html')"), 'metadata HTML must use no-store');
+assert.ok(!runtime.includes('innerHTML'), 'dedicated metadata UI must avoid untrusted HTML injection');
+console.log('v577-metadata-dedicated-page-smoke-pass');

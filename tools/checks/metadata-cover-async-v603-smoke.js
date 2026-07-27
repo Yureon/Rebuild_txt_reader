@@ -1,0 +1,6 @@
+#!/usr/bin/env node
+const assert=require('assert');const fs=require('fs');const os=require('os');const path=require('path');
+const {createMetadataCoverService}=require('../../server/services/metadata-cover-service');
+const PASS='v603-metadata-cover-async-smoke-pass';
+(async()=>{const root=fs.mkdtempSync(path.join(os.tmpdir(),'metadata-cover-v603-'));const png=Buffer.from([137,80,78,71,13,10,26,10,0,0,0,0]);const service=createMetadataCoverService({coverDir:root,transport:{async fetchProvider(){return{body:png,contentType:'image/png'};}}});
+const [a,b]=await Promise.all([service.cacheRemoteCover({},'https://example.test/a'),service.cacheRemoteCover({},'https://example.test/a')]);assert.strictEqual(a.assetId,b.assetId);const asset=await service.findAssetAsync(a.assetId);assert(asset&&asset.mime==='image/png');assert.strictEqual(fs.readdirSync(root).filter(n=>n.endsWith('.tmp')).length,0);const route=fs.readFileSync(path.join(__dirname,'../../server/routes/metadata-routes.js'),'utf8');assert(route.includes('await coverService.findAssetAsync'),'cover route must avoid sync stat I/O');fs.rmSync(root,{recursive:true,force:true});console.log(JSON.stringify({pass:PASS}));})().catch(e=>{console.error(e.stack||e);process.exitCode=1;});

@@ -1,0 +1,31 @@
+#!/usr/bin/env node
+const fs = require('fs');
+const path = require('path');
+const assert = require('assert');
+const root = path.resolve(__dirname, '..', '..');
+function read(rel) { return fs.readFileSync(path.join(root, rel), 'utf8'); }
+const PASS = 'v470-reader-coordinate-policy-smoke-pass';
+const progress = read('public/scripts/rebuild/features/reader/progress.mjs');
+const reader = read('public/scripts/rebuild/features/reader.mjs');
+const paths = read('public/scripts/rebuild/features/library-paths.mjs');
+const bookmarks = read('public/scripts/rebuild/features/bookmarks.mjs');
+const readData = read('public/scripts/rebuild/features/bookmarks/read-data-modal.mjs');
+const remoteResume = read('public/scripts/rebuild/features/sync/remote-resume.mjs');
+assert.ok(progress.includes("READER_COORDINATE_POLICY_V470_PASS = 'v470-reader-coordinate-policy-pass'"), 'v470 coordinate policy marker missing');
+assert.ok(progress.includes("dataset.readerSliderScope = c.episode ? 'current-episode' : 'single-document'"), 'bottom slider scope must remain current episode for multi-file');
+assert.ok(progress.includes("safeAreaScope: app.els.safeProgress.dataset.safeProgressScope"), 'safe-area scope diagnostic missing');
+assert.ok(progress.includes("resumeScope: c.episode ? 'episode-local' : 'document'"), 'resume scope diagnostic missing');
+assert.ok(progress.includes('episodeDocumentRatio: localDocumentRatio'), 'snapshot must keep episode-local ratio');
+assert.ok(progress.includes('documentRatio: c.episode ? overallDocumentRatio : localDocumentRatio'), 'snapshot must keep folder-level display ratio for multi-file');
+assert.ok(reader.includes("mode: c?.episode ? 'current-episode' : 'single'"), 'slider preview must stay current-episode scoped');
+assert.ok(reader.includes("await goPercent(app, safeRatio, { source: 'nav-slider', forceBlockTarget: true, directBlockScroll: true });"), 'slider must keep direct block scroll anchor path');
+assert.ok(!reader.includes('folderRatioToEpisodeTarget(app, safeRatio)'), 'bottom slider must not seek against aggregate folder ratio');
+assert.ok(paths.includes("MULTIFILE_RESUME_COORDINATE_POLICY_PASS = 'v470-multifile-resume-coordinate-policy-pass'"), 'multi-file resume coordinate helper marker missing');
+assert.ok(paths.includes('const episodeRatio = Number(snap?.episodeDocumentRatio);'), 'episodeDocumentRatio fallback must precede documentRatio fallback');
+assert.ok(paths.indexOf('snap?.episodeDocumentRatio') < paths.indexOf('snap?.documentRatio'), 'episodeDocumentRatio must be checked before documentRatio');
+assert.ok(bookmarks.includes('openOptionsFromSnapshot({ episodeId: bm.episodeId || null }, bm)'), 'bookmarks must use centralized resume coordinates');
+assert.ok(readData.includes('openOptionsFromSnapshot({ episodeId: snap.episodeId || null }, snap)'), 'read-data snapshots must use centralized resume coordinates');
+assert.ok(readData.includes('openOptionsFromSnapshot({ episodeId }, snap)'), 'recent read-data opens must use centralized resume coordinates');
+assert.ok(remoteResume.includes('openOptionsFromSnapshot({'), 'remote resume must use centralized resume coordinates');
+assert.ok(!remoteResume.includes('ratio: lastRead.documentRatio ?? lastRead.ratio ?? 0'), 'remote resume must not prefer folder documentRatio over local ratio');
+console.log(JSON.stringify({ pass: PASS }));

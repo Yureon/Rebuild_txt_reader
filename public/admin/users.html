@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TxT Reader Multi · 사용자 관리</title>
+  <link href="/styles/admin-users.css?v=rebuild-v682" rel="stylesheet">
+  <link href="/styles/admin-users-v643.css?v=rebuild-v682" rel="stylesheet">
+  <link href="/styles/admin-users-v649.css?v=rebuild-v682" rel="stylesheet">
+  <link href="/styles/admin-users-v651.css?v=rebuild-v682" rel="stylesheet">
+  <link href="/styles/admin-users-v652.css?v=rebuild-v682" rel="stylesheet">
+  <link href="/styles/admin-metadata-v667.css?v=rebuild-v682" rel="stylesheet">
+  <link rel="preload" as="style" href="/styles/update-banner.css?v=rebuild-v682" data-update-banner-critical="v651">
+  <script data-cfasync="false" src="/service-worker-register.js?v=rebuild-v682"></script>
+  <link href="/styles/non-auth-autofill-guard.css?v=rebuild-v682" rel="stylesheet">
+  <script data-cfasync="false" src="/scripts/non-auth-autofill-guard.js?v=rebuild-v682"></script>
+  <link href="/styles/update-banner.css?v=rebuild-v682" rel="stylesheet" data-update-banner-full="v651">
+  <link href="/styles/scroll-to-top.css?v=rebuild-v682" rel="stylesheet">
+  <script data-cfasync="false" src="/scripts/scroll-to-top.js?v=rebuild-v682" defer></script>
+</head>
+<body class="admin-users-page">
+<main>
+  <section class="card">
+    <span class="badge" data-current-build="v682">OWNER CONSOLE · v682</span>
+    <h1>사용자 관리</h1>
+    <p class="muted"><code>.env LOGINID / LOGINPW</code> owner 전용 콘솔입니다. 사용자·가입코드·메타데이터 공급자와 운영 상태를 관리합니다.</p>
+    <div class="actions owner-console-actions">
+      <label class="owner-language-control" for="owner-site-language-select"><span>사이트 언어</span><select id="owner-site-language-select" aria-label="Owner 콘솔 사이트 언어"><option value="auto">시스템 기본</option><option value="ko">한국어</option><option value="en">English</option></select></label>
+      <button class="primary" id="refresh-btn" type="button">새로고침</button>
+      <button id="owner-logout-btn" class="button danger-soft" type="button">로그아웃</button>
+    </div>
+    <nav class="admin-nav" aria-label="owner 콘솔 메뉴">
+      <button class="active" type="button" data-admin-tab="users">사용자 관리</button>
+      <button type="button" data-admin-tab="signup">가입코드</button>
+      <button type="button" data-admin-tab="audit">감사 로그</button>
+      <button type="button" data-admin-tab="languages">언어팩</button>
+      <button type="button" data-admin-tab="metadata">메타데이터 설정</button>
+      <button type="button" data-admin-tab="cleanup">파일 정리</button>
+      <button type="button" data-admin-tab="ops">운영 상태</button>
+    </nav>
+  </section>
+
+  <section class="admin-section" data-admin-section="users">
+    <div class="user-workbench-tabs" data-admin-user-workbench-pass="v502-admin-user-workbench-tabs-pass" role="tablist" aria-label="사용자 관리 작업 선택">
+      <button class="active" type="button" data-user-panel-tab="create" aria-selected="true">사용자 생성</button>
+      <button type="button" data-user-panel-tab="list" aria-selected="false">사용자 목록</button>
+      <button type="button" data-user-panel-tab="edit" aria-selected="false">사용자 편집</button>
+    </div>
+    <div class="user-management-layout" data-admin-user-layout-pass="v502-admin-user-workbench-single-panel-pass">
+      <section class="card user-create-card user-panel is-active" data-user-panel="create">
+        <div class="user-panel-heading"><div><h2>사용자 생성</h2><p class="muted small">계정 기본값, 접근 폴더, 이동/삭제 권한을 한 패널에서 설정합니다.</p></div></div>
+        <form id="create-form" class="user-panel-form create-user-form">
+          <div class="user-form-row user-form-row-compact">
+            <div class="field"><label for="create-username">아이디</label><input id="create-username" autocomplete="username" placeholder="reader-a" required></div>
+            <div class="field"><label for="create-password">초기 비밀번호</label><input id="create-password" type="password" autocomplete="new-password" minlength="8" required></div>
+          </div>
+          <div class="user-form-row user-form-row-access">
+            <div class="field"><label for="create-access-mode">라이브러리 권한</label><select id="create-access-mode"><option value="none">none · 접근 없음</option><option value="all">all · 전체 허용</option><option value="folders">folders · 선택 폴더와 하위 폴더</option></select></div>
+            <div class="field"><label for="create-folders">허용 폴더 목록</label><textarea id="create-folders" placeholder="판타지&#10;무협/작가A"></textarea></div>
+          </div>
+          <section class="field-panel app-permission-panel" data-full-search-permission-pass="v551-full-search-permission-admin-ui-pass" data-metadata-access-permission-pass="v588-metadata-access-permission-admin-ui-pass">
+            <div class="field-panel-header"><label>기능 권한</label></div>
+            <div class="app-permission-options">
+              <label class="checkline"><input id="create-full-search" type="checkbox" checked> 전체검색 허용</label>
+              <label class="checkline"><input id="create-metadata-access" type="checkbox"> 메타데이터 탭 접근 허용</label>
+            </div>
+            <p class="muted small">메타데이터 권한을 켜면 탭과 작품 정보 수집 화면에 진입할 수 있습니다. 실제 적용·수집 변경은 전체 라이브러리 접근 권한이 있는 사용자만 가능합니다.</p>
+          </section>
+          <section class="field-panel access-picker-panel">
+            <div class="field-panel-header"><label for="create-folder-search">라이브러리 폴더</label><input id="create-folder-search" class="folder-search" placeholder="폴더명 또는 경로 검색"></div>
+            <div class="picker-grid">
+              <div class="picker-column"><label>폴더 선택</label><div class="folder-picker" id="create-folder-picker"><div class="admin-skeleton-list" data-skeleton-ui-pass="v417-skeleton-ui-pass" aria-hidden="true"><div></div><div></div><div></div></div></div></div>
+              <div class="picker-column picker-column-summary"><label>선택된 권한 폴더</label><div class="selection-summary" id="create-selection"></div></div>
+            </div>
+          </section>
+          <div class="permission-grid user-mutation-row">
+            <section class="field-panel mutation-panel"><div class="field-panel-header"><label for="create-move-folders">폴더 이동 권한</label><textarea id="create-move-folders" placeholder="판타지&#10;무협/작가A"></textarea></div><input id="create-move-folder-search" class="folder-search" aria-label="이동 권한 폴더 검색" placeholder="이동 권한 폴더 검색"><div class="picker-grid picker-grid-compact"><div class="picker-column"><label>이동 권한 폴더 선택</label><div class="folder-picker" id="create-move-folder-picker"><div class="admin-skeleton-list" data-skeleton-ui-pass="v417-skeleton-ui-pass" aria-hidden="true"><div></div><div></div><div></div></div></div></div><div class="picker-column picker-column-summary"><label>선택된 이동 권한</label><div class="selection-summary" id="create-move-selection"></div></div></div><p class="muted small">입력한 폴더와 하위 폴더만 이동할 수 있습니다.</p></section>
+            <section class="field-panel mutation-panel"><div class="field-panel-header"><label for="create-delete-folders">폴더 삭제 권한</label><textarea id="create-delete-folders" placeholder="판타지/완결"></textarea></div><input id="create-delete-folder-search" class="folder-search" aria-label="삭제 권한 폴더 검색" placeholder="삭제 권한 폴더 검색"><div class="picker-grid picker-grid-compact"><div class="picker-column"><label>삭제 권한 폴더 선택</label><div class="folder-picker" id="create-delete-folder-picker"><div class="admin-skeleton-list" data-skeleton-ui-pass="v417-skeleton-ui-pass" aria-hidden="true"><div></div><div></div><div></div></div></div></div><div class="picker-column picker-column-summary"><label>선택된 삭제 권한</label><div class="selection-summary" id="create-delete-selection"></div></div></div><p class="muted small">삭제 권한은 별도로 부여합니다.</p></section>
+          </div>
+          <div class="actions user-panel-actions"><button class="primary" type="submit">사용자 생성</button></div>
+        </form>
+      </section>
+      <section class="card user-list-card user-panel" data-user-panel="list" hidden>
+        <div class="user-panel-heading"><div><h2>사용자 목록</h2><p class="muted small">계정 상태와 권한 요약을 가로형 행으로 확인합니다.</p></div></div>
+        <div id="users-wrap" class="user-list compact-user-list"><div class="admin-skeleton-list" data-skeleton-ui-pass="v417-skeleton-ui-pass" aria-hidden="true"><div></div><div></div><div></div></div></div>
+      </section>
+      <section class="card user-edit-card user-panel" data-user-panel="edit" hidden>
+        <div class="user-panel-heading"><div><h2>사용자 편집</h2><p class="muted small">선택한 계정의 접근 권한, 세션, 비밀번호, 독서 데이터를 조정합니다.</p></div></div>
+        <div id="edit-empty" class="edit-empty">사용자 목록에서 편집할 계정을 선택하세요.</div>
+        <form id="edit-form" class="user-panel-form edit-user-form" hidden>
+          <input type="hidden" id="edit-user-id">
+          <div class="edit-toolbar"><h3 id="edit-title">사용자</h3><label class="checkline"><input id="edit-enabled" type="checkbox"> 계정 활성화</label></div>
+          <div class="user-form-row user-form-row-access">
+            <div class="field"><label for="edit-access-mode">라이브러리 권한</label><select id="edit-access-mode"><option value="none">none · 접근 없음</option><option value="all">all · 전체 허용</option><option value="folders">folders · 선택 폴더와 하위 폴더</option></select></div>
+            <div class="field"><label for="edit-folders">허용 폴더 목록</label><textarea id="edit-folders"></textarea></div>
+          </div>
+          <section class="field-panel app-permission-panel" data-full-search-permission-pass="v551-full-search-permission-admin-ui-pass" data-metadata-access-permission-pass="v588-metadata-access-permission-admin-ui-pass">
+            <div class="field-panel-header"><label>기능 권한</label></div>
+            <div class="app-permission-options">
+              <label class="checkline"><input id="edit-full-search" type="checkbox"> 전체검색 허용</label>
+              <label class="checkline"><input id="edit-metadata-access" type="checkbox"> 메타데이터 탭 접근 허용</label>
+            </div>
+            <p class="muted small">권한을 해제하면 서재의 메타데이터 링크와 작품 작업 버튼이 숨겨지고, 직접 URL과 API 접근도 차단됩니다.</p>
+          </section>
+          <section class="field-panel access-picker-panel">
+            <div class="field-panel-header"><label for="edit-folder-search">라이브러리 폴더</label><input id="edit-folder-search" class="folder-search" placeholder="폴더명 또는 경로 검색"></div>
+            <div class="picker-grid">
+              <div class="picker-column"><label>폴더 선택</label><div class="folder-picker" id="edit-folder-picker"><div class="admin-skeleton-list" data-skeleton-ui-pass="v417-skeleton-ui-pass" aria-hidden="true"><div></div><div></div><div></div></div></div></div>
+              <div class="picker-column picker-column-summary"><label>선택된 권한 폴더</label><div class="selection-summary" id="edit-selection"></div></div>
+            </div>
+          </section>
+          <div class="permission-grid user-mutation-row">
+            <section class="field-panel mutation-panel"><div class="field-panel-header"><label for="edit-move-folders">폴더 이동 권한</label><textarea id="edit-move-folders" placeholder="판타지&#10;무협/작가A"></textarea></div><input id="edit-move-folder-search" class="folder-search" aria-label="이동 권한 폴더 검색" placeholder="이동 권한 폴더 검색"><div class="picker-grid picker-grid-compact"><div class="picker-column"><label>이동 권한 폴더 선택</label><div class="folder-picker" id="edit-move-folder-picker"><div class="admin-skeleton-list" data-skeleton-ui-pass="v417-skeleton-ui-pass" aria-hidden="true"><div></div><div></div><div></div></div></div></div><div class="picker-column picker-column-summary"><label>선택된 이동 권한</label><div class="selection-summary" id="edit-move-selection"></div></div></div><p class="muted small">소스 폴더와 하위 폴더에만 적용됩니다. 이동 대상은 해당 사용자의 라이브러리 접근 범위 안이어야 합니다.</p></section>
+            <section class="field-panel mutation-panel"><div class="field-panel-header"><label for="edit-delete-folders">폴더 삭제 권한</label><textarea id="edit-delete-folders" placeholder="판타지/완결"></textarea></div><input id="edit-delete-folder-search" class="folder-search" aria-label="삭제 권한 폴더 검색" placeholder="삭제 권한 폴더 검색"><div class="picker-grid picker-grid-compact"><div class="picker-column"><label>삭제 권한 폴더 선택</label><div class="folder-picker" id="edit-delete-folder-picker"><div class="admin-skeleton-list" data-skeleton-ui-pass="v417-skeleton-ui-pass" aria-hidden="true"><div></div><div></div><div></div></div></div></div><div class="picker-column picker-column-summary"><label>선택된 삭제 권한</label><div class="selection-summary" id="edit-delete-selection"></div></div></div><p class="muted small">삭제는 이동 권한과 별도로 확인합니다.</p></section>
+          </div>
+          <div class="actions user-panel-actions"><button class="primary" type="submit">변경 저장</button><button id="edit-disable-toggle" type="button">활성/비활성 전환</button><button id="preview-user-btn" type="button">목록 미리보기</button><button id="compare-access-btn" type="button">권한 변경 영향 미리보기</button><button id="revoke-user-sessions-btn" type="button">세션 강제 만료</button></div>
+          <div class="edit-subsections">
+            <section class="edit-subcard"><h3>비밀번호 초기화</h3><p class="muted small">직접 입력 또는 임시 비밀번호 발급을 사용할 수 있습니다.</p><div class="field"><label for="reset-password">새 비밀번호</label><input id="reset-password" type="password" autocomplete="new-password" minlength="8" placeholder="8글자 이상"></div><div class="actions"><button class="danger" id="reset-password-btn" type="button">비밀번호 초기화</button><button id="generate-temp-password-btn" type="button">임시 비밀번호 발급</button></div><div id="temporary-password-output" class="status small mt-10">임시 비밀번호는 발급 응답에 한 번만 표시됩니다.</div></section>
+            <section class="edit-subcard"><h3>독서 데이터 관리</h3><p class="muted small">서버 저장 독서 데이터를 JSON으로 내보내거나 초기화합니다.</p><div class="actions"><button id="export-user-state-btn" type="button">독서 데이터 내보내기</button><button id="create-user-snapshot-btn" type="button">현재 상태 snapshot 생성</button><button id="list-user-snapshots-btn" type="button">snapshot 목록</button><button class="danger" id="reset-user-state-btn" type="button">독서 데이터 초기화</button></div><div id="user-state-snapshot-list" class="status small mt-10">snapshot 목록을 불러오려면 사용자를 선택하세요.</div></section>
+            <section class="danger-zone edit-subcard edit-danger-card"><h3>위험 작업</h3><p class="muted small">세션 강제 만료, 독서 데이터 초기화, 계정 삭제는 운영 감사 로그에 기록됩니다. 삭제 확인 문구는 <code>DELETE:&lt;username&gt;</code> 형식입니다.</p><button class="danger" id="delete-user-btn" type="button">계정 삭제</button></section>
+          </div>
+        </form>
+      </section>
+    </div>
+  </section>
+
+  <section class="admin-section" data-admin-section="signup" hidden>
+    <section class="card" id="signup-code-card">
+      <div class="admin-section-heading"><div><h2 class="admin-section-title">가입코드 발급</h2><p class="muted small admin-section-desc">가입코드는 원문을 저장하지 않고 hash만 저장합니다. 발급 직후 표시되는 코드를 복사해 초대 대상자에게 전달하세요.</p></div></div>
+      <div class="subgrid"><form id="signup-code-form"><div class="field"><label for="signup-code-label">라벨</label><input id="signup-code-label" placeholder="예: 홍길동 초대"></div><div class="field"><label for="signup-code-max-uses">사용 가능 횟수</label><input id="signup-code-max-uses" type="number" min="1" value="1"></div><div class="field"><label for="signup-code-expires-at">만료일</label><input id="signup-code-expires-at" type="date"></div><div class="field"><label for="signup-code-access-mode">가입 후 권한</label><select id="signup-code-access-mode"><option value="none">none · 접근 없음</option><option value="all">all · 전체 접근</option><option value="folders">folders · 지정 폴더와 하위 폴더</option></select></div><div class="field"><label for="signup-code-folders">허용 폴더</label><textarea id="signup-code-folders" placeholder="판타지/작가A&#10;무협"></textarea></div><section class="field-panel app-permission-panel" data-signup-code-full-search-permission-pass="v554-signup-code-full-search-permission-ui-pass" data-signup-code-metadata-access-permission-pass="v588-signup-code-metadata-access-permission-ui-pass"><div class="field-panel-header"><label>가입 후 기능 권한</label></div><div class="app-permission-options"><label class="checkline"><input id="signup-code-full-search" type="checkbox" checked> 전체검색 허용</label><label class="checkline"><input id="signup-code-metadata-access" type="checkbox"> 메타데이터 탭 접근 허용</label></div><p class="muted small">메타데이터 접근은 기본적으로 차단되며, 필요한 가입코드에만 명시적으로 허용합니다.</p></section><div class="permission-grid"><div class="field"><label for="signup-code-move-folders">가입 후 폴더 이동 권한</label><textarea id="signup-code-move-folders" placeholder="판타지/작가A"></textarea><input id="signup-code-move-folder-search" class="folder-search" aria-label="가입 후 이동 권한 폴더 검색" placeholder="이동 권한 폴더 검색"><label>이동 권한 폴더 선택</label><div class="folder-picker" id="signup-code-move-folder-picker"><div class="admin-skeleton-list" data-skeleton-ui-pass="v417-skeleton-ui-pass" aria-hidden="true"><div></div><div></div><div></div></div></div><label>선택된 이동 권한</label><div class="selection-summary" id="signup-code-move-selection"></div></div><div class="field"><label for="signup-code-delete-folders">가입 후 폴더 삭제 권한</label><textarea id="signup-code-delete-folders" placeholder="판타지/완결"></textarea><input id="signup-code-delete-folder-search" class="folder-search" aria-label="가입 후 삭제 권한 폴더 검색" placeholder="삭제 권한 폴더 검색"><label>삭제 권한 폴더 선택</label><div class="folder-picker" id="signup-code-delete-folder-picker"><div class="admin-skeleton-list" data-skeleton-ui-pass="v417-skeleton-ui-pass" aria-hidden="true"><div></div><div></div><div></div></div></div><label>선택된 삭제 권한</label><div class="selection-summary" id="signup-code-delete-selection"></div></div></div><div class="actions"><button class="primary" type="submit">가입코드 발급</button><button id="refresh-signup-codes-btn" type="button">코드 목록 새로고침</button></div></form><div><h2>가입코드 목록</h2><div id="signup-code-issued" class="status small">아직 발급된 코드가 없습니다.</div><div id="signup-code-list" class="user-list mt-10"></div></div></div>
+    </section>
+  </section>
+
+  <section class="admin-section" data-admin-section="audit" hidden>
+    <section class="card" id="audit-log-card"><h2>감사 로그</h2><p class="muted small">최근 owner 작업과 인증/계정 작업 이력을 조회합니다. 민감 필드는 서버에서 redaction된 상태로 기록됩니다.</p><div class="actions"><input id="audit-event-type" class="audit-filter-event" aria-label="감사 로그 이벤트 유형" placeholder="event type 예: admin.user.update"><input id="audit-user-filter" class="audit-filter-user" aria-label="감사 로그 사용자 ID" placeholder="userId"><input id="audit-query" class="audit-filter-query" aria-label="감사 로그 검색어" placeholder="검색어"><select id="audit-limit" class="audit-filter-limit" aria-label="감사 로그 표시 개수"><option value="50">50개</option><option value="100" selected>100개</option><option value="200">200개</option></select><button id="audit-load-btn" type="button">이력 조회</button><button id="audit-export-btn" type="button">JSONL 다운로드</button></div><div id="audit-log-output" class="status small mt-10">감사 로그를 조회하려면 이력 조회를 누르세요.</div></section>
+  </section>
+
+
+  <section class="admin-section" data-admin-section="languages" hidden>
+    <section class="card" id="site-language-pack-card" data-site-language-pack-admin-pass="v560-site-language-pack-admin-ui-pass">
+      <div class="admin-section-heading"><div><h2 class="admin-section-title">공통 언어팩 관리</h2><p class="muted small admin-section-desc">owner가 저장한 언어팩은 모든 사용자의 사이트 언어 선택 목록에 표시됩니다. 같은 언어 코드의 사용자 정의 언어가 있으면 개인 문구가 공통 언어팩 위에 덮어씁니다.</p></div></div>
+      <div class="subgrid language-pack-admin-grid">
+        <form id="language-pack-form" class="language-pack-form">
+          <div class="user-form-row user-form-row-compact">
+            <div class="field"><label for="language-pack-name">언어 이름</label><input id="language-pack-name" placeholder="예: 日本語, Español" maxlength="60"></div>
+            <div class="field"><label for="language-pack-id">언어 코드</label><input id="language-pack-id" placeholder="예: ja, es, zh-cn" maxlength="32"></div>
+          </div>
+          <div class="field"><label for="language-pack-description">설명</label><input id="language-pack-description" placeholder="예: owner 공통 일본어 언어팩" maxlength="240"></div>
+          <label class="checkline"><input id="language-pack-enabled" type="checkbox" checked> 일반 사용자에게 표시</label>
+          <div class="field"><label for="language-pack-map">표시 문구</label><textarea id="language-pack-map" class="language-pack-map" rows="14" spellcheck="false" placeholder="설정=Settings&#10;검색=Search"></textarea></div>
+          <p class="muted small">한 줄에 <code>원문=표시문구</code>, <code>원문=&gt;표시문구</code>, tab 구분 또는 JSON 객체를 사용할 수 있습니다. HTML은 넣지 말고 표시할 텍스트만 입력하세요.</p>
+          <div class="actions"><button class="primary" type="submit">언어팩 저장</button><button id="language-pack-template-btn" type="button">템플릿 채우기</button><button id="language-pack-reset-btn" type="button">입력 초기화</button><button id="language-pack-refresh-btn" type="button">목록 새로고침</button></div>
+          <div id="language-pack-status" class="status small mt-10">입력 대기</div>
+        </form>
+        <div><h2>공통 언어팩 목록</h2><p class="muted small">사용자는 설정 &gt; 일반 &gt; 사이트 언어에서 <code>site:&lt;코드&gt;</code> 언어팩을 선택할 수 있습니다.</p><div id="language-pack-list" class="user-list mt-10"></div></div>
+      </div>
+    </section>
+  </section>
+
+
+  <section class="admin-section" data-admin-section="metadata" hidden data-owner-metadata-workspace-pass="v667-owner-metadata-workspace-pass">
+    <div class="owner-metadata-workbench-tabs" role="tablist" aria-label="메타데이터 설정 세부 메뉴">
+      <button class="active" type="button" role="tab" aria-selected="true" data-owner-metadata-tab="basic">기본 메타데이터 공급자</button>
+      <button type="button" role="tab" aria-selected="false" data-owner-metadata-tab="advanced">고급 메타데이터 공급자 관리</button>
+      <button type="button" role="tab" aria-selected="false" data-owner-metadata-tab="cleanup">메타데이터 정리</button>
+    </div>
+
+    <div class="owner-metadata-workbench-panel is-active" data-owner-metadata-panel="basic">
+      <section class="card owner-metadata-settings-card" data-owner-metadata-settings-pass="v667-owner-metadata-settings-ui-pass">
+        <div class="admin-section-heading owner-metadata-heading">
+          <div>
+            <h2 class="admin-section-title">기본 메타데이터 공급자</h2>
+            <p class="muted small admin-section-desc">내장 공급자의 활성화·우선순위·로그인 프로필을 관리합니다. 사이트 구조가 바뀌면 각 카드의 URL·selector override를 열어 직접 수정할 수 있습니다.</p>
+          </div>
+          <button id="owner-metadata-refresh" type="button">공급자 새로고침</button>
+        </div>
+        <div class="owner-metadata-boundary">
+          <strong>인증·네트워크 경계</strong>
+          <span>Cookie 직접 입력은 사용하지 않습니다. 사용자 정의 URL은 자격 증명과 fragment가 없는 HTTPS 443만 허용하고, 저장된 host/path 범위 밖 요청은 차단합니다.</span>
+        </div>
+        <div id="owner-metadata-status" class="status small" role="status" aria-live="polite">공급자 설정을 준비하는 중입니다.</div>
+        <div id="owner-metadata-provider-list" class="owner-metadata-provider-list">
+          <div class="admin-skeleton-list" aria-hidden="true"><div></div><div></div><div></div></div>
+        </div>
+      </section>
+    </div>
+
+    <div class="owner-metadata-workbench-panel" data-owner-metadata-panel="advanced" hidden>
+      <section class="card owner-metadata-settings-card owner-metadata-custom-editor-card">
+        <div class="admin-section-heading owner-metadata-heading">
+          <div>
+            <h2 class="admin-section-title">고급 메타데이터 공급자 관리</h2>
+            <p class="muted small admin-section-desc">검색 결과 카드와 상세 페이지를 읽는 제한 CSS selector 공급자를 추가합니다. JavaScript 실행, 임의 코드, HTTP·사설망 URL은 지원하지 않습니다.</p>
+          </div>
+          <button id="owner-metadata-custom-reset" type="button">입력 초기화</button>
+        </div>
+        <form id="owner-metadata-custom-form" class="owner-metadata-definition-form" autocomplete="off">
+          <div class="owner-metadata-definition-grid compact">
+            <label><span>공급자 ID</span><input id="owner-metadata-custom-id" type="text" maxlength="64" placeholder="예: my-site" autocomplete="off" required></label>
+            <label><span>표시 이름</span><input id="owner-metadata-custom-name" type="text" maxlength="100" placeholder="예: 내 소설 사이트" autocomplete="off" required></label>
+            <label class="wide"><span>설명</span><input id="owner-metadata-custom-description" type="text" maxlength="500" placeholder="관리 목적 설명" autocomplete="off"></label>
+            <label class="wide"><span>검색 URL 템플릿</span><input id="owner-metadata-custom-search-url" type="url" maxlength="2400" placeholder="https://example.com/search?q={query}&amp;limit={limit}" autocomplete="off" required></label>
+            <label class="wide"><span>상세정보 URL 템플릿</span><input id="owner-metadata-custom-detail-url" type="url" maxlength="2400" placeholder="선택: https://example.com/novel/{id} 또는 {url}" autocomplete="off"></label>
+            <label class="wide"><span>표지 CDN host</span><input id="owner-metadata-custom-cover-hosts" type="text" maxlength="1000" placeholder="예: img.example.com, cdn.example.com" autocomplete="off"></label>
+          </div>
+          <details class="owner-metadata-selector-details" open>
+            <summary>검색·상세정보 selector</summary>
+            <div class="owner-metadata-selector-grid" data-owner-metadata-custom-selectors>
+              <label><span>검색 결과 카드 *</span><input data-definition-selector="searchResult" placeholder=".search-result" required></label>
+              <label><span>검색 제목 *</span><input data-definition-selector="searchTitle" placeholder=".title" required></label>
+              <label><span>검색 작가</span><input data-definition-selector="searchAuthor" placeholder=".author"></label>
+              <label><span>상세 링크 *</span><input data-definition-selector="searchLink" placeholder="a.detail" required></label>
+              <label><span>원격 ID</span><input data-definition-selector="searchId" placeholder="[data-id]"></label>
+              <label><span>검색 표지</span><input data-definition-selector="searchCover" placeholder="img.cover"></label>
+              <label><span>상세 제목 *</span><input data-definition-selector="detailTitle" placeholder="h1.title" required></label>
+              <label><span>상세 작가</span><input data-definition-selector="detailAuthor" placeholder=".author"></label>
+              <label><span>소개글</span><input data-definition-selector="detailSynopsis" placeholder=".synopsis"></label>
+              <label><span>장르</span><input data-definition-selector="detailGenres" placeholder=".genres .item"></label>
+              <label><span>태그</span><input data-definition-selector="detailTags" placeholder=".tags .item"></label>
+              <label><span>상세 표지</span><input data-definition-selector="detailCover" placeholder="img.cover"></label>
+            </div>
+          </details>
+          <div class="owner-metadata-definition-grid compact attributes">
+            <label><span>상세 링크 속성</span><input data-definition-attribute="searchLink" value="href" maxlength="40"></label>
+            <label><span>원격 ID 속성</span><input data-definition-attribute="searchId" placeholder="예: data-id" maxlength="40"></label>
+            <label><span>검색 표지 속성</span><input data-definition-attribute="searchCover" value="src" maxlength="40"></label>
+            <label><span>상세 표지 속성</span><input data-definition-attribute="detailCover" value="src" maxlength="40"></label>
+          </div>
+          <div class="actions"><button class="primary" type="submit">고급 공급자 추가</button></div>
+          <div id="owner-metadata-custom-status" class="status small" role="status" aria-live="polite">입력 대기</div>
+        </form>
+      </section>
+      <section class="card owner-metadata-settings-card">
+        <div class="admin-section-heading"><div><h2 class="admin-section-title">등록된 고급 공급자</h2><p class="muted small">저장된 공급자는 기본 공급자와 같은 수집 queue·속도 제한·SSRF 방어를 사용합니다.</p></div></div>
+        <div id="owner-metadata-custom-provider-list" class="owner-metadata-provider-list"><p class="muted">등록된 고급 공급자를 불러오는 중입니다.</p></div>
+      </section>
+    </div>
+
+    <div class="owner-metadata-workbench-panel" data-owner-metadata-panel="cleanup" hidden>
+      <section class="card owner-metadata-storage-card" data-owner-metadata-storage-pass="v667-metadata-candidate-maintenance-ui-pass">
+        <div class="admin-section-heading owner-metadata-heading">
+          <div>
+            <h2 class="admin-section-title">메타데이터 정리</h2>
+            <p class="muted small admin-section-desc">적용 중인 metadata는 보호하고, 오래된 미사용·고아 후보만 미리보기 후 정리합니다.</p>
+          </div>
+          <button id="owner-metadata-storage-refresh" type="button">용량 새로고침</button>
+        </div>
+        <div id="owner-metadata-storage-stats" class="owner-metadata-storage-stats" aria-live="polite">
+          <article><span>후보</span><strong data-metadata-storage-stat="candidates">-</strong><small>전체 후보</small></article>
+          <article><span>적용</span><strong data-metadata-storage-stat="applied">-</strong><small>보호된 메타데이터</small></article>
+          <article><span>논리 용량</span><strong data-metadata-storage-stat="logical">-</strong><small>압축 전 JSON</small></article>
+          <article><span>디스크 용량</span><strong data-metadata-storage-stat="disk">-</strong><small>primary + backup</small></article>
+          <article><span>압축률</span><strong data-metadata-storage-stat="ratio">-</strong><small>작을수록 효율적</small></article>
+        </div>
+        <div class="owner-metadata-storage-policy">
+          <label><span>일반 후보 보존 기간</span><input id="owner-metadata-cleanup-days" type="number" min="1" max="3650" value="30"><small>일</small></label>
+          <label><span>서재에서 사라진 후보</span><input id="owner-metadata-orphan-days" type="number" min="1" max="3650" value="7"><small>일</small></label>
+          <label><span>작품별 최소 보존</span><input id="owner-metadata-keep-work" type="number" min="0" max="100" value="5"><small>개</small></label>
+          <label><span>Provider별 최소 보존</span><input id="owner-metadata-keep-provider" type="number" min="0" max="20" value="1"><small>개</small></label>
+        </div>
+        <div class="actions owner-metadata-storage-actions">
+          <button id="owner-metadata-cleanup-preview" type="button">정리 미리보기</button>
+          <button id="owner-metadata-storage-rewrite" type="button">압축 저장소 다시 쓰기</button>
+          <button id="owner-metadata-cleanup-apply" class="danger" type="button" disabled>미사용 후보 정리</button>
+        </div>
+        <div id="owner-metadata-storage-status" class="status small" role="status" aria-live="polite">저장소 통계를 불러오는 중입니다.</div>
+        <div id="owner-metadata-cleanup-preview-result" class="owner-metadata-cleanup-preview" hidden></div>
+      </section>
+    </div>
+  </section>
+
+  <section class="admin-section" data-admin-section="cleanup" hidden>
+    <div class="cleanup-workbench-tabs" role="tablist" aria-label="파일 정리 작업 선택">
+      <button class="active" type="button" data-cleanup-panel-tab="duplicates" aria-selected="true">중복 정리</button>
+      <button type="button" data-cleanup-panel-tab="organization" aria-selected="false">라이브러리 정리</button>
+    </div>
+
+    <div data-cleanup-panel="duplicates" class="cleanup-workbench-panel is-active">
+      <div class="library-cleanup-grid" data-library-cleanup-ui-pass="v642-library-cleanup-similarity-ui-pass" data-library-cleanup-current-ui-pass="v657-library-cleanup-disclosure-layout-pass">
+        <section class="card library-cleanup-controls">
+          <div class="admin-section-heading">
+            <div>
+              <h2 class="admin-section-title">작품 묶음·대표 파일 검토</h2>
+              <p class="muted small admin-section-desc">제목·작가·소개글·본문 sample 유사도와 회차·파일 품질을 함께 계산해 작품 묶음, 대표 파일, 검토 후보를 보여줍니다. 중복·이전본만 격리 스크립트 대상으로 선택할 수 있으며 브라우저에서는 파일을 직접 삭제하지 않습니다.</p>
+            </div>
+          </div>
+          <div class="library-cleanup-options" role="group" aria-label="정리 대상 관계" data-admin-cleanup-responsive-pass="v649-admin-cleanup-responsive-pass">
+            <label class="checkline library-cleanup-filter"><input id="library-cleanup-duplicates" type="checkbox" checked><span class="library-cleanup-filter-copy"><strong>파일명상 중복본</strong><small>정리 스크립트 대상</small></span><span class="library-cleanup-filter-state" data-cleanup-filter-state="library-cleanup-duplicates" aria-live="polite">선택됨</span></label>
+            <label class="checkline library-cleanup-filter"><input id="library-cleanup-superseded" type="checkbox" checked><span class="library-cleanup-filter-copy"><strong>최신 누적 범위에 포함되는 이전본</strong><small>정리 스크립트 대상</small></span><span class="library-cleanup-filter-state" data-cleanup-filter-state="library-cleanup-superseded" aria-live="polite">선택됨</span></label>
+            <label class="checkline library-cleanup-filter"><input id="library-cleanup-alternate" type="checkbox" checked><span class="library-cleanup-filter-copy"><strong>다른 판본·개정판</strong><small>검토 전용 · 자동 격리 안 함</small></span><span class="library-cleanup-filter-state" data-cleanup-filter-state="library-cleanup-alternate" aria-live="polite">표시됨</span></label>
+            <label class="checkline library-cleanup-filter"><input id="library-cleanup-suspected" type="checkbox" checked><span class="library-cleanup-filter-copy"><strong>동일 작품 의심 후보</strong><small>검토 전용 · 자동 격리 안 함</small></span><span class="library-cleanup-filter-state" data-cleanup-filter-state="library-cleanup-suspected" aria-live="polite">표시됨</span></label>
+          </div>
+          <div class="actions">
+            <button id="library-cleanup-preview-btn" type="button">판정 미리보기</button>
+            <button id="library-cleanup-download-btn" class="primary" type="button" disabled>정리 스크립트 다운로드</button>
+          </div>
+          <div id="library-cleanup-status" class="status small" role="status" aria-live="polite">미리보기를 실행하면 유사도 근거, 대표 선정 이유와 검토 후보를 확인할 수 있습니다.</div>
+          <div class="library-cleanup-safety">
+            <strong>안전 실행 방식</strong>
+            <ol>
+              <li><code>.\정리스크립트.ps1 -Library "실제 서재 경로"</code>로 dry-run 결과를 검토합니다.</li>
+              <li>확인 후 <code>-Apply</code>를 추가하면 대상 파일을 라이브러리 내부 <code>.txt-reader-cleanup/</code> 격리 폴더로 이동합니다.</li>
+              <li>생성 이후 크기·수정 시간이 달라졌거나 경로가 바뀐 파일, symlink, 대표 파일이 사라진 항목은 자동으로 건너뜁니다.</li>
+              <li>다른 판본과 의심 후보는 자동 격리하지 않습니다. 대표 지정·묶음 제외만 저장됩니다.</li>
+            </ol>
+          </div>
+        </section>
+        <section class="card library-cleanup-results">
+          <div class="library-cleanup-result-head">
+            <div><h2>정리 후보</h2><p id="library-cleanup-summary" class="muted small">아직 계산하지 않았습니다.</p></div>
+            <span id="library-cleanup-plan-hash" class="badge library-cleanup-hash" title="정리 계획 해시">계획 없음</span>
+          </div>
+          <div id="library-cleanup-progress" class="library-cleanup-progress muted small" hidden></div>
+          <div id="library-cleanup-list" class="library-cleanup-list">
+            <p class="muted small">판정 미리보기를 누르세요.</p>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div data-cleanup-panel="organization" class="cleanup-workbench-panel" hidden>
+      <div class="library-organization-grid" data-library-organization-pass="v643-library-organization-ui-pass">
+        <section class="card library-organization-controls">
+          <div class="admin-section-heading">
+            <div>
+              <h2 class="admin-section-title">라이브러리 구조 변환</h2>
+              <p class="muted small admin-section-desc">현재 서재의 파일을 메타데이터 제목·작가 기준의 일관된 폴더 구조로 재배치하는 PowerShell 스크립트를 생성합니다. 브라우저는 파일을 직접 이동하지 않습니다.</p>
+            </div>
+          </div>
+          <div class="library-organization-options">
+            <label><span>폴더 구조</span><select id="library-organization-layout"><option value="author-title">작가 / 작품 / 파일</option><option value="category-author-title">기존 분류 / 작가 / 작품 / 파일</option><option value="title">작품 / 파일</option></select></label>
+            <fieldset>
+              <legend>처리 방식</legend>
+              <label class="checkline"><input type="radio" name="library-organization-mode" value="copy" checked> 새 위치로 복사 <small>권장·원본 유지</small></label>
+              <label class="checkline"><input type="radio" name="library-organization-mode" value="move"> 새 위치로 이동 <small>dry-run 검토 필수</small></label>
+            </fieldset>
+          </div>
+          <div class="actions">
+            <button id="library-organization-preview-btn" type="button">변환 미리보기</button>
+            <button id="library-organization-download-btn" class="primary" type="button" disabled>변환 스크립트 다운로드</button>
+          </div>
+          <div id="library-organization-status" class="status small" role="status" aria-live="polite">미리보기 후 원본 경로와 변환 경로를 확인하십시오.</div>
+          <div class="library-cleanup-safety">
+            <strong>실행 계약</strong>
+            <ol>
+              <li>스크립트는 <code>-Library</code>와 별도의 <code>-Destination</code> 경로를 요구합니다.</li>
+              <li>기본 실행은 dry-run이며 <code>-Apply</code>가 있어야 복사 또는 이동합니다.</li>
+              <li>대상 파일이 이미 있거나 source가 symlink/reparse point이면 건너뜁니다.</li>
+              <li>적용 결과는 대상 루트의 <code>txt-reader-library-organization-result.json</code>에 기록됩니다.</li>
+            </ol>
+          </div>
+        </section>
+        <section class="card library-organization-results">
+          <div class="library-cleanup-result-head">
+            <div><h2>변환 계획</h2><p id="library-organization-summary" class="muted small">아직 계산하지 않았습니다.</p></div>
+            <span id="library-organization-plan-hash" class="badge library-cleanup-hash">계획 없음</span>
+          </div>
+          <div id="library-organization-list" class="library-organization-list"><p class="muted small">변환 미리보기를 누르세요.</p></div>
+        </section>
+      </div>
+    </div>
+  </section>
+
+  <section class="admin-section" data-admin-section="ops" hidden>
+    <div class="operation-grid" data-admin-ops-layout-pass="v495-admin-ops-layout-pass">
+      <section class="card owner-warning ops-control-card"><h2>운영 경계</h2><p class="muted">운영 진단, 배포 전 점검, 감사 로그를 이 탭에서 실행합니다. 결과는 요약 카드와 접이식 상세로 나누어 표시합니다.</p><div class="actions"><button id="admin-diagnostics-btn" type="button">운영 진단</button><button id="admin-preflight-btn" type="button">배포 전 점검</button><button id="admin-audit-log-btn" type="button">감사 로그 조회</button><label class="checkline diagnostics-filter"><input id="admin-diagnostics-problem-only" type="checkbox" data-admin-diagnostics-filter-pass="v417-admin-diagnostics-filter-pass"> warn/error만 보기</label></div><div id="admin-diagnostics-summary" class="diagnostics-summary muted small">운영 진단을 실행하면 등급과 조치 방법이 표시됩니다.</div></section>
+      <section class="card ops-result-card"><h2>운영 진단 결과</h2><div id="admin-diagnostics-output" class="diagnostics-output"><p class="muted small">운영 진단 또는 배포 전 점검을 실행하세요.</p></div></section><section class="card ops-history-card"><h2>최근 진단 이력</h2><div id="admin-diagnostics-history" class="diagnostics-history" data-admin-diagnostics-history-pass="v417-admin-diagnostics-history-pass" data-admin-ops-card-pass="v417-admin-ops-card-details-pass" data-admin-ops-detail-table-pass="v416-admin-ops-detail-table-pass"><p class="muted small">진단 실행 후 최근 이력이 표시됩니다.</p></div></section>
+      <section class="card ops-status-card"><h2>상태</h2><pre class="status" id="status-output">초기화 중입니다.</pre></section>
+    </div>
+  </section>
+</main>
+
+<div id="owner-metadata-login-modal" class="owner-metadata-login-modal" role="dialog" aria-modal="true" aria-labelledby="owner-metadata-login-title" hidden>
+  <div class="owner-metadata-login-card">
+    <div class="owner-metadata-login-head">
+      <div><h2 id="owner-metadata-login-title">공급자 로그인</h2><p id="owner-metadata-login-subtitle">서버 Playwright 브라우저 화면입니다.</p></div>
+      <button id="owner-metadata-login-close" type="button">닫기</button>
+    </div>
+    <div class="owner-metadata-login-body" data-owner-metadata-login-body>
+      <div id="owner-metadata-login-status" class="status small owner-metadata-login-status" role="status" aria-live="polite">브라우저를 준비하는 중입니다.</div>
+      <div class="owner-metadata-login-workspace">
+        <section class="owner-metadata-login-browser-pane" aria-label="Playwright 브라우저 화면">
+          <div class="owner-metadata-login-screen-wrap"><img id="owner-metadata-login-screen" alt="Playwright 로그인 브라우저 화면" draggable="false"></div>
+          <div class="owner-metadata-login-location"><span>현재 위치</span><code id="owner-metadata-login-url">-</code></div>
+        </section>
+        <aside class="owner-metadata-login-control-pane" aria-label="Playwright 브라우저 조작">
+          <div class="owner-metadata-login-control-heading"><strong>브라우저 조작</strong><span>화면의 입력 칸을 먼저 선택한 뒤 전송하십시오.</span></div>
+          <div class="owner-metadata-login-inputs">
+            <label class="sr-only" for="owner-metadata-login-text">Playwright 브라우저에 입력할 문자</label><input id="owner-metadata-login-text" type="text" maxlength="1024" autocomplete="off" placeholder="화면에서 입력할 문자">
+            <button type="button" data-owner-metadata-control="type">문자 입력</button>
+            <label class="sr-only" for="owner-metadata-login-password">Playwright 브라우저에 입력할 비밀번호</label><input id="owner-metadata-login-password" type="password" maxlength="1024" autocomplete="new-password" placeholder="비밀번호 입력(저장하지 않음)">
+            <button type="button" data-owner-metadata-control="password">비밀번호 입력</button>
+          </div>
+          <div class="owner-metadata-login-keys">
+            <button type="button" data-owner-metadata-key="Tab">Tab</button>
+            <button type="button" data-owner-metadata-key="Shift+Tab">Shift+Tab</button>
+            <button type="button" data-owner-metadata-key="Enter">Enter</button>
+            <button type="button" data-owner-metadata-key="Backspace">Backspace</button>
+            <button type="button" data-owner-metadata-scroll="-720">위로 스크롤</button>
+            <button type="button" data-owner-metadata-scroll="720">아래로 스크롤</button>
+            <button type="button" data-owner-metadata-control="reload">새로고침</button>
+          </div>
+          <p class="muted small owner-metadata-login-help">CAPTCHA·2단계 인증·연령 확인은 화면에서 직접 완료합니다. 입력한 비밀번호는 서버 설정에 저장하지 않습니다.</p>
+        </aside>
+      </div>
+    </div>
+    <div class="actions owner-metadata-login-footer" data-owner-metadata-login-footer>
+      <button type="button" data-owner-metadata-control="cancel">취소</button>
+      <button class="primary" type="button" data-owner-metadata-control="finish">로그인 완료 및 프로필 저장</button>
+    </div>
+  </div>
+</div>
+<script data-cfasync="false" src="/scripts/admin/core.js?v=rebuild-v682" defer></script>
+<script data-cfasync="false" src="/scripts/admin/sections.js?v=rebuild-v682" defer></script>
+<script data-cfasync="false" src="/scripts/admin/ops.js?v=rebuild-v682" defer></script>
+<script data-cfasync="false" src="/scripts/admin/users.js?v=rebuild-v682" defer></script>
+<script data-cfasync="false" src="/scripts/admin/state.js?v=rebuild-v682" defer></script>
+<script data-cfasync="false" src="/scripts/admin/audit.js?v=rebuild-v682" defer></script>
+<script data-cfasync="false" src="/scripts/admin/signup.js?v=rebuild-v682" defer></script>
+<script data-cfasync="false" src="/scripts/admin/actions.js?v=rebuild-v682" defer></script>
+<script data-cfasync="false" src="/scripts/admin/audit-actions.js?v=rebuild-v682" defer></script>
+<script data-cfasync="false" src="/scripts/admin/signup-actions.js?v=rebuild-v682" defer></script>
+<script data-cfasync="false" src="/scripts/admin/site-languages.js?v=rebuild-v682" defer></script>
+<script data-cfasync="false" src="/scripts/admin/state-actions.js?v=rebuild-v682" defer></script>
+<script data-cfasync="false" src="/scripts/admin/permissions.js?v=rebuild-v682" defer></script>
+<script data-cfasync="false" src="/scripts/admin/form-workflow.js?v=rebuild-v682" defer></script>
+<script data-cfasync="false" src="/scripts/admin/library-cleanup.js?v=rebuild-v682" defer></script>
+<script data-cfasync="false" src="/scripts/admin/library-organization.js?v=rebuild-v682" defer></script>
+<script data-cfasync="false" type="module" src="/scripts/admin/site-language-runtime.mjs?v=rebuild-v682"></script>
+<script data-cfasync="false" type="module" src="/scripts/admin/metadata.mjs?v=rebuild-v682"></script>
+<script data-cfasync="false" src="/scripts/admin-users.js?v=rebuild-v682" defer></script>
+</body>
+</html>

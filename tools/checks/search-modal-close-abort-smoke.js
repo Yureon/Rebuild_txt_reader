@@ -1,0 +1,21 @@
+#!/usr/bin/env node
+const assert = require('assert');
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '../..');
+const search = fs.readFileSync(path.join(root, 'public/scripts/rebuild/features/search.mjs'), 'utf8');
+const docs = fs.readFileSync(path.join(root, 'docs/smoke-tests.md'), 'utf8');
+const runner = fs.readFileSync(path.join(root, 'tools/run_smoke_tests.js'), 'utf8');
+const PASS = 'v539-search-modal-close-abort-smoke-pass';
+assert.ok(search.includes("SEARCH_MODAL_CLOSE_ABORT_PASS = 'v509-search-modal-close-abort-pass'"), 'modal close abort marker missing');
+assert.ok(search.includes("on(app.els.nsearchClose, 'click', () => closeSearch(app, { abort:true"), 'modal X button must abort the active search run');
+assert.ok(search.includes("if (ev.target === app.els.nsearchOverlay) closeSearch(app, { abort:true"), 'overlay close must abort the active search run');
+assert.ok(search.includes("reason:'search-modal-input-escape'"), 'input Escape close must abort the active search run');
+assert.ok(search.includes("reason:'search-navigation-escape'"), 'navigation Escape close must abort the active search run');
+assert.ok(search.includes("close: (options = {}) => closeSearch(app, options)"), 'app.search.close must pass closeSearch options through');
+assert.ok(search.includes("closeSearch: (options = {}) => closeSearch(app, options)"), 'results-view closeSearch callback must preserve abort:false navigation intent');
+assert.ok(search.includes('app.state.search.lastModalCloseAbort'), 'modal close abort diagnostic missing');
+assert.ok(search.includes('app.state.search.abortController?.abort?.();'), 'closeSearch must abort active controller when requested');
+assert.ok(docs.includes('search-modal-close-abort-smoke.js'), 'smoke docs must mention modal close abort smoke');
+assert.ok(runner.includes("nodeCmd('tools/checks/search-modal-close-abort-smoke.js')"), 'runner must include modal close abort smoke');
+console.log(JSON.stringify({ pass: PASS }));

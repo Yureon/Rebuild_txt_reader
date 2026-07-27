@@ -1,0 +1,12 @@
+{
+  "status": 200,
+  "result": {
+    "novels": [
+      {
+        "novel_no": "991919",
+        "novel_name": "성인 대상 검증작",
+        "writer_nick": "검증성인작가"
+      }
+    ]
+  }
+}

@@ -1,0 +1,31 @@
+#!/usr/bin/env node
+'use strict';
+const assert = require('assert');
+const fs = require('fs');
+const os = require('os');
+const path = require('path');
+const { createSiteLanguageService } = require('../../server/services/site-language-service');
+const PASS = 'v604-site-language-backup-only-smoke-pass';
+(async()=>{
+  const root = await fs.promises.mkdtemp(path.join(os.tmpdir(), 'txt-reader-site-language-v604-'));
+  const storage = path.join(root, 'stored');
+  const bundled = path.join(root, 'bundled');
+  await fs.promises.mkdir(storage, {recursive:true});
+  await fs.promises.mkdir(bundled, {recursive:true});
+  const record = { id:'backup-only', name:'Backup Only', enabled:true, map:{Hello:'안녕'}, createdAt:new Date().toISOString(), updatedAt:new Date().toISOString() };
+  await fs.promises.writeFile(path.join(storage, 'backup-only.json.bak'), JSON.stringify(record));
+  const service = createSiteLanguageService({siteLanguagesDir:storage,bundledSiteLanguagesDir:bundled,logger:{warn(){}}});
+  const listed = await service.listPublicLanguagesAsync();
+  assert(listed.some(item=>item.id==='backup-only'),'backup-only language must be discovered by directory listing');
+  const loaded = await service.getLanguageAsync('backup-only');
+  assert.strictEqual(loaded.map.Hello,'안녕');
+  const saved = await service.saveLanguageAsync({id:'backup-only',name:'Backup Healed',map:{Hello:'반가워'}});
+  assert.strictEqual(saved.language.name,'Backup Healed');
+  assert(fs.existsSync(path.join(storage,'backup-only.json')),'save must heal the primary file');
+  await service.deleteLanguageAsync('backup-only');
+  assert(!fs.existsSync(path.join(storage,'backup-only.json')));
+  assert(!fs.existsSync(path.join(storage,'backup-only.json.bak')));
+  assert(!(await fs.promises.readdir(storage)).some(name=>name.includes('.deleting')),'staged delete files must be cleaned');
+  await fs.promises.rm(root,{recursive:true,force:true});
+  console.log(JSON.stringify({pass:PASS}));
+})().catch(error=>{console.error(error&&error.stack||error);process.exitCode=1;});

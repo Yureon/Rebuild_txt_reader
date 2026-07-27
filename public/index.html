@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#000000">
+  <link rel="preload" as="style" href="/styles/update-banner.css?v=rebuild-v682" data-update-banner-critical="v651">
+  <script data-cfasync="false" src="/service-worker-register.js?v=rebuild-v682"></script>
+<script data-cfasync="false" src="/scripts/entry-router.js?v=rebuild-v682" data-entry-router-blocking-pass="v668-entry-router-before-paint-pass"></script>
+  <script data-cfasync="false" src="/scripts/theme-boot.js?v=rebuild-v682"></script>
+  <link href="/styles/non-auth-autofill-guard.css?v=rebuild-v682" rel="stylesheet">
+  <script data-cfasync="false" src="/scripts/non-auth-autofill-guard.js?v=rebuild-v682"></script>
+  <link href="/styles/update-banner.css?v=rebuild-v682" rel="stylesheet" data-update-banner-full="v651">
+<link rel="manifest" href="/manifest.json?v=rebuild-v682">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon/icon-192.png?v=rebuild-v682">
+<title>TxT Reader</title>
+<link href="/styles/entry-router.css?v=rebuild-v682" rel="stylesheet">
+  <link href="/styles/scroll-to-top.css?v=rebuild-v682" rel="stylesheet">
+  <script data-cfasync="false" src="/scripts/scroll-to-top.js?v=rebuild-v682" defer></script>
+<link rel="stylesheet" href="/styles/skeleton-v675.css?v=rebuild-v682">
+</head>
+<body>
+  <main class="route-card" aria-label="TxT Reader entry selector">
+    <div class="kicker">TxT Reader</div>
+    <h1 class="title">페이지를 선택하세요</h1>
+    <p class="desc">자동 이동이 차단된 경우 아래 버튼으로 데스크톱용 서재 열기 또는 모바일 전용 페이지를 직접 열 수 있습니다.</p>
+    <div class="actions">
+      <a id="entry-site-link" class="btn primary" href="library.html">서재 열기</a>
+      <a id="entry-mobile-link" class="btn" href="site.html">리더 직접 열기</a>
+    </div>
+    <noscript><div class="nojs">JavaScript가 꺼져 있으면 자동 분기가 동작하지 않습니다. 위 링크 중 하나를 선택하세요.</div></noscript>
+    <div class="hint">기본 진입은 <code>/library.html</code>이며 작품 선택 시 독립 리더 페이지로 이동합니다.</div>
+  </main>
+</body>
+</html>

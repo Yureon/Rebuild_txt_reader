@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="TxT Reader">
+<link rel="apple-touch-icon" sizes="180x180" href="/icon/apple-icon-180x180.png?v=rebuild-v682">
+<link rel="icon" type="image/png" sizes="32x32" href="/icon/favicon-32x32.png?v=rebuild-v682">
+<link rel="icon" type="image/png" sizes="16x16" href="/icon/favicon-16x16.png?v=rebuild-v682">
+<link rel="manifest" href="/manifest.json?v=rebuild-v682">
+<meta name="theme-color" content="#000000">
+  <link rel="preload" as="style" href="/styles/update-banner.css?v=rebuild-v682" data-update-banner-critical="v651">
+  <script data-cfasync="false" src="/service-worker-register.js?v=rebuild-v682"></script>
+  <script data-cfasync="false" src="/scripts/theme-boot.js?v=rebuild-v682"></script>
+  <link href="/styles/non-auth-autofill-guard.css?v=rebuild-v682" rel="stylesheet">
+  <script data-cfasync="false" src="/scripts/non-auth-autofill-guard.js?v=rebuild-v682"></script>
+  <link href="/styles/update-banner.css?v=rebuild-v682" rel="stylesheet" data-update-banner-full="v651">
+<title>TxT Reader Site</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link id="builtin-font-defaults" crossorigin="anonymous" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500&family=Pretendard:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="styles/app.css?v=rebuild-v682" rel="stylesheet">
+<link rel="modulepreload" href="/scripts/rebuild/core/app-shell.mjs">
+<link rel="modulepreload" href="/scripts/rebuild/main.mjs">
+<link rel="modulepreload" href="/scripts/rebuild/core/api.mjs">
+<link rel="modulepreload" href="/scripts/rebuild/core/utils.mjs">
+<link rel="modulepreload" href="/scripts/rebuild/state/app-state.mjs">
+<link rel="modulepreload" href="/scripts/rebuild/features/ui.mjs">
+<link rel="modulepreload" href="/scripts/rebuild/core/user-scope-bootstrap.mjs">
+<link rel="modulepreload" href="/scripts/rebuild/features/lazy-features.mjs">
+<link rel="modulepreload" href="/scripts/rebuild/features/library.mjs">
+<meta content="light dark" name="color-scheme">
+  <link href="/styles/scroll-to-top.css?v=rebuild-v682" rel="stylesheet">
+  <script data-cfasync="false" src="/scripts/scroll-to-top.js?v=rebuild-v682" defer></script>
+<link rel="stylesheet" href="/styles/skeleton-v675.css?v=rebuild-v682">
+</head>
+<body data-client-profile="site" class="reader-site">
+<div id="boot-skeleton" class="app-skeleton-shell reader-boot-skeleton" data-skeleton-ui-pass="v675-current-reader-skeleton-pass" data-shell-profile="reader" aria-hidden="true">
+  <aside class="app-skeleton-sidebar reader-boot-library-rail">
+    <div class="skeleton-line title"></div><div class="skeleton-input"></div>
+    <div class="skeleton-row"></div><div class="skeleton-row short"></div><div class="skeleton-row"></div><div class="skeleton-row mid"></div>
+  </aside>
+  <main class="app-skeleton-main reader-boot-main">
+    <div class="reader-boot-safe"><span class="skeleton-pill short"></span><span class="skeleton-pill"></span><span class="skeleton-pill short"></span></div>
+    <div class="reader-boot-toolbar"><span class="skeleton-dot"></span><div class="skeleton-line title"></div><span class="skeleton-dot"></span><span class="skeleton-dot"></span><span class="skeleton-dot"></span></div>
+    <div class="reader-boot-stage">
+      <article class="reader-skeleton-paper">
+        <div class="reader-skeleton-heading"><div class="skeleton-line short"></div><div class="skeleton-line title"></div></div>
+        <div class="reader-skeleton-paragraph"><div class="skeleton-line wide"></div><div class="skeleton-line"></div><div class="skeleton-line mid"></div></div>
+        <div class="reader-skeleton-paragraph"><div class="skeleton-line wide"></div><div class="skeleton-line wide"></div><div class="skeleton-line short"></div></div>
+        <div class="reader-skeleton-paragraph"><div class="skeleton-line"></div><div class="skeleton-line mid"></div></div>
+      </article>
+    </div>
+    <div class="reader-boot-bottom"><span class="skeleton-pill short"></span><span class="skeleton-pill active"></span><span class="skeleton-pill short"></span></div>
+  </main>
+</div>
+<script data-cfasync="false" type="module" src="scripts/rebuild/site.mjs?v=rebuild-v682"></script>
+</body>
+</html>

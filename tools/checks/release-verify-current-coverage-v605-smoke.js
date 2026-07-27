@@ -1,0 +1,5 @@
+#!/usr/bin/env node
+'use strict';
+const assert=require('assert');const fs=require('fs');const PASS='v605-release-verify-current-coverage-smoke-pass';const source=fs.readFileSync('tools/release_verify.js','utf8');const required=[
+'csrf-multitab-v605-smoke.js','csrf-client-retry-v605-smoke.mjs','fileops-symlink-boundary-v605-smoke.js','fileops-folder-cache-prescan-v605-smoke.js','user-state-access-fastpath-v605-smoke.js','user-state-write-acl-v605-smoke.js','static-cache-versioning-v605-smoke.js','shutdown-docker-contract-v605-smoke.js','account-auth-timing-path-v605-smoke.js','build-mismatch-worker-v605-smoke.js','docker-library-mount-mode-v605-smoke.js','proxy-scheme-trust-v605-smoke.js','legacy-sync-disabled-v605-smoke.js','state-sync-number-validation-v605-smoke.js','release-verify-current-coverage-v605-smoke.js'];
+for(const name of required)assert(source.includes(`tools/checks/${name}`),`release verifier is missing v605 critical smoke: ${name}`);console.log(JSON.stringify({pass:PASS,required:required.length}));

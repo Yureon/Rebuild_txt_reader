@@ -1,0 +1,15 @@
+const fs = require('fs');
+const assert = require('assert');
+const reader = fs.readFileSync('public/scripts/rebuild/features/reader.mjs', 'utf8');
+const virtual = fs.readFileSync('public/scripts/rebuild/features/reader/virtual-layout.mjs', 'utf8');
+assert.ok(reader.includes('v475-reader-slider-measured-char-anchor-pass'), 'reader measured char anchor marker missing');
+assert.ok(virtual.includes('v475-reader-slider-measured-char-anchor-pass'), 'virtual measured char anchor marker missing');
+assert.ok(virtual.includes('pendingSliderMeasureTarget'), 'nav slider measured correction target must be tracked separately');
+assert.ok(virtual.includes('function applyPendingSliderMeasureTarget'), 'measured correction helper missing');
+assert.ok(virtual.includes("scrollToVirtualTarget(app, target, { fromMeasure: true, sliderMeasureCorrection: true })"), 'measured correction must re-apply direct target after row measurement');
+const helper = virtual.slice(virtual.indexOf('function applyPendingSliderMeasureTarget'), virtual.indexOf('export function scrollToVirtualTarget'));
+assert.ok(!helper.includes('scrollIntoView('), 'slider measured correction must not use scrollIntoView fallback');
+assert.ok(virtual.includes('!meta.sliderMeasureCorrection'), 'initial direct slider scroll should create pending correction only once');
+assert.ok(virtual.includes('terminalSliderTarget'), 'terminal slider target should avoid old ratio-only path');
+assert.ok(reader.includes('const navSliderCharTarget'), 'goPercent must keep nav slider 99.9%+ on char target path');
+console.log('v475-reader-slider-measured-char-anchor-smoke-pass');

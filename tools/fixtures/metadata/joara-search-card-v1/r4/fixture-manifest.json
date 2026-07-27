@@ -1,0 +1,9 @@
+{
+  "fixtureVersion": "v0.64.2",
+  "adapterKey": "joara-search-card-v1",
+  "sourceHost": "www.joara.com",
+  "notes": [
+    "Sanitized from user-supplied Joara logged-in search/detail saved pages.",
+    "Keeps only metadata selectors: title, author, synopsis, genre, adult badge, keyword, cover URL, canonical URL."
+  ]
+}

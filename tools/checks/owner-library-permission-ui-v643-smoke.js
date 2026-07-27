@@ -1,0 +1,20 @@
+#!/usr/bin/env node
+'use strict';
+const assert=require('assert');
+const fs=require('fs');
+const path=require('path');
+const root=path.resolve(__dirname,'../..');
+const read=rel=>fs.readFileSync(path.join(root,rel),'utf8');
+const html=read('public/admin/users.html');
+const js=read('public/scripts/admin/permissions.js');
+const css=read('public/styles/admin-users.css')+'\n'+read('public/styles/admin-users-v643.css');
+assert(js.includes("v643-admin-folder-explorer-segmented-pass"));
+for(const token of ['access-mode-segmented','data-access-mode-value','접근 없음','전체 허용','선택 폴더']) assert(js.includes(token),token);
+for(const id of ['create-access-mode','edit-access-mode']) assert(html.includes(id),id);
+assert(css.includes('.folder-picker.folder-picker-explorer .folder-line.folder-explorer-row{display:grid!important'));
+assert(css.includes('grid-template-columns:44px minmax(180px,1.15fr) minmax(160px,1fr) minmax(125px,.72fr)'));
+assert(css.includes('@media(max-width:760px)'));
+assert(css.includes('.folder-explorer-head{display:none!important}'));
+assert(css.includes('word-break:keep-all!important'));
+assert(css.includes('.owner-metadata-provider-head{display:grid!important'));
+console.log(JSON.stringify({pass:'v643-owner-library-permission-ui-pass',segmented:true,responsive:true,providerHeading:true}));

@@ -1,0 +1,31 @@
+#!/usr/bin/env node
+'use strict';
+const assert=require('assert');
+const fs=require('fs');
+const os=require('os');
+const path=require('path');
+const zlib=require('zlib');
+const {createMetadataStoreService}=require('../../server/services/metadata-store-service');
+(async()=>{
+  const dir=fs.mkdtempSync(path.join(os.tmpdir(),'v642-meta-gzip-'));
+  const legacy=path.join(dir,'work-metadata.json');
+  const legacyState={schemaVersion:1,revision:1,settings:{providers:{}},candidates:{},applied:{}};
+  fs.writeFileSync(legacy,JSON.stringify(legacyState,null,2));
+  const store=createMetadataStoreService({storePath:legacy,logger:{warn(){}}});
+  await store.rewriteCompressedDurably();
+  const compressed=legacy+'.gz';
+  assert(fs.existsSync(compressed));
+  assert(!fs.existsSync(legacy));
+  const decoded=JSON.parse(zlib.gunzipSync(fs.readFileSync(compressed)).toString('utf8'));
+  assert.equal(decoded.schemaVersion,1);
+  const stats=store.getStorageStats();
+  assert.equal(stats.compressionPass,'v642-metadata-compressed-store-pass');
+  assert(stats.compressedBytes>0);
+  assert(stats.logicalBytes>0);
+  await store.close();
+  const reload=createMetadataStoreService({storePath:legacy,logger:{warn(){}}});
+  assert.equal(reload.getStorageStats().loadedSource,'compressed-primary');
+  await reload.close();
+  fs.rmSync(dir,{recursive:true,force:true});
+  console.log(JSON.stringify({pass:'v642-metadata-compressed-store-pass',compressed:true,migrated:true}));
+})().catch(error=>{console.error(error);process.exit(1);});

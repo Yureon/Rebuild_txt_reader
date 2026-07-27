@@ -1,0 +1,229 @@
+/* rebuild-v649: responsive owner permission picker and duplicate-review state clarity */
+.admin-users-page [data-folder-permission-row="true"]{
+  display:grid!important;
+  grid-template-columns:minmax(76px,.34fr) minmax(180px,1.15fr) minmax(150px,1fr) minmax(118px,.68fr)!important;
+  gap:10px!important;
+  align-items:center!important;
+  min-width:0!important;
+  min-height:54px!important;
+  padding:8px 12px!important;
+  overflow:visible!important;
+}
+.admin-users-page .folder-explorer-head{
+  grid-template-columns:minmax(76px,.34fr) minmax(180px,1.15fr) minmax(150px,1fr) minmax(118px,.68fr)!important;
+  min-width:0!important;
+}
+.admin-users-page [data-folder-permission-row="true"]>span{
+  grid-column:auto!important;
+  grid-row:auto!important;
+  min-width:0!important;
+  max-width:none!important;
+}
+.admin-users-page [data-folder-permission-row="true"] .folder-explorer-check{
+  display:flex!important;
+  align-items:center!important;
+  gap:7px!important;
+  min-width:0!important;
+}
+.admin-users-page [data-folder-permission-row="true"] .folder-explorer-check input{
+  grid-column:auto!important;
+  grid-row:auto!important;
+  flex:0 0 auto!important;
+  width:20px!important;
+  height:20px!important;
+  margin:0!important;
+}
+.admin-users-page .folder-explorer-state{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:44px;
+  min-height:24px;
+  padding:2px 6px;
+  border:1px solid var(--border);
+  border-radius:999px;
+  color:var(--muted);
+  background:rgba(255,255,255,.025);
+  font-size:.66rem;
+  font-weight:800;
+  white-space:nowrap;
+}
+.admin-users-page [data-folder-permission-row="true"][data-selection-state="selected"] .folder-explorer-state{
+  color:#a9f6c3;
+  border-color:rgba(74,222,128,.42);
+  background:rgba(74,222,128,.12);
+}
+.admin-users-page [data-folder-permission-row="true"] .folder-explorer-name strong,
+.admin-users-page [data-folder-permission-row="true"] .folder-explorer-parent,
+.admin-users-page [data-folder-permission-row="true"] .folder-line-meta{
+  display:block!important;
+  min-width:0!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+  line-height:1.4!important;
+}
+.admin-users-page .selection-summary{
+  display:flex!important;
+  flex-wrap:wrap!important;
+  gap:6px!important;
+  align-items:flex-start!important;
+}
+.admin-users-page .selection-summary .chip{
+  max-width:100%;
+  overflow-wrap:anywhere;
+  word-break:break-word;
+  white-space:normal;
+}
+.library-cleanup-options{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+}
+.library-cleanup-filter{
+  display:grid!important;
+  grid-template-columns:auto minmax(0,1fr) auto!important;
+  grid-template-rows:auto!important;
+  gap:10px!important;
+  align-items:center!important;
+  min-width:0!important;
+  overflow:visible!important;
+}
+.library-cleanup-filter>input{
+  grid-column:1!important;
+  grid-row:1!important;
+  width:20px!important;
+  height:20px!important;
+  margin:0!important;
+  flex:0 0 auto;
+}
+.library-cleanup-filter-copy{
+  grid-column:2!important;
+  display:grid!important;
+  gap:3px!important;
+  min-width:0!important;
+  color:var(--text)!important;
+}
+.library-cleanup-filter-copy strong{
+  min-width:0;
+  overflow-wrap:anywhere;
+  line-height:1.35;
+}
+.library-cleanup-filter-copy small{
+  margin:0!important;
+  color:var(--muted)!important;
+  line-height:1.35;
+}
+.library-cleanup-filter-state,
+.library-cleanup-candidate-state{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:26px;
+  padding:3px 8px;
+  border:1px solid var(--border);
+  border-radius:999px;
+  color:var(--muted);
+  background:rgba(255,255,255,.025);
+  font-size:.68rem;
+  font-weight:850;
+  white-space:nowrap;
+}
+.library-cleanup-filter-state[data-active="true"],
+.library-cleanup-candidate-state.state-selected{
+  color:#a9f6c3;
+  border-color:rgba(74,222,128,.42);
+  background:rgba(74,222,128,.11);
+}
+.library-cleanup-candidate-state.state-review{
+  color:#d9c5ff;
+  border-color:rgba(153,102,255,.38);
+  background:rgba(153,102,255,.11);
+}
+.library-cleanup-candidate{
+  min-width:0!important;
+  overflow:visible!important;
+  isolation:isolate;
+}
+.library-cleanup-candidate-head{
+  display:grid!important;
+  grid-template-columns:minmax(0,auto) minmax(0,1fr)!important;
+  align-items:start!important;
+  gap:10px!important;
+  min-width:0!important;
+}
+.library-cleanup-candidate-badges{
+  display:flex;
+  flex-wrap:wrap;
+  gap:5px;
+  align-items:center;
+  min-width:0;
+}
+.library-cleanup-candidate-head code{
+  display:block!important;
+  min-width:0!important;
+  max-width:100%!important;
+  overflow-wrap:anywhere!important;
+  word-break:break-word!important;
+  white-space:normal!important;
+  line-height:1.45!important;
+}
+.library-cleanup-similarity-grid{
+  grid-template-columns:repeat(auto-fit,minmax(74px,1fr))!important;
+  min-width:0;
+}
+.library-cleanup-candidate-actions{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;
+  min-width:0;
+}
+.library-cleanup-candidate-actions button{
+  width:100%;
+  min-width:0;
+  white-space:normal;
+}
+@media (min-width:1180px){
+  .admin-users-page .folder-picker{max-height:340px!important}
+  .library-cleanup-list{max-height:min(76vh,900px)}
+}
+@media (max-width:900px){
+  .admin-users-page .folder-explorer-head{
+    grid-template-columns:minmax(72px,.34fr) minmax(180px,1fr) minmax(130px,.8fr)!important;
+  }
+  .admin-users-page .folder-explorer-head span:nth-child(4){display:none!important}
+  .admin-users-page [data-folder-permission-row="true"]{
+    grid-template-columns:minmax(72px,.34fr) minmax(180px,1fr) minmax(130px,.8fr)!important;
+  }
+  .admin-users-page [data-folder-permission-row="true"] .folder-line-meta{display:none!important}
+  .library-cleanup-options{grid-template-columns:1fr}
+}
+@media (max-width:620px){
+  .admin-users-page .folder-picker{min-height:168px!important;max-height:52dvh!important;padding:0!important}
+  .admin-users-page .folder-explorer-head{display:none!important}
+  .admin-users-page [data-folder-permission-row="true"]{
+    grid-template-columns:auto minmax(0,1fr)!important;
+    grid-template-areas:"check name" "check parent" "check meta"!important;
+    gap:3px 10px!important;
+    min-width:0!important;
+    min-height:68px!important;
+    padding:10px!important;
+    border-bottom:1px solid var(--border)!important;
+  }
+  .admin-users-page [data-folder-permission-row="true"] .folder-explorer-check{grid-area:check!important;align-self:center!important;flex-direction:column!important;gap:4px!important}
+  .admin-users-page [data-folder-permission-row="true"] .folder-explorer-name{grid-area:name!important}
+  .admin-users-page [data-folder-permission-row="true"] .folder-explorer-parent{grid-area:parent!important;display:block!important;white-space:normal!important;overflow-wrap:anywhere!important}
+  .admin-users-page [data-folder-permission-row="true"] .folder-line-meta{grid-area:meta!important;display:block!important;white-space:normal!important}
+  .admin-users-page .folder-explorer-state{min-width:38px;padding-inline:4px;font-size:.61rem}
+  .library-cleanup-filter{grid-template-columns:auto minmax(0,1fr)!important;grid-template-areas:"input state" "copy copy"!important}
+  .library-cleanup-filter>input{grid-area:input!important;align-self:center!important}
+  .library-cleanup-filter-copy{grid-area:copy!important}
+  .library-cleanup-filter-state{grid-area:state!important;justify-self:end!important}
+  .library-cleanup-group-summary{padding:10px!important}
+  .library-cleanup-group-count{white-space:normal!important}
+  .library-cleanup-candidate-head{grid-template-columns:1fr!important}
+  .library-cleanup-candidate-actions{grid-template-columns:1fr!important}
+  .library-cleanup-similarity-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media (max-width:360px){
+  .admin-users-page [data-folder-permission-row="true"]{padding-inline:8px!important;gap-inline:8px!important}
+  .library-cleanup-similarity-grid{grid-template-columns:1fr!important}
+}

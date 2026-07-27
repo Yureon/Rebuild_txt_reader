@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "adapterKey": "munpia-webnovel-v1",
+  "adapterRevision": 1,
+  "pageKinds": [
+    "search-primary",
+    "search-empty",
+    "search-decoy",
+    "detail-primary"
+  ],
+  "sanitizedSha256": {
+    "detail-primary.html": "6a34daf6862a06f365b7c547257da25c27f2420d1a65d13e38bc0ecc8ea4bd9f",
+    "expected.json": "90a523ea6287d25456e1b746e1d9da608b66139171f7130427f14d83e73a45fc",
+    "search-decoy.html": "9bc7f56ecc69e96d93480a2cd8e7498509c9eb8ad9c362de818558ba36596c18",
+    "search-empty.html": "c4264a4107a71d54ff985e24b316c584730c1d2fd0c6309fc3a1636e2b031956",
+    "search-primary.html": "433d8479218301cacebbc3c594416fbc8a42b8f8b94245c452a10291879a65b9"
+  },
+  "sourceHost": "novel.munpia.com",
+  "sanitizationNotes": "합성 작품명·작가·짧은 소개만 보존. 계정 UI, cookie, token, analytics, 광고, 댓글, 구매 정보와 원본 장문 소개를 제거했습니다.",
+  "expectedFile": "expected.json"
+}

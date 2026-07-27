@@ -1,0 +1,16 @@
+{
+  "adapterKey": "joara-search-card-v1",
+  "adapterRevision": 4,
+  "remoteId": "567890",
+  "sourceUrl": "https://www.joara.com/book/567890",
+  "title": "조아라 직접 작품",
+  "author": "조아라 작가",
+  "synopsis": "조아라 직접 소개",
+  "genres": ["판타지"],
+  "tags": ["판타지", "성장"],
+  "publicationStatus": null,
+  "publicationYear": null,
+  "sourceLanguage": "ko",
+  "coverUrl": "https://cf-image.joara.com/literature_file/synthetic-direct.jpg",
+  "sourceMode": "direct-detail"
+}

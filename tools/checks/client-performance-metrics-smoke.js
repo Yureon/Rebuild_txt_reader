@@ -1,0 +1,21 @@
+#!/usr/bin/env node
+const fs = require('fs');
+const path = require('path');
+const assert = require('assert');
+const root = path.resolve(__dirname, '../..');
+const read = rel => fs.readFileSync(path.join(root, rel), 'utf8');
+const PASS = 'v569-client-performance-metrics-smoke-pass';
+const metrics = read('public/scripts/rebuild/core/performance-metrics.mjs');
+const main = read('public/scripts/rebuild/main.mjs');
+const shell = read('public/scripts/rebuild/core/app-shell.mjs');
+const fragments = read('public/scripts/rebuild/core/feature-fragments.mjs');
+const lazy = read('public/scripts/rebuild/features/lazy-features.mjs');
+const report = read('public/scripts/rebuild/features/devtools/report.mjs');
+for (const token of ['CLIENT_PERFORMANCE_METRICS_PASS','LONG_TASK_LIMIT = 24','PerformanceObserver','store.longTasks.splice','resourceSummary','transferBytes','decodedBytes']) assert.ok(metrics.includes(token), `metrics token missing: ${token}`);
+for (const phase of ['bootStart','uiInstalled','serverStateHydrated','libraryReady','lastReadRestoreComplete']) assert.ok(main.includes(`'${phase}'`), `boot phase missing: ${phase}`);
+assert.ok(metrics.includes("markPerformancePhase('bootComplete')"), 'bootComplete phase missing');
+assert.ok(shell.includes('APP_SHELL_PERFORMANCE_PASS') && shell.includes('resources.appShell'), 'app shell timing missing');
+assert.ok(fragments.includes('resources.deferredUiHtml') && fragments.includes('resources.deferredUiCss'), 'deferred resource timing missing');
+assert.ok(lazy.includes('perf.resources[`feature:${name}`]'), 'lazy feature timing store missing');
+for (const row of ['bootDurationMs','appShellMs','deferredUiMs','resourceCount','longTasks','shelfCards']) assert.ok(report.includes(`'${row}'`), `devtools performance row missing: ${row}`);
+console.log(JSON.stringify({ pass:PASS }));

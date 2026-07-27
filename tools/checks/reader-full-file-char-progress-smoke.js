@@ -1,0 +1,14 @@
+const fs = require('fs');
+const assert = require('assert');
+const coords = fs.readFileSync('public/scripts/rebuild/features/reader/coordinates.mjs', 'utf8');
+const virtual = fs.readFileSync('public/scripts/rebuild/features/reader/virtual-layout.mjs', 'utf8');
+const reader = fs.readFileSync('public/scripts/rebuild/features/reader.mjs', 'utf8');
+assert.ok(coords.includes("READER_FULL_FILE_CHAR_PROGRESS_PASS = 'v472-reader-full-file-char-progress-pass'"), 'char progress marker missing');
+assert.ok(coords.includes('coords.totalManifestChars > 0'), 'coordinate policy must use totalManifestChars');
+assert.ok(coords.includes('chunkCharToDocumentRatio(app, address.chunk, address.charIndex'), 'address ratio must support char coordinate');
+assert.ok(virtual.includes('resolveViewportFileCharProgress(app, row, rowRatio, localCharIndex)'), 'viewport address must resolve file-char manifest progress');
+assert.ok(virtual.includes('fileCharToDocumentRatio(app, fileCharIndex)'), 'viewport file-char progress must convert to a document ratio');
+assert.ok(virtual.includes('estimateInRowOffset(row, address.charIndex') && virtual.includes('slider manifest block target aligns the target char'), 'slider direct scroll must be char-aware');
+assert.ok(reader.includes('await manifestPromise.catch'), 'openNovel must wait for manifest before first progress calculation');
+assert.ok(reader.includes('charIndex: target.charIndex'), 'slider/goPercent targetAddress must pass charIndex');
+console.log('v472-reader-full-file-char-progress-smoke-pass');

@@ -1,0 +1,34 @@
+{
+  "result": {
+    "list": [
+      {
+        "type": "SERIES",
+        "series_id": 66136165,
+        "title": "요리의 신이 강림했다",
+        "category_uid": 11,
+        "category": "웹소설",
+        "sub_category": "현판",
+        "authors": ["김촌지"],
+        "thumbnail": "qyydT/hAJq5BhJiK/gD9100kizxrFGd5mZ352Gk",
+        "on_issue": "End"
+      },
+      {
+        "type": "SERIES",
+        "series_id": 99999999,
+        "title": "요리의 신이 강림했다",
+        "category_uid": 10,
+        "category": "웹툰",
+        "authors": ["다른 작가"]
+      },
+      {
+        "type": "SET",
+        "series_id": 77777777,
+        "title": "요리의 신이 강림했다 세트",
+        "category_uid": 11,
+        "category": "웹소설"
+      }
+    ],
+    "is_end": true,
+    "total_count": 3
+  }
+}

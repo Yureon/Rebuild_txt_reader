@@ -1,0 +1,96 @@
+/* rebuild-v651: stable duplicate-review summaries and bounded mobile rendering */
+.library-cleanup-results{
+  min-width:0;
+  align-self:start;
+}
+.library-cleanup-list{
+  overflow-anchor:none;
+  contain:layout style;
+}
+.library-cleanup-group{
+  min-width:0;
+  contain:layout style;
+}
+/* Chromium/Samsung Internet can collapse a native summary to its marker box when
+   summary itself is a grid. Keep summary block-native and grid only its child. */
+.library-cleanup-group-summary{
+  position:relative!important;
+  display:block!important;
+  min-width:0!important;
+  min-height:0!important;
+  padding:0!important;
+  overflow:visible!important;
+  list-style:none!important;
+}
+.library-cleanup-group-summary::marker{content:''}
+.library-cleanup-group-summary::-webkit-details-marker{display:none!important}
+.library-cleanup-group-summary-layout{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:12px;
+  align-items:center;
+  width:100%;
+  min-width:0;
+  min-height:56px;
+  padding:10px 42px 10px 12px;
+  box-sizing:border-box;
+}
+.library-cleanup-group-summary::after{
+  content:'⌄';
+  position:absolute;
+  top:50%;
+  right:14px;
+  width:20px;
+  height:20px;
+  display:grid;
+  place-items:center;
+  color:var(--muted);
+  font-size:18px;
+  line-height:1;
+  transform:translateY(-50%);
+  transition:transform .16s ease,color .16s ease;
+  pointer-events:none;
+}
+.library-cleanup-group[open]>.library-cleanup-group-summary::after{
+  color:var(--accent);
+  transform:translateY(-50%) rotate(180deg);
+}
+.library-cleanup-load-more{
+  width:100%;
+  min-height:44px;
+  margin:2px 0 6px;
+  padding:9px 12px;
+  border:1px dashed color-mix(in srgb,var(--accent) 44%,var(--border));
+  border-radius:12px;
+  background:color-mix(in srgb,var(--panel2) 92%,var(--accent) 8%);
+  color:var(--text);
+  font-weight:800;
+  cursor:pointer;
+}
+.library-cleanup-load-more:hover,
+.library-cleanup-load-more:focus-visible{
+  border-style:solid;
+  background:color-mix(in srgb,var(--panel2) 84%,var(--accent) 16%);
+}
+@media(max-width:620px){
+  .library-cleanup-list{
+    min-height:140px!important;
+    max-height:min(64dvh,680px)!important;
+    padding-right:2px!important;
+  }
+  .library-cleanup-group-summary-layout{
+    grid-template-columns:minmax(0,1fr);
+    gap:6px;
+    min-height:64px;
+    padding:10px 38px 10px 10px;
+  }
+  .library-cleanup-group-count{
+    white-space:normal!important;
+  }
+  .library-cleanup-load-more{
+    min-height:48px;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .library-cleanup-group-summary::after{transition:none}
+}

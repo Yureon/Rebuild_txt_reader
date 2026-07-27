@@ -1,0 +1,20 @@
+{
+  "adapterKey": "joara-search-card-v1",
+  "adapterRevision": 4,
+  "searchQuery": "검증 차원",
+  "title": "검증 차원",
+  "author": "검증작가",
+  "synopsis": "짧은 검증 소개입니다.",
+  "genres": [
+    "판타지"
+  ],
+  "tags": [
+    "무료 연재"
+  ],
+  "publicationStatus": "ongoing",
+  "publicationYear": null,
+  "sourceLanguage": "ko",
+  "coverUrl": "https://cf-image.joara.com/literature_file/synthetic.jpg?w=200&q=70&f=webp",
+  "detailRequests": 0,
+  "sourceMode": "search-card-inline"
+}

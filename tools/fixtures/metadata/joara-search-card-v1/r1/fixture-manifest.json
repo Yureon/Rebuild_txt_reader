@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "adapterKey": "joara-search-card-v1",
+  "adapterRevision": 4,
+  "pageKinds": [
+    "search-primary",
+    "search-empty",
+    "search-decoy",
+    "detail-primary"
+  ],
+  "sanitizedSha256": {
+    "detail-primary.html": "78d02bcfc5cb77365293583417057bd3d0e9224b115e07806eec6be858f64446",
+    "expected.json": "4d147b2db149a6e1f2b98fd5835ced7c8cf8cb76704344d5aebc9646187862dd",
+    "search-decoy.html": "72d3dcc80eb3611083644707524e26297b2e2af3ebbe4e0c1e927bf9d96a1937",
+    "search-empty.html": "19e526782f099fa9141e2aa66b52a3b59cc7e8949a081c4fa3711b16b8627bc7",
+    "search-primary.html": "0dbf9279a461f19dded481cd0e70bcf089158dfc466e2dd9f60293c92384b416"
+  },
+  "sourceHost": "www.joara.com",
+  "sanitizationNotes": "합성 작품명·작가·짧은 소개만 보존. 계정 UI, cookie, token, analytics, 광고, 댓글, 구매 정보와 원본 장문 소개를 제거했습니다. 제공된 저장 HTML에는 모달 DOM, 안정 remote ID와 상세 URL이 없어 공개 검색 카드가 inline detail source입니다.",
+  "expectedFile": "expected.json"
+}

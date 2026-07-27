@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "adapterKey": "novelpia-webnovel-v1",
+  "adapterRevision": 2,
+  "pageKinds": [
+    "search-primary",
+    "search-empty",
+    "search-decoy",
+    "detail-primary"
+  ],
+  "sanitizedSha256": {
+    "detail-primary.html": "d80d197176ba32f1f85be01bd5066e854b85dc621cfa32db97a18c170c771919",
+    "expected.json": "055c51a5df78a58a6747c72d40f19da9e4d7063b234e34b5dd3f8d375216b2ce",
+    "search-decoy.html": "51a7c928b23b21fc13412b9d72f5692507aa8d5a61f8ff485ca88ac266033c01",
+    "search-empty.html": "0a9c88dd09fa7c505375ba22d45c9cfec3e46d7a839758134c9851531036604b",
+    "search-primary.html": "504e4d8d497507b77da7c900e68dc6aee9941927bc2231809c982fd569e76688"
+  },
+  "sourceHost": "novelpia.com",
+  "sanitizationNotes": "합성 작품명·작가·짧은 소개만 보존. 계정 UI, cookie, token, analytics, 광고, 댓글, 구매 정보와 원본 장문 소개를 제거했습니다.",
+  "expectedFile": "expected.json"
+}

@@ -1,0 +1,11 @@
+@keyframes txt-reader-nonauth-autofill-start {
+  from { opacity: 0.99999; }
+  to { opacity: 1; }
+}
+
+[data-autofill-guard="v667"]:-webkit-autofill,
+[data-autofill-guard="v667"]:autofill {
+  animation-name: txt-reader-nonauth-autofill-start;
+  animation-duration: 0.001s;
+  animation-iteration-count: 1;
+}

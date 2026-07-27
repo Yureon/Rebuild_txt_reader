@@ -1,0 +1,20 @@
+#!/usr/bin/env node
+const assert = require('assert');
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '../..');
+const PASS = 'v460-reader-append-incremental-index-delta-pass';
+const PASS_V466 = 'v466-reader-append-incremental-index-delta-pass';
+const src = fs.readFileSync(path.join(root, 'public/scripts/rebuild/features/reader/virtual-layout.mjs'), 'utf8');
+assert.ok(src.includes(`READER_APPEND_INCREMENTAL_INDEX_DELTA_PASS = '${PASS}'`), 'delta append marker missing');
+assert.ok(src.includes(`READER_APPEND_INCREMENTAL_INDEX_DELTA_V466_PASS = '${PASS_V466}'`), 'v466 append delta marker missing');
+assert.ok(src.includes('function appendVirtualRowsDelta('), 'append delta helper missing');
+assert.ok(src.includes('recordAppendIncrementalIndexDelta'), 'append delta diagnostics missing');
+assert.ok(src.includes('appendIncrementalIndexDeltaV466Pass'), 'append delta v466 diagnostics missing');
+assert.ok(src.includes('const decoratedRows = decorateRowsWithGlobalBlocks(app, rowsToAppend);'), 'append path must decorate only new rows');
+assert.ok(src.includes('appendVirtualRowsDelta(app, decoratedRows'), 'append path must use delta helper');
+assert.ok(!src.includes('v.rows = decorateRowsWithGlobalBlocks(app, v.rows.concat(rowsToAppend));'), 'append path must not concat and redecorate all rows');
+const appendFn = src.slice(src.indexOf('function tryAppendVirtualRowsIncrementally'), src.indexOf('function resolveAppendSeamRenderGate'));
+assert.ok(!appendFn.includes('rebuildVirtualRowIndexes(v);'), 'append incremental path must not full-rebuild indexes');
+assert.ok(!appendFn.includes('recalcVirtualLayout(app);'), 'append incremental path must not full-recalculate prefix heights');
+console.log(JSON.stringify({ pass: PASS, passV466: PASS_V466 }));

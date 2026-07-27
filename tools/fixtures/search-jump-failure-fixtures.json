@@ -1,0 +1,287 @@
+{
+  "pass": "v252-search-jump-failure-fixture-data-pass",
+  "cases": [
+    {
+      "name": "missing result index",
+      "failure": {
+        "index": 5,
+        "chunk": 4,
+        "totalChunks": 10,
+        "query": "needle",
+        "runId": 3,
+        "retryCount": 0,
+        "finalReason": "missing-result-index"
+      },
+      "app": {
+        "query": "needle",
+        "runId": 3,
+        "resultCount": 1,
+        "novelId": "novel-a",
+        "episodeId": "ep-1"
+      },
+      "expectedReason": "missing-result-index",
+      "expectedRetryCount": 0
+    },
+    {
+      "name": "novel mismatch",
+      "failure": {
+        "index": 0,
+        "chunk": 2,
+        "totalChunks": 8,
+        "query": "needle",
+        "runId": 3,
+        "novelId": "novel-b",
+        "retryCount": 0,
+        "finalReason": "novel-mismatch"
+      },
+      "app": {
+        "query": "needle",
+        "runId": 3,
+        "resultCount": 2,
+        "novelId": "novel-a",
+        "episodeId": "ep-1"
+      },
+      "expectedReason": "novel-mismatch",
+      "expectedRetryCount": 0
+    },
+    {
+      "name": "query mismatch",
+      "failure": {
+        "index": 0,
+        "chunk": 2,
+        "totalChunks": 8,
+        "query": "old",
+        "runId": 3,
+        "novelId": "novel-a",
+        "retryCount": 0,
+        "finalReason": "query-mismatch"
+      },
+      "app": {
+        "query": "new",
+        "runId": 3,
+        "resultCount": 2,
+        "novelId": "novel-a",
+        "episodeId": "ep-1"
+      },
+      "expectedReason": "query-mismatch",
+      "expectedRetryCount": 0
+    },
+    {
+      "name": "valid retry",
+      "failure": {
+        "index": 0,
+        "chunk": 2,
+        "totalChunks": 8,
+        "query": "needle",
+        "runId": 3,
+        "novelId": "novel-a",
+        "episodeId": "ep-1",
+        "retryCount": 0,
+        "finalReason": "retry-valid"
+      },
+      "app": {
+        "query": "needle",
+        "runId": 3,
+        "resultCount": 2,
+        "novelId": "novel-a",
+        "episodeId": "ep-1"
+      },
+      "expectedOk": true,
+      "expectedRetryCount": 0
+    },
+    {
+      "name": "in-window retry sample",
+      "failure": {
+        "index": 1,
+        "chunk": 3,
+        "totalChunks": 8,
+        "query": "needle",
+        "runId": 4,
+        "novelId": "novel-a",
+        "episodeId": "ep-1",
+        "sourceLabel": "loaded window",
+        "retryMode": "in-window",
+        "retryCount": 1,
+        "finalReason": "retry-valid"
+      },
+      "app": {
+        "query": "needle",
+        "runId": 4,
+        "resultCount": 3,
+        "novelId": "novel-a",
+        "episodeId": "ep-1"
+      },
+      "expectedOk": true,
+      "expectedRetryMode": "in-window",
+      "expectedRetryCount": 1
+    },
+    {
+      "name": "replace-load retry sample",
+      "failure": {
+        "index": 0,
+        "chunk": 6,
+        "totalChunks": 8,
+        "query": "needle",
+        "runId": 5,
+        "novelId": "novel-a",
+        "episodeId": "ep-1",
+        "sourceLabel": "replace load",
+        "retryMode": "replace-load",
+        "retryCount": 1,
+        "finalReason": "retry-valid"
+      },
+      "app": {
+        "query": "needle",
+        "runId": 5,
+        "resultCount": 2,
+        "novelId": "novel-a",
+        "episodeId": "ep-1"
+      },
+      "expectedOk": true,
+      "expectedRetryMode": "replace-load",
+      "expectedRetryCount": 1
+    },
+    {
+      "name": "missing-row retry sample",
+      "failure": {
+        "index": 2,
+        "chunk": 7,
+        "totalChunks": 8,
+        "query": "needle",
+        "runId": 6,
+        "novelId": "novel-a",
+        "episodeId": "ep-1",
+        "sourceLabel": "missing row",
+        "retryMode": "missing-row",
+        "retryCount": 1,
+        "finalReason": "retry-valid"
+      },
+      "app": {
+        "query": "needle",
+        "runId": 6,
+        "resultCount": 4,
+        "novelId": "novel-a",
+        "episodeId": "ep-1"
+      },
+      "expectedOk": true,
+      "expectedRetryMode": "missing-row",
+      "expectedRetryCount": 1
+    },
+    {
+      "name": "live DOM row available sample",
+      "failure": {
+        "index": 1,
+        "chunk": 4,
+        "totalChunks": 9,
+        "query": "needle",
+        "runId": 7,
+        "novelId": "novel-a",
+        "episodeId": "ep-1",
+        "sourceLabel": "live row",
+        "retryMode": "in-window",
+        "liveRowAvailable": true,
+        "retryCount": 1,
+        "finalReason": "retry-valid"
+      },
+      "app": {
+        "query": "needle",
+        "runId": 7,
+        "resultCount": 3,
+        "novelId": "novel-a",
+        "episodeId": "ep-1"
+      },
+      "expectedOk": true,
+      "expectedRetryMode": "in-window",
+      "expectedLiveRowAvailable": true,
+      "expectedRetryCount": 1
+    },
+    {
+      "name": "highlighted match sample",
+      "failure": {
+        "index": 0,
+        "chunk": 5,
+        "totalChunks": 9,
+        "query": "needle",
+        "runId": 8,
+        "novelId": "novel-a",
+        "episodeId": "ep-1",
+        "sourceLabel": "highlighted match",
+        "retryMode": "highlighted-match",
+        "highlightedMatch": true,
+        "retryCount": 1,
+        "finalReason": "retry-valid"
+      },
+      "app": {
+        "query": "needle",
+        "runId": 8,
+        "resultCount": 2,
+        "novelId": "novel-a",
+        "episodeId": "ep-1"
+      },
+      "expectedOk": true,
+      "expectedRetryMode": "highlighted-match",
+      "expectedHighlightedMatch": true,
+      "expectedRetryCount": 1
+    },
+    {
+      "name": "browser diagnostics snapshot linked sample",
+      "failure": {
+        "index": 1,
+        "chunk": 6,
+        "totalChunks": 10,
+        "query": "needle",
+        "runId": 9,
+        "novelId": "novel-a",
+        "episodeId": "ep-1",
+        "sourceLabel": "live diagnostics snapshot",
+        "retryMode": "live-dom-snapshot",
+        "liveRowAvailable": false,
+        "highlightedMatch": false,
+        "retryCount": 1,
+        "finalReason": "retry-valid"
+      },
+      "app": {
+        "query": "needle",
+        "runId": 9,
+        "resultCount": 3,
+        "novelId": "novel-a",
+        "episodeId": "ep-1"
+      },
+      "expectedOk": true,
+      "expectedRetryMode": "live-dom-snapshot",
+      "expectedLiveDomSnapshot": true,
+      "expectedRetryCount": 1
+    },
+    {
+      "name": "manual browser live DOM retry evidence",
+      "failure": {
+        "index": 2,
+        "chunk": 8,
+        "totalChunks": 12,
+        "query": "needle",
+        "runId": 10,
+        "novelId": "novel-a",
+        "episodeId": "ep-1",
+        "sourceLabel": "manual browser evidence",
+        "retryMode": "manual-browser",
+        "liveRowAvailable": true,
+        "highlightedMatch": true,
+        "retryCount": 2,
+        "finalReason": "manual-browser-captured"
+      },
+      "app": {
+        "query": "needle",
+        "runId": 10,
+        "resultCount": 5,
+        "novelId": "novel-a",
+        "episodeId": "ep-1"
+      },
+      "expectedOk": true,
+      "expectedRetryMode": "manual-browser",
+      "expectedLiveRowAvailable": true,
+      "expectedHighlightedMatch": true,
+      "expectedLiveDomSnapshot": true,
+      "expectedRetryCount": 2
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "result": {
+    "author_list": [
+      {"name": "김촌지", "role": "AUTHOR", "role_display_name": "글"}
+    ],
+    "description": "평범한 삶을 살던 주인공에게 요리의 신 시스템이 찾아온다.",
+    "detail": {
+      "age_grade": 0,
+      "publisher_name": "고렘팩토리",
+      "publisher_operation_label": "",
+      "category_list": ["웹소설", "현판"]
+    },
+    "theme_keyword_list": [
+      {"uid": 1, "scheme": "kakaopage://theme/1", "title": "성장"},
+      {"uid": 2, "scheme": "kakaopage://theme/2", "title": "먹방/요리"},
+      {"uid": 3, "scheme": "kakaopage://theme/3", "title": "요리사"}
+    ],
+    "screen_shot_list": [],
+    "character_list": []
+  }
+}

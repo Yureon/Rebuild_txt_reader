@@ -1,0 +1,1 @@
+https://accounts.kakao.com/login/?continue=https%3A%2F%2Fkauth.kakao.com%2Foauth%2Fauthorize%3Fstate%3Dhttps%25253A%25252F%25252Fpage.kakao.com%25252Fcontent%25252F60374376%25252F%26redirect_uri%3Dhttps%253A%252F%252Fpage.kakao.com%252Frelay%252Flogin

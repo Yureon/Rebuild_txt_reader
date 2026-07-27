@@ -1,0 +1,134 @@
+{
+  "pass": "v251-recovery-search-fixture-data-pass",
+  "cases": [
+    {
+      "name": "coverage modal shell",
+      "rel": "public/scripts/rebuild/features/recovery/search-coverage-modal-renderers.mjs",
+      "markers": [
+        "createRecoveryCoverageModalShell",
+        "renderRecoveryCoverageRows"
+      ]
+    },
+    {
+      "name": "coverage modal actions",
+      "rel": "public/scripts/rebuild/features/recovery/search-coverage-modal-actions.mjs",
+      "markers": [
+        "getRecoveryCoverageRenderState",
+        "selectRecoveryCoveragePreset"
+      ]
+    },
+    {
+      "name": "diagnostics copy payload",
+      "rel": "public/scripts/rebuild/features/recovery/search-diagnostics-copy-payload.mjs",
+      "markers": [
+        "buildRecoverySearchDiagnosticsPayload"
+      ]
+    },
+    {
+      "name": "recovery search actions",
+      "rel": "public/scripts/rebuild/features/recovery/search-panel-actions.mjs",
+      "markers": [
+        "copyRecoverySearchDiagnostics"
+      ]
+    },
+    {
+      "name": "recovery search renderers",
+      "rel": "public/scripts/rebuild/features/recovery/search-panel-renderers.mjs",
+      "markers": [
+        "createRecoverySearchPanelSection"
+      ]
+    },
+    {
+      "name": "runtime coverage formatter",
+      "rel": "public/scripts/rebuild/features/search/status-formatters.mjs",
+      "markers": [
+        "describeCoveragePreview"
+      ]
+    },
+    {
+      "name": "session runtime boundary",
+      "rel": "public/scripts/rebuild/features/search/session-runtime.mjs",
+      "markers": [
+        "SEARCH_SESSION_RUNTIME_BOUNDARY_PASS",
+        "resetSearchRuntimeSession"
+      ]
+    },
+    {
+      "name": "run action boundary",
+      "rel": "public/scripts/rebuild/features/search/run-actions.mjs",
+      "markers": [
+        "SEARCH_RUN_ACTIONS_PASS",
+        "beginSearchRun"
+      ]
+    },
+    {
+      "name": "retry action boundary",
+      "rel": "public/scripts/rebuild/features/search/retry-actions.mjs",
+      "markers": [
+        "SEARCH_RETRY_ACTIONS_PASS",
+        "buildSearchRetryRequest"
+      ]
+    },
+    {
+      "name": "search jump failure fixtures",
+      "rel": "tools/fixtures/search-jump-failure-fixtures.json",
+      "markers": [
+        "v252-search-jump-failure-fixture-data-pass",
+        "expectedReason"
+      ]
+    }
+  ],
+  "stateSamples": [
+    {
+      "name": "all chunk retry state",
+      "search": {
+        "query": "test",
+        "stats": {
+          "failedChunkList": [
+            2,
+            4
+          ],
+          "skippedOfflineChunkList": [
+            5
+          ]
+        }
+      },
+      "expectedMarkers": [
+        "retry-failed",
+        "retry-missing"
+      ]
+    },
+    {
+      "name": "coverage preview state",
+      "search": {
+        "coveragePreview": {
+          "totalChunks": 8,
+          "cachedChunks": 6,
+          "missingChunks": [
+            7,
+            8
+          ]
+        }
+      },
+      "expectedMarkers": [
+        "coverage",
+        "missing"
+      ]
+    },
+    {
+      "name": "jump failure stale query state",
+      "search": {
+        "lastJumpFailure": {
+          "query": "old",
+          "chunk": 2
+        },
+        "query": "new"
+      },
+      "expectedMarkers": [
+        "lastjumpfailure",
+        "old",
+        "new"
+      ]
+    }
+  ]
+}

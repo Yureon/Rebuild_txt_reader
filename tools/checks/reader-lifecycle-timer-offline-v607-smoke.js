@@ -1,0 +1,10 @@
+const fs=require('fs');
+const r=fs.readFileSync('public/scripts/rebuild/features/reader.mjs','utf8');
+const o=fs.readFileSync('public/scripts/rebuild/features/reader/offline-status.mjs','utf8');
+const s=fs.readFileSync('public/scripts/rebuild/features/reader/open-state.mjs','utf8');
+if(!r.includes('clearReaderOpenDeferredTimers(app);'))throw new Error('reader deferred timer cleanup missing');
+if(!s.includes('globalThis.clearTimeout?.(app.state.readerSliderCoastThumbSettleTimer || 0);'))throw new Error('slider coast timer cleanup missing');
+if(!s.includes('app.state.readerSliderCoastThumbSettleTimer = 0;'))throw new Error('slider coast timer reset missing on novel open');
+if(!r.includes('app.offlineStatus?.dispose?.();'))throw new Error('offline lifecycle dispose missing');
+for(const c of ['dispose: () => {','app.offlineStatus.installed = false','app.offlineStatus = null'])if(!o.includes(c))throw new Error('offline reinstall contract missing: '+c);
+console.log('reader-lifecycle-timer-offline-v607-pass');

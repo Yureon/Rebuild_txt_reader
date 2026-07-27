@@ -1,0 +1,4 @@
+{
+  "source": "synthetic NovelPia adult-search and age-verification fixtures",
+  "files": ["search-adult.json", "age-gate.json"]
+}

@@ -1,0 +1,110 @@
+<div id="app" data-selector-consolidation-pass="v140" data-css-selector-audit-pass="v140" data-library-shell-isolation-pass="v668-library-shell-isolation-pass"><aside id="sidebar" class="sidebar">
+<div class="sb-header">
+	<div class="sb-header-row"><h1 id="library-panel-title">서재</h1>
+		<div class="library-header-actions">
+			<button id="library-settings-page-btn" class="library-header-link library-settings-link" type="button" title="환경설정 화면 열기" aria-label="환경설정 화면 열기">환경설정</button>
+			<a id="library-metadata-page-link" class="library-header-link" href="/metadata.html" title="메타데이터 관리 화면 열기" aria-label="메타데이터 관리 화면 열기" hidden>메타데이터</a>
+			<button id="library-logout-btn" class="library-header-link library-logout-btn" type="button" title="현재 계정에서 로그아웃" aria-label="현재 계정에서 로그아웃">로그아웃</button>
+			<button class="tbtn" id="sidebar-close-btn" type="button" title="소설 목록 닫기" aria-label="소설 목록 닫기">✕</button>
+		</div>
+	</div>
+		<input id="search" type="search" placeholder="검색..." autocomplete="off" aria-label="서재 작품 검색">
+		<div id="search-history-box" class="search-history-box" hidden></div>
+		<div id="library-view-tabs" class="library-view-tabs" role="tablist" aria-label="라이브러리 보기 방식">
+			<button id="library-view-shelf" aria-label="카드형 보기" title="카드형 보기" class="library-view-tab active" type="button" role="tab" aria-selected="true" aria-controls="novel-list" tabindex="0" data-library-view="shelf"><span aria-hidden="true">▦</span><span>카드형</span></button>
+			<button id="library-view-files" aria-label="폴더 트리 보기" title="폴더 트리 보기" class="library-view-tab" type="button" role="tab" aria-selected="false" aria-controls="novel-list" tabindex="-1" data-library-view="files"><span aria-hidden="true">☷</span><span>폴더 트리</span></button>
+			<button id="library-view-explorer" aria-label="탐색기형 보기" title="탐색기형 보기" class="library-view-tab" type="button" role="tab" aria-selected="false" aria-controls="novel-list" tabindex="-1" data-library-view="explorer"><span aria-hidden="true">▤</span><span>탐색기형</span></button>
+		</div>
+		<div id="library-scope-tabs" class="library-scope-tabs" role="tablist" aria-label="서재 범위">
+			<button id="library-scope-all" class="library-scope-tab active" type="button" role="tab" aria-selected="true" aria-controls="novel-list" tabindex="0" data-library-scope="all"><span>전체</span><span id="library-scope-all-count" class="library-scope-count">0</span></button>
+			<button id="library-scope-favorites" class="library-scope-tab" type="button" role="tab" aria-selected="false" aria-controls="novel-list" tabindex="-1" data-library-scope="favorites"><span>즐겨찾기</span><span id="library-scope-favorites-count" class="library-scope-count">0</span></button>
+			<button id="library-scope-recent" class="library-scope-tab" type="button" role="tab" aria-selected="false" aria-controls="novel-list" tabindex="-1" data-library-scope="recent"><span>최근</span><span id="library-scope-recent-count" class="library-scope-count">0</span></button>
+		</div>
+		<div class="library-shelf-status-row">
+			<button id="library-user-tags-btn" class="library-header-link library-user-tags-btn library-card-only-action" type="button" title="카드형 보기의 사용자 태그 관리" aria-label="카드형 보기에서 사용자 태그 관리"><span aria-hidden="true">🏷</span><span>태그 관리</span></button>
+			<div id="library-shelf-summary" class="library-shelf-summary" role="status" aria-live="polite">서재를 불러오는 중…</div>
+			<details id="library-filter-popover" class="library-filter-popover" data-library-shelf-filter-ui-pass="v575-library-shelf-filter-ui-pass">
+				<summary id="library-filter-trigger" class="library-filter-trigger" aria-label="서재 필터"><span aria-hidden="true">⚲</span><span>필터</span><span id="library-filter-count" class="library-filter-count" hidden>0</span></summary>
+				<div class="library-filter-panel">
+					<div class="library-filter-panel-header"><strong>서재 필터</strong><button id="library-filter-clear" type="button" disabled>전체 해제</button></div>
+					<p id="library-filter-status" class="library-filter-status">같은 항목 안에서는 하나라도 일치, 다른 항목끼리는 모두 일치하는 작품을 표시합니다.</p>
+					<section class="library-filter-section"><h3>연재 상태</h3><div id="library-filter-status-options" class="library-filter-options"></div></section>
+					<section class="library-filter-section"><h3>구성</h3><div id="library-filter-group-options" class="library-filter-options"></div></section><section class="library-filter-section library-density-section"><h3>카드 크기</h3><label class="library-density-label" for="library-density-select"><span class="sr-only">서재 카드 크기</span><select id="library-density-select" class="library-density-select" aria-label="서재 카드 크기"><option value="compact">조밀하게</option><option value="default">기본</option><option value="large">크게</option></select></label></section>
+					<section class="library-filter-section"><h3>작가</h3><div id="library-filter-author-options" class="library-filter-options library-filter-options-scroll"></div></section>
+					<section class="library-filter-section"><h3>폴더</h3><div id="library-filter-category-options" class="library-filter-options library-filter-options-scroll"></div></section>
+					<section class="library-filter-section library-filter-tag-section">
+						<div class="library-filter-section-heading">
+							<h3>태그</h3>
+							<label class="library-tag-threshold-label" for="library-tag-min-count">
+								<span>태그 표시 기준</span>
+								<select id="library-tag-min-count" aria-label="태그 필터 표시 기준">
+									<option value="auto">자동</option>
+									<option value="1">모두 표시</option>
+									<option value="2">2개 이상</option>
+									<option value="3">3개 이상</option>
+									<option value="4">4개 이상</option>
+									<option value="5">5개 이상</option>
+									<option value="10">10개 이상</option>
+								</select>
+							</label>
+						</div>
+						<p id="library-tag-threshold-note" class="library-tag-threshold-note"></p>
+						<div class="library-tag-browser-tools">
+							<label class="library-tag-search-label" for="library-tag-filter-search"><span class="sr-only">태그 검색</span><input id="library-tag-filter-search" type="search" inputmode="search" autocomplete="off" maxlength="80" placeholder="태그 검색"></label>
+							<button id="library-tag-previous" class="library-tag-load-more" type="button" hidden>이전 태그</button>
+							<button id="library-tag-load-more" class="library-tag-load-more" type="button" hidden>다음 태그</button>
+						</div>
+						<div id="library-filter-tag-options" class="library-filter-options library-filter-options-scroll"></div>
+					</section>
+				</div>
+			</details>
+		</div>
+		<div id="library-active-filters" class="library-active-filters" hidden aria-label="적용된 서재 필터"></div>
+		</div>
+		<div id="library-quick-list" class="library-quick-list" hidden data-library-quick-pass="v273"></div>
+		<div id="novel-list"><div class="library-shelf-skeleton library-entry-grid-skeleton" data-skeleton-ui-pass="v675-library-entry-skeleton-pass" aria-hidden="true"><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div></div></div>
+		<div id="folder-bulk-actions" class="folder-bulk-actions">
+			<button type="button" class="tbtn folder-bulk-btn" id="expand-all-btn">폴더 모두 펼치기</button>
+			<button type="button" class="tbtn folder-bulk-btn" id="collapse-all-btn">모두 접기</button>
+		</div>
+		</aside>
+</div>
+<div id="list-action-overlay">
+  <div id="list-action-sheet">
+    <div class="las-header">
+      <div id="list-action-title" class="las-title">항목</div>
+      <div id="list-action-sub" class="las-sub">선택한 항목 작업</div>
+    </div>
+    <div class="las-actions">
+      <button type="button" id="list-action-open" class="las-btn">열기</button>
+	  <button type="button" id="list-action-favorite" class="las-btn">즐겨찾기</button>
+      <button type="button" id="list-action-tags" class="las-btn">사용자 태그</button>
+      <button type="button" id="list-action-metadata" class="las-btn" hidden>작품 정보 수집·편집</button>
+      <button type="button" id="list-action-rename" class="las-btn">이름 변경</button>
+      <button type="button" id="list-action-move" class="las-btn">이동</button>
+      <button type="button" id="list-action-delete" class="las-btn danger">삭제</button>
+      <button type="button" id="list-action-cancel" class="las-btn">취소</button>
+    </div>
+  </div>
+</div>
+<div id="user-tag-overlay" class="user-tag-overlay" hidden aria-hidden="true">
+  <section id="user-tag-dialog" class="user-tag-dialog" role="dialog" aria-modal="true" aria-labelledby="user-tag-dialog-title">
+    <header class="user-tag-dialog-header">
+      <div><h2 id="user-tag-dialog-title">사용자 태그</h2><p id="user-tag-dialog-subtitle">내 서재에서 사용할 태그를 관리합니다.</p></div>
+      <button id="user-tag-dialog-close" class="user-tag-dialog-close" type="button" aria-label="사용자 태그 창 닫기" title="닫기">✕</button>
+    </header>
+    <div class="user-tag-create-row">
+      <label class="sr-only" for="user-tag-input">새 사용자 태그</label>
+      <input id="user-tag-input" type="text" maxlength="40" autocomplete="off" placeholder="새 태그 이름">
+      <button id="user-tag-add" type="button">추가</button>
+    </div>
+    <p id="user-tag-status" class="user-tag-status" role="status" aria-live="polite"></p>
+    <div id="user-tag-list" class="user-tag-list" role="list"></div>
+    <footer class="user-tag-dialog-actions">
+      <button id="user-tag-cancel" type="button">취소</button>
+      <button id="user-tag-save" class="primary" type="button">저장</button>
+    </footer>
+  </section>
+</div>
+<div id="toast-wrap" data-reader-overlay-pass="v140" data-reader-overlay-role="toast-stack"></div>
+<div id="sync-status-dock" data-reader-overlay-pass="v140" data-reader-overlay-role="legacy-sync-dock"><div id="sync-status-pill" class="sync-status-pill pending"><span class="dot"></span><span id="sync-status-text">저장 중...</span></div></div>

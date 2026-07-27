@@ -1,0 +1,23 @@
+#!/usr/bin/env node
+'use strict';
+const assert=require('assert');
+const fs=require('fs');
+const path=require('path');
+const root=path.resolve(__dirname,'../..');
+const read=rel=>fs.readFileSync(path.join(root,rel),'utf8');
+const html=read('public/metadata.html');
+const css=read('public/styles/metadata-page.css');
+const js=read('public/scripts/rebuild/metadata-page.mjs');
+assert(html.includes('id="metadata-work-folder-disclosure"'),'folder disclosure missing');
+assert(html.includes('<summary>'),'native summary missing');
+assert(html.includes('id="metadata-work-folder-summary"'),'folder summary missing');
+assert(html.indexOf('metadata-work-folder-disclosure') < html.indexOf('metadata-work-folder-query'),'folder controls are not nested under disclosure');
+assert(css.includes('.metadata-work-folder-disclosure[open]>summary::after'),'open-state indicator missing');
+assert(css.includes('.metadata-work-folder-panel'),'folder panel layout missing');
+assert(css.includes('@media(max-width:760px)'),'mobile disclosure layout missing');
+assert(js.includes('FOLDER_DISCLOSURE_STORAGE_KEY'),'disclosure persistence key missing');
+assert(js.includes('initializeFolderDisclosure()'),'disclosure initialization missing');
+assert(js.includes("addEventListener('toggle'"),'toggle persistence wiring missing');
+assert(js.includes("page.folderPath || page.folderQuery || storedOpen"),'active filter must force disclosure open');
+assert(js.includes("summary.textContent = label"),'current folder summary missing');
+console.log(JSON.stringify({pass:'v679-metadata-folder-disclosure-smoke-pass',nativeDetails:true,persistent:true,activeFilterVisible:true,mobile:true}));

@@ -1,0 +1,31 @@
+{
+  "source": "sanitized from user-provided KakaoPage saved HTML and bundled Next.js client chunks",
+  "adapterRevision": 11,
+  "files": [
+    {
+      "name": "detail-about.json",
+      "sha256": "95813c4bca3cf2ea9497315962440551b925a449f10017c46d2882c3f7dba6a9",
+      "bytes": 708
+    },
+    {
+      "name": "detail-overview.json",
+      "sha256": "3166add7a557f740fe8c34a2b29b4ac2ec2d0a30ea3a780e88f36183287f5d7f",
+      "bytes": 607
+    },
+    {
+      "name": "expected.json",
+      "sha256": "19758d8aafe552f004a8fd43c20a37aa60f89c139712a5a238f484f375a9b09d",
+      "bytes": 546
+    },
+    {
+      "name": "search-empty.json",
+      "sha256": "514c69cf62169c8e72fbedfa1ece9193e1beabb0fd6c594960fe73b83e535b97",
+      "bytes": 53
+    },
+    {
+      "name": "search-primary.json",
+      "sha256": "e97bfc7365ca44c9533ebc56cdbe21abbd63740be337bffa3347a7156e907bc8",
+      "bytes": 833
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+#!/usr/bin/env node
+const fs = require('fs');
+const path = require('path');
+const assert = require('assert');
+const root = path.resolve(__dirname, '../..');
+const PASS = 'v458-reader-multifile-native-scroll-anchor-stabilization-smoke-pass';
+const EXACT = 'v458-reader-multi-file-native-exact-anchor-pass';
+const BOTTOM = 'v458-reader-multi-file-bottom-anchor-native-guard-pass';
+const layout = fs.readFileSync(path.join(root, 'public/scripts/rebuild/features/reader/virtual-layout.mjs'), 'utf8');
+const render = fs.readFileSync(path.join(root, 'public/scripts/rebuild/features/reader/virtual-render-stability.mjs'), 'utf8');
+assert.ok(layout.includes(`READER_MULTI_FILE_NATIVE_EXACT_ANCHOR_PASS = '${EXACT}'`), 'multi-file exact anchor marker missing');
+assert.ok(layout.includes(`READER_MULTI_FILE_BOTTOM_ANCHOR_NATIVE_GUARD_PASS = '${BOTTOM}'`), 'multi-file bottom guard marker missing');
+assert.ok(layout.includes('function shouldCaptureExactNativeAnchor'), 'native exact anchor resolver missing');
+assert.ok(layout.includes('preferBodyRows: !exactNativeAnchor'), 'render-window capture must disable body remap during multi-file native scroll');
+assert.ok(layout.includes('preferBodyRows: !exactNativeMeasureAnchor'), 'measure capture must disable body remap during multi-file native scroll');
+assert.ok(render.includes('preferBodyRows = true'), 'render-window capture API must expose preferBodyRows');
+assert.ok(render.includes('captureVirtualScrollAnchor({ reader, rows, prefix, anchorOffsetPx, preferBodyRows })'), 'render-window anchor must forward preferBodyRows');
+assert.ok(layout.includes('remainingBottom > 2'), 'bottom guard must require actual bottom within 2px');
+assert.ok(layout.includes('multi-file native scroll has not reached actual bottom'), 'bottom guard reason missing');
+console.log(JSON.stringify({ pass: PASS, exact: EXACT, bottom: BOTTOM }));

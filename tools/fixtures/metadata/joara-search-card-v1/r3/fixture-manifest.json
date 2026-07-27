@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "adapterKey": "joara-search-card-v1",
+  "adapterRevision": 4,
+  "pageKinds": [
+    "detail-primary"
+  ],
+  "sanitizedSha256": {
+    "detail-primary.html": "7e853c8eaaa529f5efb14f17de4d7f528b3c008726261a192471046540af8cb7",
+    "expected.json": "6d4cf48aaa5abce18c7c63a5d48f1691a0132f69735d164774c1fc7e40ce1d5a"
+  },
+  "sourceHost": "www.joara.com",
+  "sanitizationNotes": "합성 작품명·작가·짧은 소개와 공개 /book/{id} URL 구조만 보존했습니다. 계정 UI, cookie, token, analytics, 광고, 댓글, 구매 정보와 원본 장문 소개는 포함하지 않습니다.",
+  "expectedFile": "expected.json"
+}

@@ -1,0 +1,20 @@
+#!/usr/bin/env node
+'use strict';
+const assert = require('assert');
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '../..');
+const read = rel => fs.readFileSync(path.join(root, rel), 'utf8');
+const view = read('public/scripts/rebuild/features/search/results-view.mjs');
+const css = read('public/styles/deferred-ui.css');
+const html = read('public/fragments/deferred-ui.html');
+assert(view.includes("SEARCH_MODAL_MOBILE_LAYOUT_PASS = 'v647-search-modal-mobile-layout-pass'"), 'v647 search modal layout marker missing');
+assert(view.includes("app.els.nsearchPanel.dataset.searchLayoutState = layoutState"), 'search layout state dataset missing');
+assert(view.includes("app.els.nsearchStatus.style.display = 'none'"), 'idle duplicate search status suppression missing');
+assert(html.includes('id="nsearch-run"') && html.includes('id="nsearch-results"'), 'search modal controls missing');
+assert(css.includes('body.light #nsearch-panel{\n  background:linear-gradient(180deg,var(--surface)'), 'search modal must use theme variables even when body.light is present');
+assert(!css.includes('body.light #nsearch-panel{\n  background:linear-gradient(180deg,#ffffff,#fbfcff);'), 'hard-coded white search modal background must not remain effective');
+assert(css.includes('[data-search-layout-state="idle"]') && css.includes('height:auto !important'), 'idle mobile modal compact layout missing');
+assert(css.includes('min-height:96px !important') && css.includes('max-height:132px !important'), 'idle result region height budget missing');
+assert(css.includes('#nsearch-results{\n  background:color-mix'), 'search result surface theme background missing');
+console.log(JSON.stringify({ pass:'v647-reader-search-modal-pass' }));

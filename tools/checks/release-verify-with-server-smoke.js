@@ -1,0 +1,14 @@
+const fs = require('fs');
+const path = require('path');
+const assert = require('assert');
+const root = path.join(__dirname, '../..');
+const script = fs.readFileSync(path.join(root, 'tools/release_verify.js'), 'utf8');
+assert.ok(script.includes('--with-server'), 'release verify --with-server option missing');
+assert.ok(script.includes('--timeout-ms=') && script.includes('v429-release-verify-timeout-option-pass'), 'release verify timeout option marker missing');
+assert.ok(script.includes('v429-release-verify-step-logs-pass'), 'release verify step log marker missing');
+assert.ok(script.includes('v429-release-verify-with-server-pass'), 'release verify with-server marker missing');
+assert.ok(script.includes('npm') && script.includes('ci') && script.includes('tools/check_server_structure.js') && script.includes('tools/smoke_server_http.js'), 'with-server command set missing');
+assert.ok(script.includes('verifyPackageManifest') && script.includes('current-package-manifest-content-verify-pass'), 'package manifest content verification missing');
+assert.ok(script.indexOf("runtime dependency install") < script.indexOf("static release smoke set"), 'runtime dependency install must precede dependency-sensitive release smokes');
+assert.ok(script.includes('admin-state-actions-split-smoke') && script.includes('admin-permission-actions-split-smoke') && script.includes('admin-diagnostics-filter-smoke'), 'v417 split smokes missing from release verify');
+console.log('v429-release-verify-with-server-smoke-pass');

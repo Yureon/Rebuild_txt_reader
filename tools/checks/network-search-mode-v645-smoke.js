@@ -1,0 +1,30 @@
+#!/usr/bin/env node
+'use strict';
+const assert = require('assert');
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '../..');
+const read = rel => fs.readFileSync(path.join(root, rel), 'utf8');
+const ui = read('public/scripts/rebuild/features/ui.mjs');
+const offline = read('public/scripts/rebuild/features/reader/offline-status.mjs');
+const filter = read('public/scripts/rebuild/features/search/filter-controls.mjs');
+const search = read('public/scripts/rebuild/features/search.mjs');
+const run = read('public/scripts/rebuild/features/search/run-actions.mjs');
+const elements = read('public/scripts/rebuild/features/ui/elements.mjs');
+
+assert(ui.includes('export function setNetworkBadge') && ui.includes('app.els.toolbarNetworkMode'), 'network badge must target the toolbar indicator');
+assert(ui.includes('export function setSearchModeBadge') && ui.includes('app.els.nsearchNetworkMode'), 'search mode must have an independent badge setter');
+assert(!ui.includes('const targets = [app.els.toolbarNetworkMode, app.els.nsearchNetworkMode]'), 'network and search badges must not be coupled');
+assert(offline.includes("label = '온라인';"), 'normal online state should be explicit');
+assert(!offline.includes("label = profile.online ? '캐시 준비' : '캐시만'"), 'cache coverage must not replace network connection state');
+assert(offline.includes('setNetworkBadge(app, mode, label,'), 'toolbar network badge detail update missing');
+assert(filter.includes("setSearchModeBadge(app, 'normal', '캐시 검색'"), 'cache search badge missing');
+assert(filter.includes("setSearchModeBadge(app, 'fast', '서버 검색'"), 'server search badge missing');
+assert(filter.includes("setSearchModeBadge(app, 'offline', '오프라인'"), 'offline search badge missing');
+assert(elements.includes("'nsearch-run'"), 'search run button must be collected');
+assert(search.includes("on(app.els.nsearchRun, 'click', () => runSearch(app))"), 'search run button handler missing');
+assert(search.includes('!ev.isComposing && ev.keyCode !== 229'), 'Korean IME Enter guard missing');
+assert(run.includes("setButtonBusy(app.els?.nsearchRun, true, '검색 중…')"), 'busy state must use the search action button');
+assert(!run.includes("setButtonBusy(app.els?.nsearchNextBtn, true, '검색…')"), 'next-result button must not be repurposed as the search action');
+assert(run.includes('if (!search || !request.query || !app.state.current) return false;'), 'empty search must be rejected before clearing prior results');
+console.log(JSON.stringify({ pass:'v645-network-search-mode-separation-pass' }));

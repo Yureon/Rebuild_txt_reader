@@ -1,0 +1,35 @@
+#!/usr/bin/env node
+'use strict';
+const assert = require('assert');
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname,'../..');
+const read = rel => fs.readFileSync(path.join(root,rel),'utf8');
+const pkg = JSON.parse(read('package.json'));
+const version = require('../../server/version-contract');
+assert.equal(pkg.version,'6.79.0');
+assert(version.RELEASE_NUMBER >= 641);
+assert.equal(version.BUILD_ID,'rebuild-v679');
+assert.equal(JSON.parse(read('public/version.json')).buildId,'rebuild-v679');
+assert(read('tools/sync_version_contract.js').includes('packageVersionToReleaseNumber'));
+assert(pkg.scripts['version:sync']);
+
+const rebuild = read('tools/package_rebuild.js');
+assert(rebuild.includes("'docs/archive'"));
+assert(rebuild.includes('isHistoricalReleaseArtifact'));
+assert(rebuild.includes('isPackageInventoryExcluded'));
+const runner = read('tools/run_smoke_tests.js');
+assert(runner.includes('SMOKE_RESULT_JSON'));
+assert(runner.includes('smoke-${group}-last.json'));
+assert(runner.includes('ALLOW_DEPENDENCY_BLOCKS'));
+assert(fs.existsSync(path.join(root,'tools/predeploy_environment_gate.js')));
+assert(fs.existsSync(path.join(root,'tools/dependency_audit_gate.js')));
+assert(fs.existsSync(path.join(root,'tools/generate_dependency_inventory.js')));
+assert(pkg.scripts['dependencies:inventory']);
+assert(fs.existsSync(path.join(root,'tools/checks/source-size-budget-v641-smoke.js')));
+assert(!read('tools/rebuild_doc_scaffold.js').includes('v251'));
+assert(!read('tools/release_notes_from_package.js').includes('changed-file manifest entries only'));
+assert(!read('tools/rebuild_doc_scaffold.js').includes('txt_reader_rebuild_v'));
+assert(fs.statSync(path.join(root,'docs/release-history.md')).size < 200000);
+assert(read('.env.example').includes('coverUrlLocal'));
+console.log(JSON.stringify({ pass:'v641-packaging-gates-pass', release:version.RELEASE_NUMBER, machineReadable:true }));

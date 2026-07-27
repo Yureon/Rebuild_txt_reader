@@ -1,0 +1,11 @@
+#!/usr/bin/env node
+import assert from 'node:assert';
+import fs from 'node:fs';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {loadInitialExpandedTagFacets,searchTagFacets,loadMoreTagSearchFacets} from '../../public/scripts/rebuild/features/library-tag-browser.mjs';
+const __dirname=path.dirname(fileURLToPath(import.meta.url));
+const pages=Array.from({length:1800},(_,i)=>({value:`tag-${i}`,count:1800-i}));
+const app={api:{async novelShelfFilterTags({cursor='',limit=500,query=''}){const offset=cursor?Number(cursor):(query?0:500);const source=query?pages.filter(x=>x.value.includes(query)):pages;const items=source.slice(offset,offset+limit);return{items,total:source.length,nextCursor:offset+items.length<source.length?String(offset+items.length):'',hasMore:offset+items.length<source.length};}}};
+const initial=pages.slice(0,500);const expanded=await loadInitialExpandedTagFacets(app,{tagPage:{nextCursor:'500',hasMore:true,total:pages.length}},initial,null,1);assert(expanded.items.length<=500,'initial manual expansion must be bounded');assert.strictEqual(expanded.hasMore,true,'remaining pages must be exposed for incremental loading');const search=await searchTagFacets(app,'tag-1',1,null);assert(search.items.length>0&&search.items.length<=200);if(search.hasMore){const next=await loadMoreTagSearchFacets(app,search,null);assert(next.items.length>0,'search pagination must load the next cursor page');}
+const source=fs.readFileSync(path.join(__dirname,'../../public/scripts/rebuild/features/library-shelf-filters.mjs'),'utf8');const controls=fs.readFileSync(path.join(__dirname,'../../public/scripts/rebuild/features/library-tag-filter-controls.mjs'),'utf8');assert(source.includes('const TAG_RENDER_LIMIT = 180'),'tag DOM render budget missing');assert(controls.includes('libraryTagLoadMore')&&controls.includes('libraryTagPrevious')&&controls.includes('libraryTagRenderOffset'),'tag incremental control missing');const html=fs.readFileSync(path.join(__dirname,'../../public/fragments/app-shell.html'),'utf8');assert(html.includes('library-tag-filter-search')&&html.includes('library-tag-previous')&&html.includes('library-tag-load-more'));console.log(JSON.stringify({pass:'v603-library-tag-browser-smoke-pass',initial:expanded.items.length,search:search.items.length}));

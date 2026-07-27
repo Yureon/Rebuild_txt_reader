@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#0d0d0d">
+  <link rel="preload" as="style" href="/styles/update-banner.css?v=rebuild-v682" data-update-banner-critical="v651">
+  <script data-cfasync="false" data-update-ui="silent" src="/service-worker-register.js?v=rebuild-v682"></script>
+  <link href="/styles/update-banner.css?v=rebuild-v682" rel="stylesheet" data-update-banner-full="v651">
+  <title>TxT Reader</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="/icon/apple-icon-180x180.png?v=rebuild-v682">
+  <link rel="icon" type="image/png" sizes="32x32" href="/icon/favicon-32x32.png?v=rebuild-v682">
+  <link rel="icon" type="image/png" sizes="16x16" href="/icon/favicon-16x16.png?v=rebuild-v682">
+  <link rel="manifest" href="/manifest.json?v=rebuild-v682">
+  <link crossorigin="anonymous" href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="/styles/login.css?v=rebuild-v682" rel="stylesheet">
+  <link href="/styles/scroll-to-top.css?v=rebuild-v682" rel="stylesheet">
+  <script data-cfasync="false" src="/scripts/scroll-to-top.js?v=rebuild-v682" defer></script>
+</head>
+<body data-login-palette="owner-console">
+  <div class="card">
+    <div class="logo-wrap">
+      <div class="logo-img-wrap"><img src="/icon/icon-192.png?v=rebuild-v682" alt="TxT Reader" class="logo-img"></div>
+      <div class="logo-title">TxT <span>Reader</span></div>
+      <div class="logo-sub">PRIVATE NOVEL VIEWER</div>
+    </div>
+    <div class="tabs" role="tablist" aria-label="로그인 또는 회원가입">
+      <button class="tab-btn active" id="tab-login" type="button" role="tab" aria-selected="true" aria-controls="login-panel" tabindex="0">로그인</button>
+      <button class="tab-btn" id="tab-register" type="button" role="tab" aria-selected="false" aria-controls="register-panel" tabindex="-1">회원가입</button>
+    </div>
+    <p class="intro-copy" id="mode-copy">Owner 계정 또는 발급된 일반 계정으로 로그인하세요.</p>
+    <div id="message" class="message error"><span id="message-text"></span></div>
+    <section class="panel" id="login-panel">
+      <form id="login-form" class="form" autocomplete="on">
+        <div class="input-wrap"><span class="icon">👤</span><input id="login-id" aria-label="로그인 아이디" name="username" autocomplete="username" placeholder="아이디" required></div>
+        <div class="input-wrap"><span class="icon">🔒</span><input id="login-pw" aria-label="로그인 비밀번호" name="password" type="password" autocomplete="current-password" placeholder="비밀번호" required></div>
+        <div id="caps-msg" class="caps-msg">Caps Lock이 켜져 있습니다.</div>
+        <button type="submit" class="btn-login" id="login-btn">입장하기</button>
+      </form>
+    </section>
+    <section class="panel" id="register-panel" hidden>
+      <form id="register-form" class="form" autocomplete="on">
+        <div class="input-wrap"><span class="icon">🆔</span><input id="register-id" aria-label="회원가입 아이디" name="username" autocomplete="username" placeholder="새 아이디 · 영문/숫자 3~32자" required></div>
+        <div class="input-wrap"><span class="icon">🔒</span><input id="register-pw" aria-label="회원가입 비밀번호" name="new-password" type="password" autocomplete="new-password" placeholder="비밀번호 · 최소 8자" required></div>
+        <div class="input-wrap"><span class="icon">✅</span><input id="register-pw2" aria-label="회원가입 비밀번호 확인" name="new-password-confirm" type="password" autocomplete="new-password" placeholder="비밀번호 확인" required></div>
+        <div class="input-wrap"><span class="icon">🎟️</span><input id="register-code" aria-label="가입코드" name="signup-code" autocomplete="one-time-code" placeholder="가입코드" required></div>
+        <p class="hint">가입코드는 owner가 미리 권한을 설정해 발급한 코드만 사용할 수 있습니다. 성공 후 로그인 화면에서 다시 로그인하세요.</p>
+        <button type="submit" class="btn-login" id="register-btn">회원가입</button>
+      </form>
+    </section>
+    <div class="offline-banner" id="offline-banner-text">네트워크 연결 후 로그인할 수 있습니다.</div>
+    <div class="footer">TxT Reader · 개인용 웹소설 뷰어</div>
+  </div>
+  <script src="/scripts/login.js?v=rebuild-v682" defer></script>
+</body>
+</html>

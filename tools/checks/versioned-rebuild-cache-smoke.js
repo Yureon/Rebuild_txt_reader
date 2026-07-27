@@ -1,0 +1,16 @@
+const fs = require('fs');
+const path = require('path');
+const assert = require('assert');
+const root = path.join(__dirname, '../..');
+const PASS = 'v434-versioned-rebuild-asset-cache-smoke-pass';
+const policy = fs.readFileSync(path.join(root, 'server/middleware/cache-policy.js'), 'utf8');
+const app = fs.readFileSync(path.join(root, 'server/app.js'), 'utf8');
+assert.ok(policy.includes("VERSIONED_REBUILD_ASSET_CACHE_PASS = 'v434-versioned-rebuild-asset-cache-pass'"), 'versioned rebuild cache marker missing');
+assert.ok(policy.includes('function isVersionedRebuildAssetRequest'), 'versioned rebuild request detector missing');
+assert.ok(policy.includes("pathname.startsWith('/scripts/rebuild/')"), 'detector must be scoped to rebuild scripts');
+assert.ok(policy.includes('/^rebuild-v\\d+$/.test(version)'), 'detector must require rebuild version query');
+assert.ok(policy.includes("public, max-age=31536000, immutable"), 'versioned request must be immutable');
+assert.ok(policy.includes("public, max-age=0, must-revalidate"), 'unversioned rebuild modules must remain revalidated');
+assert.ok(app.includes('applyVersionedRebuildAssetCache'), 'versioned cache middleware must be wired');
+assert.ok(app.indexOf('applyVersionedRebuildAssetCache') < app.indexOf('createPrecompressedStaticMiddleware(paths.PUBLIC_DIR)'), 'versioned cache middleware must run before static serving');
+console.log(JSON.stringify({ pass: PASS }));
